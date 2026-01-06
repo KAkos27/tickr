@@ -1,22 +1,16 @@
-import { signIn } from "@/auth";
-import Login from "@/components/login";
-import { SessionProvider } from "next-auth/react";
+import Link from "next/link";
+import { auth } from "@/auth";
 
-export default function Home() {
+export default async function Home() {
+  const session = await auth();
+
   return (
     <div>
-      <form
-        action={async (formData) => {
-          "use server";
-          await signIn("resend", formData);
-        }}
-      >
-        <input type="text" name="email" placeholder="Email" />
-        <button type="submit">Signin with Resend</button>
-      </form>
-      {/* <SessionProvider>
-        <Login />
-      </SessionProvider> */}
+      {session && session.user ? (
+        <Link href={"/dashboard"}>Dashboard</Link>
+      ) : (
+        <Link href={"/sign-in"}>Sign In</Link>
+      )}
     </div>
   );
 }
