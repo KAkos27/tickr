@@ -13,24 +13,29 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Sex {
+  MALE
+  FEMALE
+  OTHER
+}
+
 model Session {
   id           String   @id @default(cuid())
-  sessionToken String   @unique @map("session_token")
+  sessionToken String   @unique
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
-  id            String      @id @default(cuid())
+  id            String        @id @default(cuid())
   name          String?
-  email         String?     @unique
+  email         String?       @unique
   emailVerified DateTime?
   image         String?
   sessions      Session[]
-  groupUsers    GroupUser[]
-  assignedTasks Task[]      @relation("AssignedTasks")
-  createdTasks  Task[]      @relation("CreatedTasks")
+  patients      UserPatient[]
+  appointments  Appointment[]
 }
 
 model VerificationToken {
@@ -41,42 +46,42 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model Group {
-  id         String      @id @default(cuid())
-  name       String
-  groupUsers GroupUser[]
-  projects   Project[]
+model Patient {
+  id           String        @id @default(cuid())
+  name         String
+  birthDate    DateTime
+  sex          Sex           @default(OTHER)
+  phone        String        @unique
+  email        String        @unique
+  doctors      UserPatient[]
+  appointments Appointment[]
 }
 
-model GroupUser {
-  id      String @id @default(cuid())
-  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId  String
-  group   Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  groupId String
+model UserPatient {
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String
+  patient   Patient? @relation(fields: [patientId], references: [id])
+  patientId String
 
-  @@unique([userId, groupId])
+  @@unique([userId, patientId])
 }
 
-model Project {
-  id        String   @id @default(cuid())
-  name      String
-  createdAt DateTime @default(now())
-  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  groupId   String
-  tasks     Task[]
+model Operation {
+  id           String        @id @default(cuid())
+  name         String        @unique
+  price        Int
+  appointments Appointment[]
 }
 
-model Task {
-  id          String   @id @default(cuid())
+model Appointment {
+  id          String     @id @default(cuid())
   title       String
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId   String
-  assignee    User?    @relation("AssignedTasks", fields: [assigneeId], references: [id])
-  assigneeId  String?
-  createdBy   User     @relation("CreatedTasks", fields: [createdById], references: [id])
-  createdById String
+  startTime   DateTime
+  endTime     DateTime
+  patient     Patient?   @relation(fields: [patientId], references: [id])
+  patientId   String?
+  operation   Operation? @relation(fields: [operationId], references: [id])
+  operationId String?
+  user        User?      @relation(fields: [userId], references: [id])
+  userId      String?
 }

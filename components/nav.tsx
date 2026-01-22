@@ -4,8 +4,10 @@ export default function Nav() {
   return (
     <nav>
       <Link href={"/"}>Home</Link>
-      <Link href={"/dashboard/groups"}>Groups</Link>
-      <Link href={"/"}>Users</Link>
+      <Link href={"/dashboard/patients"}>Páciensek</Link>
+      <Link href={"/dashboard/calendar"}>Naptár</Link>
+      <Link href={"/dashboard/operations"}>Beavatkozások</Link>
+      <Link href={"/"}>Felhasználók</Link>
     </nav>
   );
 }

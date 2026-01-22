@@ -33,22 +33,22 @@ export type User = Prisma.UserModel
  */
 export type VerificationToken = Prisma.VerificationTokenModel
 /**
- * Model Group
+ * Model Patient
  * 
  */
-export type Group = Prisma.GroupModel
+export type Patient = Prisma.PatientModel
 /**
- * Model GroupUser
+ * Model UserPatient
  * 
  */
-export type GroupUser = Prisma.GroupUserModel
+export type UserPatient = Prisma.UserPatientModel
 /**
- * Model Project
+ * Model Operation
  * 
  */
-export type Project = Prisma.ProjectModel
+export type Operation = Prisma.OperationModel
 /**
- * Model Task
+ * Model Appointment
  * 
  */
-export type Task = Prisma.TaskModel
+export type Appointment = Prisma.AppointmentModel

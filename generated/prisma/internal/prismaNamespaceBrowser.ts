@@ -54,10 +54,10 @@ export const ModelName = {
   Session: 'Session',
   User: 'User',
   VerificationToken: 'VerificationToken',
-  Group: 'Group',
-  GroupUser: 'GroupUser',
-  Project: 'Project',
-  Task: 'Task'
+  Patient: 'Patient',
+  UserPatient: 'UserPatient',
+  Operation: 'Operation',
+  Appointment: 'Appointment'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -106,45 +106,46 @@ export const VerificationTokenScalarFieldEnum = {
 export type VerificationTokenScalarFieldEnum = (typeof VerificationTokenScalarFieldEnum)[keyof typeof VerificationTokenScalarFieldEnum]
 
 
-export const GroupScalarFieldEnum = {
-  id: 'id',
-  name: 'name'
-} as const
-
-export type GroupScalarFieldEnum = (typeof GroupScalarFieldEnum)[keyof typeof GroupScalarFieldEnum]
-
-
-export const GroupUserScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  groupId: 'groupId'
-} as const
-
-export type GroupUserScalarFieldEnum = (typeof GroupUserScalarFieldEnum)[keyof typeof GroupUserScalarFieldEnum]
-
-
-export const ProjectScalarFieldEnum = {
+export const PatientScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  createdAt: 'createdAt',
-  groupId: 'groupId'
+  birthDate: 'birthDate',
+  sex: 'sex',
+  phone: 'phone',
+  email: 'email'
 } as const
 
-export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum]
+export type PatientScalarFieldEnum = (typeof PatientScalarFieldEnum)[keyof typeof PatientScalarFieldEnum]
 
 
-export const TaskScalarFieldEnum = {
+export const UserPatientScalarFieldEnum = {
+  userId: 'userId',
+  patientId: 'patientId'
+} as const
+
+export type UserPatientScalarFieldEnum = (typeof UserPatientScalarFieldEnum)[keyof typeof UserPatientScalarFieldEnum]
+
+
+export const OperationScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  price: 'price'
+} as const
+
+export type OperationScalarFieldEnum = (typeof OperationScalarFieldEnum)[keyof typeof OperationScalarFieldEnum]
+
+
+export const AppointmentScalarFieldEnum = {
   id: 'id',
   title: 'title',
-  description: 'description',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  projectId: 'projectId',
-  assigneeId: 'assigneeId',
-  createdById: 'createdById'
+  startTime: 'startTime',
+  endTime: 'endTime',
+  patientId: 'patientId',
+  operationId: 'operationId',
+  userId: 'userId'
 } as const
 
-export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
+export type AppointmentScalarFieldEnum = (typeof AppointmentScalarFieldEnum)[keyof typeof AppointmentScalarFieldEnum]
 
 
 export const SortOrder = {

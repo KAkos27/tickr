@@ -183,9 +183,8 @@ export type UserWhereInput = {
   emailVerified?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   image?: Prisma.StringNullableFilter<"User"> | string | null
   sessions?: Prisma.SessionListRelationFilter
-  groupUsers?: Prisma.GroupUserListRelationFilter
-  assignedTasks?: Prisma.TaskListRelationFilter
-  createdTasks?: Prisma.TaskListRelationFilter
+  patients?: Prisma.UserPatientListRelationFilter
+  appointments?: Prisma.AppointmentListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -195,9 +194,8 @@ export type UserOrderByWithRelationInput = {
   emailVerified?: Prisma.SortOrderInput | Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   sessions?: Prisma.SessionOrderByRelationAggregateInput
-  groupUsers?: Prisma.GroupUserOrderByRelationAggregateInput
-  assignedTasks?: Prisma.TaskOrderByRelationAggregateInput
-  createdTasks?: Prisma.TaskOrderByRelationAggregateInput
+  patients?: Prisma.UserPatientOrderByRelationAggregateInput
+  appointments?: Prisma.AppointmentOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -210,9 +208,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   emailVerified?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   image?: Prisma.StringNullableFilter<"User"> | string | null
   sessions?: Prisma.SessionListRelationFilter
-  groupUsers?: Prisma.GroupUserListRelationFilter
-  assignedTasks?: Prisma.TaskListRelationFilter
-  createdTasks?: Prisma.TaskListRelationFilter
+  patients?: Prisma.UserPatientListRelationFilter
+  appointments?: Prisma.AppointmentListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -244,9 +241,8 @@ export type UserCreateInput = {
   emailVerified?: Date | string | null
   image?: string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  groupUsers?: Prisma.GroupUserCreateNestedManyWithoutUserInput
-  assignedTasks?: Prisma.TaskCreateNestedManyWithoutAssigneeInput
-  createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
+  patients?: Prisma.UserPatientCreateNestedManyWithoutUserInput
+  appointments?: Prisma.AppointmentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -256,9 +252,8 @@ export type UserUncheckedCreateInput = {
   emailVerified?: Date | string | null
   image?: string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  groupUsers?: Prisma.GroupUserUncheckedCreateNestedManyWithoutUserInput
-  assignedTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssigneeInput
-  createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
+  patients?: Prisma.UserPatientUncheckedCreateNestedManyWithoutUserInput
+  appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -268,9 +263,8 @@ export type UserUpdateInput = {
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  groupUsers?: Prisma.GroupUserUpdateManyWithoutUserNestedInput
-  assignedTasks?: Prisma.TaskUpdateManyWithoutAssigneeNestedInput
-  createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
+  patients?: Prisma.UserPatientUpdateManyWithoutUserNestedInput
+  appointments?: Prisma.AppointmentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -280,9 +274,8 @@ export type UserUncheckedUpdateInput = {
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  groupUsers?: Prisma.GroupUserUncheckedUpdateManyWithoutUserNestedInput
-  assignedTasks?: Prisma.TaskUncheckedUpdateManyWithoutAssigneeNestedInput
-  createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
+  patients?: Prisma.UserPatientUncheckedUpdateManyWithoutUserNestedInput
+  appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -365,48 +358,36 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
 
-export type UserCreateNestedOneWithoutGroupUsersInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutGroupUsersInput, Prisma.UserUncheckedCreateWithoutGroupUsersInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutGroupUsersInput
+export type UserCreateNestedOneWithoutPatientsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPatientsInput, Prisma.UserUncheckedCreateWithoutPatientsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPatientsInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutGroupUsersNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutGroupUsersInput, Prisma.UserUncheckedCreateWithoutGroupUsersInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutGroupUsersInput
-  upsert?: Prisma.UserUpsertWithoutGroupUsersInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutGroupUsersInput, Prisma.UserUpdateWithoutGroupUsersInput>, Prisma.UserUncheckedUpdateWithoutGroupUsersInput>
-}
-
-export type UserCreateNestedOneWithoutAssignedTasksInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAssignedTasksInput, Prisma.UserUncheckedCreateWithoutAssignedTasksInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssignedTasksInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserCreateNestedOneWithoutCreatedTasksInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedTasksInput, Prisma.UserUncheckedCreateWithoutCreatedTasksInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedTasksInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneWithoutAssignedTasksNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAssignedTasksInput, Prisma.UserUncheckedCreateWithoutAssignedTasksInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssignedTasksInput
-  upsert?: Prisma.UserUpsertWithoutAssignedTasksInput
+export type UserUpdateOneWithoutPatientsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPatientsInput, Prisma.UserUncheckedCreateWithoutPatientsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPatientsInput
+  upsert?: Prisma.UserUpsertWithoutPatientsInput
   disconnect?: Prisma.UserWhereInput | boolean
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAssignedTasksInput, Prisma.UserUpdateWithoutAssignedTasksInput>, Prisma.UserUncheckedUpdateWithoutAssignedTasksInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPatientsInput, Prisma.UserUpdateWithoutPatientsInput>, Prisma.UserUncheckedUpdateWithoutPatientsInput>
 }
 
-export type UserUpdateOneRequiredWithoutCreatedTasksNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedTasksInput, Prisma.UserUncheckedCreateWithoutCreatedTasksInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedTasksInput
-  upsert?: Prisma.UserUpsertWithoutCreatedTasksInput
+export type UserCreateNestedOneWithoutAppointmentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAppointmentsInput, Prisma.UserUncheckedCreateWithoutAppointmentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAppointmentsInput
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedTasksInput, Prisma.UserUpdateWithoutCreatedTasksInput>, Prisma.UserUncheckedUpdateWithoutCreatedTasksInput>
+}
+
+export type UserUpdateOneWithoutAppointmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAppointmentsInput, Prisma.UserUncheckedCreateWithoutAppointmentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAppointmentsInput
+  upsert?: Prisma.UserUpsertWithoutAppointmentsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAppointmentsInput, Prisma.UserUpdateWithoutAppointmentsInput>, Prisma.UserUncheckedUpdateWithoutAppointmentsInput>
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -415,9 +396,8 @@ export type UserCreateWithoutSessionsInput = {
   email?: string | null
   emailVerified?: Date | string | null
   image?: string | null
-  groupUsers?: Prisma.GroupUserCreateNestedManyWithoutUserInput
-  assignedTasks?: Prisma.TaskCreateNestedManyWithoutAssigneeInput
-  createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
+  patients?: Prisma.UserPatientCreateNestedManyWithoutUserInput
+  appointments?: Prisma.AppointmentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -426,9 +406,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   email?: string | null
   emailVerified?: Date | string | null
   image?: string | null
-  groupUsers?: Prisma.GroupUserUncheckedCreateNestedManyWithoutUserInput
-  assignedTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssigneeInput
-  createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
+  patients?: Prisma.UserPatientUncheckedCreateNestedManyWithoutUserInput
+  appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -453,9 +432,8 @@ export type UserUpdateWithoutSessionsInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  groupUsers?: Prisma.GroupUserUpdateManyWithoutUserNestedInput
-  assignedTasks?: Prisma.TaskUpdateManyWithoutAssigneeNestedInput
-  createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
+  patients?: Prisma.UserPatientUpdateManyWithoutUserNestedInput
+  appointments?: Prisma.AppointmentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -464,189 +442,120 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  groupUsers?: Prisma.GroupUserUncheckedUpdateManyWithoutUserNestedInput
-  assignedTasks?: Prisma.TaskUncheckedUpdateManyWithoutAssigneeNestedInput
-  createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
+  patients?: Prisma.UserPatientUncheckedUpdateManyWithoutUserNestedInput
+  appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutUserNestedInput
 }
 
-export type UserCreateWithoutGroupUsersInput = {
+export type UserCreateWithoutPatientsInput = {
   id?: string
   name?: string | null
   email?: string | null
   emailVerified?: Date | string | null
   image?: string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  assignedTasks?: Prisma.TaskCreateNestedManyWithoutAssigneeInput
-  createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
+  appointments?: Prisma.AppointmentCreateNestedManyWithoutUserInput
 }
 
-export type UserUncheckedCreateWithoutGroupUsersInput = {
+export type UserUncheckedCreateWithoutPatientsInput = {
   id?: string
   name?: string | null
   email?: string | null
   emailVerified?: Date | string | null
   image?: string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  assignedTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssigneeInput
-  createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
+  appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutUserInput
 }
 
-export type UserCreateOrConnectWithoutGroupUsersInput = {
+export type UserCreateOrConnectWithoutPatientsInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutGroupUsersInput, Prisma.UserUncheckedCreateWithoutGroupUsersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPatientsInput, Prisma.UserUncheckedCreateWithoutPatientsInput>
 }
 
-export type UserUpsertWithoutGroupUsersInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutGroupUsersInput, Prisma.UserUncheckedUpdateWithoutGroupUsersInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutGroupUsersInput, Prisma.UserUncheckedCreateWithoutGroupUsersInput>
+export type UserUpsertWithoutPatientsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPatientsInput, Prisma.UserUncheckedUpdateWithoutPatientsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPatientsInput, Prisma.UserUncheckedCreateWithoutPatientsInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutGroupUsersInput = {
+export type UserUpdateToOneWithWhereWithoutPatientsInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutGroupUsersInput, Prisma.UserUncheckedUpdateWithoutGroupUsersInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPatientsInput, Prisma.UserUncheckedUpdateWithoutPatientsInput>
 }
 
-export type UserUpdateWithoutGroupUsersInput = {
+export type UserUpdateWithoutPatientsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  assignedTasks?: Prisma.TaskUpdateManyWithoutAssigneeNestedInput
-  createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
+  appointments?: Prisma.AppointmentUpdateManyWithoutUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutGroupUsersInput = {
+export type UserUncheckedUpdateWithoutPatientsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  assignedTasks?: Prisma.TaskUncheckedUpdateManyWithoutAssigneeNestedInput
-  createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
+  appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutUserNestedInput
 }
 
-export type UserCreateWithoutAssignedTasksInput = {
+export type UserCreateWithoutAppointmentsInput = {
   id?: string
   name?: string | null
   email?: string | null
   emailVerified?: Date | string | null
   image?: string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  groupUsers?: Prisma.GroupUserCreateNestedManyWithoutUserInput
-  createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
+  patients?: Prisma.UserPatientCreateNestedManyWithoutUserInput
 }
 
-export type UserUncheckedCreateWithoutAssignedTasksInput = {
+export type UserUncheckedCreateWithoutAppointmentsInput = {
   id?: string
   name?: string | null
   email?: string | null
   emailVerified?: Date | string | null
   image?: string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  groupUsers?: Prisma.GroupUserUncheckedCreateNestedManyWithoutUserInput
-  createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
+  patients?: Prisma.UserPatientUncheckedCreateNestedManyWithoutUserInput
 }
 
-export type UserCreateOrConnectWithoutAssignedTasksInput = {
+export type UserCreateOrConnectWithoutAppointmentsInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutAssignedTasksInput, Prisma.UserUncheckedCreateWithoutAssignedTasksInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAppointmentsInput, Prisma.UserUncheckedCreateWithoutAppointmentsInput>
 }
 
-export type UserCreateWithoutCreatedTasksInput = {
-  id?: string
-  name?: string | null
-  email?: string | null
-  emailVerified?: Date | string | null
-  image?: string | null
-  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  groupUsers?: Prisma.GroupUserCreateNestedManyWithoutUserInput
-  assignedTasks?: Prisma.TaskCreateNestedManyWithoutAssigneeInput
-}
-
-export type UserUncheckedCreateWithoutCreatedTasksInput = {
-  id?: string
-  name?: string | null
-  email?: string | null
-  emailVerified?: Date | string | null
-  image?: string | null
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  groupUsers?: Prisma.GroupUserUncheckedCreateNestedManyWithoutUserInput
-  assignedTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssigneeInput
-}
-
-export type UserCreateOrConnectWithoutCreatedTasksInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedTasksInput, Prisma.UserUncheckedCreateWithoutCreatedTasksInput>
-}
-
-export type UserUpsertWithoutAssignedTasksInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutAssignedTasksInput, Prisma.UserUncheckedUpdateWithoutAssignedTasksInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutAssignedTasksInput, Prisma.UserUncheckedCreateWithoutAssignedTasksInput>
+export type UserUpsertWithoutAppointmentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAppointmentsInput, Prisma.UserUncheckedUpdateWithoutAppointmentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAppointmentsInput, Prisma.UserUncheckedCreateWithoutAppointmentsInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutAssignedTasksInput = {
+export type UserUpdateToOneWithWhereWithoutAppointmentsInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutAssignedTasksInput, Prisma.UserUncheckedUpdateWithoutAssignedTasksInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAppointmentsInput, Prisma.UserUncheckedUpdateWithoutAppointmentsInput>
 }
 
-export type UserUpdateWithoutAssignedTasksInput = {
+export type UserUpdateWithoutAppointmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  groupUsers?: Prisma.GroupUserUpdateManyWithoutUserNestedInput
-  createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
+  patients?: Prisma.UserPatientUpdateManyWithoutUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutAssignedTasksInput = {
+export type UserUncheckedUpdateWithoutAppointmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  groupUsers?: Prisma.GroupUserUncheckedUpdateManyWithoutUserNestedInput
-  createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserUpsertWithoutCreatedTasksInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedTasksInput, Prisma.UserUncheckedUpdateWithoutCreatedTasksInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedTasksInput, Prisma.UserUncheckedCreateWithoutCreatedTasksInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutCreatedTasksInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedTasksInput, Prisma.UserUncheckedUpdateWithoutCreatedTasksInput>
-}
-
-export type UserUpdateWithoutCreatedTasksInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  groupUsers?: Prisma.GroupUserUpdateManyWithoutUserNestedInput
-  assignedTasks?: Prisma.TaskUpdateManyWithoutAssigneeNestedInput
-}
-
-export type UserUncheckedUpdateWithoutCreatedTasksInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  groupUsers?: Prisma.GroupUserUncheckedUpdateManyWithoutUserNestedInput
-  assignedTasks?: Prisma.TaskUncheckedUpdateManyWithoutAssigneeNestedInput
+  patients?: Prisma.UserPatientUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -656,16 +565,14 @@ export type UserUncheckedUpdateWithoutCreatedTasksInput = {
 
 export type UserCountOutputType = {
   sessions: number
-  groupUsers: number
-  assignedTasks: number
-  createdTasks: number
+  patients: number
+  appointments: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
-  groupUsers?: boolean | UserCountOutputTypeCountGroupUsersArgs
-  assignedTasks?: boolean | UserCountOutputTypeCountAssignedTasksArgs
-  createdTasks?: boolean | UserCountOutputTypeCountCreatedTasksArgs
+  patients?: boolean | UserCountOutputTypeCountPatientsArgs
+  appointments?: boolean | UserCountOutputTypeCountAppointmentsArgs
 }
 
 /**
@@ -688,22 +595,15 @@ export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.E
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountGroupUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.GroupUserWhereInput
+export type UserCountOutputTypeCountPatientsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserPatientWhereInput
 }
 
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountAssignedTasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.TaskWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountCreatedTasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.TaskWhereInput
+export type UserCountOutputTypeCountAppointmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AppointmentWhereInput
 }
 
 
@@ -714,9 +614,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   emailVerified?: boolean
   image?: boolean
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
-  groupUsers?: boolean | Prisma.User$groupUsersArgs<ExtArgs>
-  assignedTasks?: boolean | Prisma.User$assignedTasksArgs<ExtArgs>
-  createdTasks?: boolean | Prisma.User$createdTasksArgs<ExtArgs>
+  patients?: boolean | Prisma.User$patientsArgs<ExtArgs>
+  appointments?: boolean | Prisma.User$appointmentsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -747,9 +646,8 @@ export type UserSelectScalar = {
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
-  groupUsers?: boolean | Prisma.User$groupUsersArgs<ExtArgs>
-  assignedTasks?: boolean | Prisma.User$assignedTasksArgs<ExtArgs>
-  createdTasks?: boolean | Prisma.User$createdTasksArgs<ExtArgs>
+  patients?: boolean | Prisma.User$patientsArgs<ExtArgs>
+  appointments?: boolean | Prisma.User$appointmentsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -759,9 +657,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "User"
   objects: {
     sessions: Prisma.$SessionPayload<ExtArgs>[]
-    groupUsers: Prisma.$GroupUserPayload<ExtArgs>[]
-    assignedTasks: Prisma.$TaskPayload<ExtArgs>[]
-    createdTasks: Prisma.$TaskPayload<ExtArgs>[]
+    patients: Prisma.$UserPatientPayload<ExtArgs>[]
+    appointments: Prisma.$AppointmentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1164,9 +1061,8 @@ readonly fields: UserFieldRefs;
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  groupUsers<T extends Prisma.User$groupUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$groupUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GroupUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  assignedTasks<T extends Prisma.User$assignedTasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assignedTasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  createdTasks<T extends Prisma.User$createdTasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdTasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  patients<T extends Prisma.User$patientsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$patientsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPatientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  appointments<T extends Prisma.User$appointmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$appointmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1613,75 +1509,51 @@ export type User$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 }
 
 /**
- * User.groupUsers
+ * User.patients
  */
-export type User$groupUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$patientsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the GroupUser
+   * Select specific fields to fetch from the UserPatient
    */
-  select?: Prisma.GroupUserSelect<ExtArgs> | null
+  select?: Prisma.UserPatientSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the GroupUser
+   * Omit specific fields from the UserPatient
    */
-  omit?: Prisma.GroupUserOmit<ExtArgs> | null
+  omit?: Prisma.UserPatientOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.GroupUserInclude<ExtArgs> | null
-  where?: Prisma.GroupUserWhereInput
-  orderBy?: Prisma.GroupUserOrderByWithRelationInput | Prisma.GroupUserOrderByWithRelationInput[]
-  cursor?: Prisma.GroupUserWhereUniqueInput
+  include?: Prisma.UserPatientInclude<ExtArgs> | null
+  where?: Prisma.UserPatientWhereInput
+  orderBy?: Prisma.UserPatientOrderByWithRelationInput | Prisma.UserPatientOrderByWithRelationInput[]
+  cursor?: Prisma.UserPatientWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.GroupUserScalarFieldEnum | Prisma.GroupUserScalarFieldEnum[]
+  distinct?: Prisma.UserPatientScalarFieldEnum | Prisma.UserPatientScalarFieldEnum[]
 }
 
 /**
- * User.assignedTasks
+ * User.appointments
  */
-export type User$assignedTasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$appointmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Task
+   * Select specific fields to fetch from the Appointment
    */
-  select?: Prisma.TaskSelect<ExtArgs> | null
+  select?: Prisma.AppointmentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Task
+   * Omit specific fields from the Appointment
    */
-  omit?: Prisma.TaskOmit<ExtArgs> | null
+  omit?: Prisma.AppointmentOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.TaskInclude<ExtArgs> | null
-  where?: Prisma.TaskWhereInput
-  orderBy?: Prisma.TaskOrderByWithRelationInput | Prisma.TaskOrderByWithRelationInput[]
-  cursor?: Prisma.TaskWhereUniqueInput
+  include?: Prisma.AppointmentInclude<ExtArgs> | null
+  where?: Prisma.AppointmentWhereInput
+  orderBy?: Prisma.AppointmentOrderByWithRelationInput | Prisma.AppointmentOrderByWithRelationInput[]
+  cursor?: Prisma.AppointmentWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.TaskScalarFieldEnum | Prisma.TaskScalarFieldEnum[]
-}
-
-/**
- * User.createdTasks
- */
-export type User$createdTasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Task
-   */
-  select?: Prisma.TaskSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Task
-   */
-  omit?: Prisma.TaskOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.TaskInclude<ExtArgs> | null
-  where?: Prisma.TaskWhereInput
-  orderBy?: Prisma.TaskOrderByWithRelationInput | Prisma.TaskOrderByWithRelationInput[]
-  cursor?: Prisma.TaskWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.TaskScalarFieldEnum | Prisma.TaskScalarFieldEnum[]
+  distinct?: Prisma.AppointmentScalarFieldEnum | Prisma.AppointmentScalarFieldEnum[]
 }
 
 /**

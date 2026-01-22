@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.2.0",
   "engineVersion": "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3",
   "activeProvider": "postgresql",
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel Session {\n  id           String   @id @default(cuid())\n  sessionToken String   @unique @map(\"session_token\")\n  userId       String\n  expires      DateTime\n  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n}\n\nmodel User {\n  id            String      @id @default(cuid())\n  name          String?\n  email         String?     @unique\n  emailVerified DateTime?\n  image         String?\n  sessions      Session[]\n  groupUsers    GroupUser[]\n  assignedTasks Task[]      @relation(\"AssignedTasks\")\n  createdTasks  Task[]      @relation(\"CreatedTasks\")\n}\n\nmodel VerificationToken {\n  identifier String\n  token      String\n  expires    DateTime\n\n  @@unique([identifier, token])\n}\n\nmodel Group {\n  id         String      @id @default(cuid())\n  name       String\n  groupUsers GroupUser[]\n  projects   Project[]\n}\n\nmodel GroupUser {\n  id      String @id @default(cuid())\n  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)\n  userId  String\n  group   Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)\n  groupId String\n\n  @@unique([userId, groupId])\n}\n\nmodel Project {\n  id        String   @id @default(cuid())\n  name      String\n  createdAt DateTime @default(now())\n  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)\n  groupId   String\n  tasks     Task[]\n}\n\nmodel Task {\n  id          String   @id @default(cuid())\n  title       String\n  description String?\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)\n  projectId   String\n  assignee    User?    @relation(\"AssignedTasks\", fields: [assigneeId], references: [id])\n  assigneeId  String?\n  createdBy   User     @relation(\"CreatedTasks\", fields: [createdById], references: [id])\n  createdById String\n}\n",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nenum Sex {\n  MALE\n  FEMALE\n  OTHER\n}\n\nmodel Session {\n  id           String   @id @default(cuid())\n  sessionToken String   @unique\n  userId       String\n  expires      DateTime\n  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n}\n\nmodel User {\n  id            String        @id @default(cuid())\n  name          String?\n  email         String?       @unique\n  emailVerified DateTime?\n  image         String?\n  sessions      Session[]\n  patients      UserPatient[]\n  appointments  Appointment[]\n}\n\nmodel VerificationToken {\n  identifier String\n  token      String\n  expires    DateTime\n\n  @@unique([identifier, token])\n}\n\nmodel Patient {\n  id           String        @id @default(cuid())\n  name         String\n  birthDate    DateTime\n  sex          Sex           @default(OTHER)\n  phone        String        @unique\n  email        String        @unique\n  doctors      UserPatient[]\n  appointments Appointment[]\n}\n\nmodel UserPatient {\n  user      User?    @relation(fields: [userId], references: [id])\n  userId    String\n  patient   Patient? @relation(fields: [patientId], references: [id])\n  patientId String\n\n  @@unique([userId, patientId])\n}\n\nmodel Operation {\n  id           String        @id @default(cuid())\n  name         String\n  price        Int\n  appointments Appointment[]\n}\n\nmodel Appointment {\n  id          String     @id @default(cuid())\n  title       String\n  startTime   DateTime\n  endTime     DateTime\n  patient     Patient?   @relation(fields: [patientId], references: [id])\n  patientId   String?\n  operation   Operation? @relation(fields: [operationId], references: [id])\n  operationId String?\n  user        User?      @relation(fields: [userId], references: [id])\n  userId      String?\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -28,7 +28,7 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"Session\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"sessionToken\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"session_token\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expires\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"SessionToUser\"}],\"dbName\":null},\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"emailVerified\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"image\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"sessions\",\"kind\":\"object\",\"type\":\"Session\",\"relationName\":\"SessionToUser\"},{\"name\":\"groupUsers\",\"kind\":\"object\",\"type\":\"GroupUser\",\"relationName\":\"GroupUserToUser\"},{\"name\":\"assignedTasks\",\"kind\":\"object\",\"type\":\"Task\",\"relationName\":\"AssignedTasks\"},{\"name\":\"createdTasks\",\"kind\":\"object\",\"type\":\"Task\",\"relationName\":\"CreatedTasks\"}],\"dbName\":null},\"VerificationToken\":{\"fields\":[{\"name\":\"identifier\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"token\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expires\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Group\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"groupUsers\",\"kind\":\"object\",\"type\":\"GroupUser\",\"relationName\":\"GroupToGroupUser\"},{\"name\":\"projects\",\"kind\":\"object\",\"type\":\"Project\",\"relationName\":\"GroupToProject\"}],\"dbName\":null},\"GroupUser\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"GroupUserToUser\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"group\",\"kind\":\"object\",\"type\":\"Group\",\"relationName\":\"GroupToGroupUser\"},{\"name\":\"groupId\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null},\"Project\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"group\",\"kind\":\"object\",\"type\":\"Group\",\"relationName\":\"GroupToProject\"},{\"name\":\"groupId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tasks\",\"kind\":\"object\",\"type\":\"Task\",\"relationName\":\"ProjectToTask\"}],\"dbName\":null},\"Task\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"project\",\"kind\":\"object\",\"type\":\"Project\",\"relationName\":\"ProjectToTask\"},{\"name\":\"projectId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"assignee\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"AssignedTasks\"},{\"name\":\"assigneeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdBy\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"CreatedTasks\"},{\"name\":\"createdById\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"Session\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"sessionToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expires\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"SessionToUser\"}],\"dbName\":null},\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"emailVerified\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"image\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"sessions\",\"kind\":\"object\",\"type\":\"Session\",\"relationName\":\"SessionToUser\"},{\"name\":\"patients\",\"kind\":\"object\",\"type\":\"UserPatient\",\"relationName\":\"UserToUserPatient\"},{\"name\":\"appointments\",\"kind\":\"object\",\"type\":\"Appointment\",\"relationName\":\"AppointmentToUser\"}],\"dbName\":null},\"VerificationToken\":{\"fields\":[{\"name\":\"identifier\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"token\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expires\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Patient\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"birthDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"sex\",\"kind\":\"enum\",\"type\":\"Sex\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"doctors\",\"kind\":\"object\",\"type\":\"UserPatient\",\"relationName\":\"PatientToUserPatient\"},{\"name\":\"appointments\",\"kind\":\"object\",\"type\":\"Appointment\",\"relationName\":\"AppointmentToPatient\"}],\"dbName\":null},\"UserPatient\":{\"fields\":[{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"UserToUserPatient\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"patient\",\"kind\":\"object\",\"type\":\"Patient\",\"relationName\":\"PatientToUserPatient\"},{\"name\":\"patientId\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null},\"Operation\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"price\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"appointments\",\"kind\":\"object\",\"type\":\"Appointment\",\"relationName\":\"AppointmentToOperation\"}],\"dbName\":null},\"Appointment\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"startTime\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"endTime\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"patient\",\"kind\":\"object\",\"type\":\"Patient\",\"relationName\":\"AppointmentToPatient\"},{\"name\":\"patientId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"operation\",\"kind\":\"object\",\"type\":\"Operation\",\"relationName\":\"AppointmentToOperation\"},{\"name\":\"operationId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"AppointmentToUser\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
   const { Buffer } = await import('node:buffer')
@@ -205,44 +205,44 @@ export interface PrismaClient<
   get verificationToken(): Prisma.VerificationTokenDelegate<ExtArgs, { omit: OmitOpts }>;
 
   /**
-   * `prisma.group`: Exposes CRUD operations for the **Group** model.
+   * `prisma.patient`: Exposes CRUD operations for the **Patient** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Groups
-    * const groups = await prisma.group.findMany()
+    * // Fetch zero or more Patients
+    * const patients = await prisma.patient.findMany()
     * ```
     */
-  get group(): Prisma.GroupDelegate<ExtArgs, { omit: OmitOpts }>;
+  get patient(): Prisma.PatientDelegate<ExtArgs, { omit: OmitOpts }>;
 
   /**
-   * `prisma.groupUser`: Exposes CRUD operations for the **GroupUser** model.
+   * `prisma.userPatient`: Exposes CRUD operations for the **UserPatient** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more GroupUsers
-    * const groupUsers = await prisma.groupUser.findMany()
+    * // Fetch zero or more UserPatients
+    * const userPatients = await prisma.userPatient.findMany()
     * ```
     */
-  get groupUser(): Prisma.GroupUserDelegate<ExtArgs, { omit: OmitOpts }>;
+  get userPatient(): Prisma.UserPatientDelegate<ExtArgs, { omit: OmitOpts }>;
 
   /**
-   * `prisma.project`: Exposes CRUD operations for the **Project** model.
+   * `prisma.operation`: Exposes CRUD operations for the **Operation** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Projects
-    * const projects = await prisma.project.findMany()
+    * // Fetch zero or more Operations
+    * const operations = await prisma.operation.findMany()
     * ```
     */
-  get project(): Prisma.ProjectDelegate<ExtArgs, { omit: OmitOpts }>;
+  get operation(): Prisma.OperationDelegate<ExtArgs, { omit: OmitOpts }>;
 
   /**
-   * `prisma.task`: Exposes CRUD operations for the **Task** model.
+   * `prisma.appointment`: Exposes CRUD operations for the **Appointment** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Tasks
-    * const tasks = await prisma.task.findMany()
+    * // Fetch zero or more Appointments
+    * const appointments = await prisma.appointment.findMany()
     * ```
     */
-  get task(): Prisma.TaskDelegate<ExtArgs, { omit: OmitOpts }>;
+  get appointment(): Prisma.AppointmentDelegate<ExtArgs, { omit: OmitOpts }>;
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {

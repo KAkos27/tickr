@@ -5,7 +5,7 @@ export default async function SignInPage() {
     <div>
       <form action={signInUser}>
         <input type="text" name="email" placeholder="Email" />
-        <button type="submit">Signin with Resend</button>
+        <button type="submit">Signin</button>
       </form>
     </div>
   );
