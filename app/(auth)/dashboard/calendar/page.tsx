@@ -1,19 +1,21 @@
-import { getAppointments } from "@/lib/querys";
 import Calendar from "@/components/calendar";
-import { auth } from "@/auth";
+import { getAppointments } from "@/lib/querys";
+
+import style from "@/styles/auth/dashboard/calendar/page.module.css";
 
 export default async function CalendarPage() {
-  const session = await auth();
-  const id = session?.user?.id;
-
-  const appointments = await getAppointments(id);
+  const appointments = await getAppointments();
 
   const events = appointments.map((appointment) => ({
     id: appointment.id,
     title: appointment.title,
-    start: appointment.startTime.toISOString(),
-    end: appointment.endTime.toISOString(),
+    start: appointment.start.toISOString(),
+    end: appointment.end.toISOString(),
   }));
 
-  return <Calendar events={events} />;
+  return (
+    <div className={style.container}>
+      <Calendar events={events} />
+    </div>
+  );
 }

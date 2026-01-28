@@ -1,6 +1,8 @@
+"use client";
+
 import { useFormStatus } from "react-dom";
 
-export default function FromSubmit({
+export default function FormSubmit({
   buttonText,
   pedingText,
 }: {

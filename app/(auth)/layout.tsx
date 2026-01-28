@@ -1,22 +1,29 @@
 import { redirect } from "next/navigation";
-import Nav from "@/components/nav";
 import { auth } from "@/auth";
+import Nav from "@/components/nav";
+import DashboardHeader from "@/components/dashboard-header";
 
-import type { ChildrenProps } from "@/types/common";
+import style from "@/styles/auth/layout.module.css";
+import { ReactNode } from "react";
 
-export default async function AuthLayout({ children }: ChildrenProps) {
+export default async function AuthLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
   const session = await auth();
 
   if (!session || !session.user) {
-    return redirect("/sign-in");
+    redirect("/sign-in");
   }
 
   return (
-    <div>
-      <Nav />
-      {session?.user && <p>Signed in as {session.user.email}</p>}
-      <h2>Auth layout</h2>
-      {children}
+    <div className={style.dashboardContainer}>
+      <DashboardHeader />
+      <div className={style.container}>
+        <Nav />
+        {children}
+      </div>
     </div>
   );
 }

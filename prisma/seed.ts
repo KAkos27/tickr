@@ -260,20 +260,18 @@ export async function main() {
     const op = operations[plan.operationName];
     if (!pat || !op) continue;
 
-    const startTime = new Date(
-      now.getTime() + plan.startOffsetMinutes * 60 * 1000,
-    );
+    const start = new Date(now.getTime() + plan.startOffsetMinutes * 60 * 1000);
     const endTime = new Date(
-      startTime.getTime() + plan.durationMinutes * 60 * 1000,
+      start.getTime() + plan.durationMinutes * 60 * 1000,
     );
 
-    // Avoid duplicates: check by title + user + patient + startTime
+    // Avoid duplicates: check by title + user + patient + start
     const existing = await prisma.appointment.findFirst({
       where: {
         title: plan.title,
         userId: targetUserId,
         patientId: pat.id,
-        startTime,
+        start,
       },
     });
     if (existing) continue;
@@ -281,8 +279,8 @@ export async function main() {
     await prisma.appointment.create({
       data: {
         title: plan.title,
-        startTime: toISODate(startTime),
-        endTime: toISODate(endTime),
+        start: toISODate(start),
+        end: toISODate(endTime),
         userId: targetUserId,
         patientId: pat.id,
         operationId: op.id,

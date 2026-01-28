@@ -1029,8 +1029,8 @@ export type OperationScalarFieldEnum = (typeof OperationScalarFieldEnum)[keyof t
 export const AppointmentScalarFieldEnum = {
   id: 'id',
   title: 'title',
-  startTime: 'startTime',
-  endTime: 'endTime',
+  start: 'start',
+  end: 'end',
   patientId: 'patientId',
   operationId: 'operationId',
   userId: 'userId'

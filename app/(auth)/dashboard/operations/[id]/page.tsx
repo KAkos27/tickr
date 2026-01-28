@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import { getOperation } from "@/lib/querys";
 import type { Params } from "@/types/route";
 import { notFound } from "next/navigation";
 
@@ -6,7 +6,7 @@ export default async function OperationPage({
   params,
 }: Params<{ id: string }>) {
   const id = (await params).id;
-  const operation = await prisma.operation.findUnique({ where: { id } });
+  const operation = await getOperation(id);
 
   if (!operation) {
     notFound();

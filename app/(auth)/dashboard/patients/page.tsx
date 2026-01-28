@@ -1,14 +1,8 @@
-import prisma from "@/lib/prisma";
-import { auth } from "@/auth";
 import Link from "next/link";
+import { getPatients } from "@/lib/querys";
 
 export default async function PatientsPage() {
-  const session = await auth();
-  const userId = session?.user?.id;
-
-  const patients = await prisma.patient.findMany({
-    where: { doctors: { some: { userId } } },
-  });
+  const patients = await getPatients();
 
   if (!patients) {
     return <div>Nincsenek páciensek</div>;

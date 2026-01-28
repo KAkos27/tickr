@@ -8,8 +8,6 @@ export default async function PatientPage({ params }: Params<{ id: string }>) {
 
   const patient = await prisma.patient.findUnique({ where: { id } });
 
-  console.log(patient);
-
   if (!patient) {
     notFound();
   }
