@@ -3,7 +3,7 @@ import { auth } from "@/auth";
 import Nav from "@/components/nav";
 import DashboardHeader from "@/components/dashboard-header";
 
-import style from "@/styles/auth/layout.module.css";
+import style from "@/styles/auth/layout.module.scss";
 import { ReactNode } from "react";
 
 export default async function AuthLayout({

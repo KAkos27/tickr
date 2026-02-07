@@ -1,9 +1,11 @@
+@use "../partials" as *;
+
 .nav {
   display: flex;
   flex-direction: column;
   height: 100%;
   min-width: 200px;
-  background-color: #111827;
+  background-color: $secondary-color;
 
   a {
     text-decoration: none;
@@ -11,7 +13,7 @@
     padding: 1rem;
 
     &:hover {
-      background-color: #5d8da8;
+      background-color: $primary-color;
     }
   }
 }

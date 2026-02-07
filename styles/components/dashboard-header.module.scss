@@ -1,5 +1,7 @@
+@use "../partials" as *;
+
 .header {
-  background-color: #5d8da8;
+  background-color: $primary-color;
   height: 40px;
   padding: 0 1rem;
   display: flex;

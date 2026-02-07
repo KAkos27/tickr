@@ -16,6 +16,10 @@ export const getAppointments = async () => {
 };
 
 export const getPatients = async () => {
+  return await prisma.patient.findMany();
+};
+
+export const getUserPatients = async () => {
   const session = await auth();
   const userId = session?.user?.id;
 
@@ -24,6 +28,10 @@ export const getPatients = async () => {
   });
 
   return patients;
+};
+
+export const getOperations = async () => {
+  return await prisma.operation.findMany();
 };
 
 export const getOperation = async (id: string) => {

@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { getPatients } from "@/lib/querys";
+import { getUserPatients } from "@/lib/querys";
 
 export default async function PatientsPage() {
-  const patients = await getPatients();
+  const patients = await getUserPatients();
 
   if (!patients) {
     return <div>Nincsenek páciensek</div>;

@@ -1,19 +1,18 @@
 "use client";
 
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-
+import allLocales from "@fullcalendar/core/locales-all";
 import { DateSelectArg, EventClickArg } from "@fullcalendar/core/index.js";
 
-import { toDateTimeLocalValue } from "@/util/date-converter";
+import { toDateTimeLocalValue } from "@/lib/utils";
 
 import type { CalendarEvent } from "@/types/domain";
 
-import style from "@/styles/components/calendar.module.css";
-import allLocales from "@fullcalendar/core/locales-all";
+import style from "@/styles/components/calendar.module.scss";
 
 export default function Calendar({ events }: { events: CalendarEvent[] }) {
   const router = useRouter();

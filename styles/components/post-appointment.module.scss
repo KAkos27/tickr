@@ -1,0 +1,28 @@
+@use "../partials" as *;
+
+.appointmentForm {
+  display: flex;
+  padding: 16px 0;
+  width: 50%;
+  flex-direction: column;
+  gap: 16px;
+
+  & > input {
+    @include submitButton;
+  }
+
+  & > div {
+    display: flex;
+    gap: 4px;
+    flex-direction: column;
+
+    input,
+    select {
+      @include input;
+    }
+
+    small {
+      color: $error-color;
+    }
+  }
+}

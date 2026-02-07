@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 
-import style from "@/styles/components/dashboard-header.module.css";
+import style from "@/styles/components/dashboard-header.module.scss";
 
 export default async function DashboardHeader() {
   const session = await auth();

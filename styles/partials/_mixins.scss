@@ -1,0 +1,22 @@
+@use "variables" as *;
+
+@mixin input {
+  height: 40px;
+  border-radius: 6px;
+  border: 0.5px solid $secondary-color;
+  background-color: $grey;
+  padding: 4px 8px;
+}
+
+@mixin submitButton {
+  cursor: pointer;
+  border-radius: 6px;
+  color: $white;
+  height: 40px;
+  border: none;
+  background-color: $primary-color;
+
+  &:hover {
+    color: $secondary-color;
+  }
+}

@@ -1,10 +1,26 @@
 export type ChildrenProps = Readonly<{ children: React.ReactNode }>;
 
-export type ActionState = {
-  error?: string;
+export type AppointmentFormError = {
+  title: string[];
+  patient: string[];
+  operation: string[];
+  date: string[];
 };
 
-export type FormAction<TState extends object = ActionState> = (
+export type OperationFormError = {
+  name: string[];
+  price: string[];
+};
+
+export type ActionState<TError> = {
+  error?: TError;
+  message?: string;
+};
+
+export type FormAction<TState> = (
   prevState: TState,
   formData: FormData,
-) => Promise<TState>;
+) => Promise<TState> | TState;
+
+export type CreateOperationState = ActionState<OperationFormError>;
+export type CreateAppointmentState = ActionState<AppointmentFormError>;

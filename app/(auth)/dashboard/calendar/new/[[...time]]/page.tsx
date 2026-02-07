@@ -1,12 +1,11 @@
-import FormSubmit from "@/components/form-submit";
-import PostForm from "@/components/post-form";
+import PostAppointment from "@/components/post-appointment";
 import { createAppointment } from "@/lib/actions";
-import type { Params } from "@/types/route";
+import { getOperations, getPatients } from "@/lib/querys";
+import { decode } from "@/lib/utils";
+import type { NewAppointmentParams, Params } from "@/types/route";
 import { notFound } from "next/navigation";
 
-type NewAppointmentParams = {
-  time?: string[];
-};
+import style from "@/styles/auth/dashboard/calendar/new/page.module.scss";
 
 export default async function NewAppointmenttPage({
   params,
@@ -17,8 +16,8 @@ export default async function NewAppointmenttPage({
     notFound();
   }
 
-  const decode = (value: string | undefined) =>
-    value ? decodeURIComponent(value) : null;
+  const patients = await getPatients();
+  const operations = await getOperations();
 
   const start = decode(time?.[0]);
   const end = decode(time?.[1]);
@@ -26,17 +25,14 @@ export default async function NewAppointmenttPage({
   console.log(start, end);
 
   return (
-    <div>
-      <PostForm action={createAppointment}>
-        <input type="text" name="title" />
-        <input
-          type="datetime-local"
-          name="start"
-          defaultValue={start ? start : ""}
-        />
-        <input type="datetime-local" name="end" defaultValue={end ? end : ""} />
-        <FormSubmit buttonText="ok" pedingText="pending" />
-      </PostForm>
+    <div className={style.container}>
+      <PostAppointment
+        action={createAppointment}
+        start={start}
+        end={end}
+        patients={patients}
+        operations={operations}
+      />
     </div>
   );
 }
