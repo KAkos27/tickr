@@ -1,0 +1,67 @@
+@use "../partials" as *;
+
+.teethSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .teethRow {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+
+    .left {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .right {
+      display: flex;
+      gap: 0.5rem;
+    }
+  }
+
+  .toothButton,
+  .toothButtonSelected {
+    border: 1px solid $grey;
+    border-radius: 6px;
+    padding: 8px 0;
+    background: $white;
+    cursor: pointer;
+    font-weight: 600;
+    height: 90px;
+    width: 30px;
+  }
+
+  .toothButtonSelected {
+    background: $primary-color;
+    color: $white;
+    border-color: $primary-color;
+  }
+
+  .toothButtonHistory {
+    background: $secondary-color;
+    color: $white;
+    border-color: $secondary-color;
+    height: 90px;
+    width: 30px;
+  }
+
+  .toothOperations {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .toothOperationGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .toothOperationList {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+}

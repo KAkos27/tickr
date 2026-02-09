@@ -34,6 +34,10 @@ export default function PostAppointment({
     {},
   );
 
+  const selectedPatient = patients.find(
+    (patient) => patient.id === selectedPatientId,
+  );
+
   const handlePatientChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const nextPatientId = event.target.value;
     setSelectedPatientId(nextPatientId);
@@ -68,9 +72,8 @@ export default function PostAppointment({
       </div>
       <Teeth
         key={selectedPatientId}
-        patients={patients}
+        selectedPatient={selectedPatient}
         operations={operations}
-        selectedPatientId={selectedPatientId}
       />
       <div>
         <label htmlFor="start">Kezdete</label>

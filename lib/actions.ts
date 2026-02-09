@@ -11,12 +11,11 @@ import type {
   ClinicFormError,
   CreateAppointmentState,
   CreateClinicState,
-  CreateOperationState,
   InviteClinicMemberState,
-  OperationFormError,
 } from "@/types/common";
 import { AuthError } from "next-auth";
 import { parseDateTimeLocalValue } from "./utils";
+import { ClinicRole } from "@/generated/prisma/enums";
 
 const getUserClinicContext = async () => {
   const session = await auth();
@@ -93,7 +92,7 @@ export const createClinic = async (
       data: {
         name,
         members: {
-          create: { userId, role: "OWNER" },
+          create: { userId, role: ClinicRole.OWNER },
         },
       },
     });
@@ -171,7 +170,7 @@ export const inviteClinicMember = async (
     return { message: "Nincs jogosultság" };
   }
 
-  if (membership.role === "MEMBER") {
+  if (membership.role === ClinicRole.MEMBER) {
     return { message: "Nincs jogosultság" };
   }
 
@@ -196,7 +195,7 @@ export const inviteClinicMember = async (
         clinicId,
         email,
         userId: targetUser?.id ?? null,
-        role: "MEMBER",
+        role: ClinicRole.MEMBER,
       },
     });
   } catch {
@@ -272,39 +271,6 @@ export const createAppointment = async (
       errors.teeth.push("Válassz beavatkozást minden kijelölt foghoz");
     }
   }
-
-  // if (patient && toothOperations.length > 0) {
-  //   const patientTeeth = await prisma.patientTooth.findMany({
-  //     where: { patientId: patient.id },
-  //     select: { toothCode: true },
-  //   });
-  //   const allowedTeeth = new Set(patientTeeth.map((t) => t.toothCode));
-  //   const invalidTeeth = toothOperations.filter(
-  //     (item) => !allowedTeeth.has(item.toothCode),
-  //   );
-  //   if (invalidTeeth.length > 0) {
-  //     errors.teeth.push("Ismeretlen fog(ak) a páciensnél");
-  //   }
-  // }
-
-  // if (clinicId && toothOperations.length > 0) {
-  //   const uniqueOperationIds = Array.from(
-  //     new Set(toothOperations.flatMap((item) => item.operationIds)),
-  //   );
-  //   if (uniqueOperationIds.length > 0) {
-  //     const validOperations = await prisma.operation.findMany({
-  //       where: { id: { in: uniqueOperationIds }, clinicId },
-  //       select: { id: true },
-  //     });
-  //     const validOperationIds = new Set(validOperations.map((op) => op.id));
-  //     const invalidOperation = toothOperations.some((item) =>
-  //       item.operationIds.some((opId) => !validOperationIds.has(opId)),
-  //     );
-  //     if (invalidOperation) {
-  //       errors.teeth.push("Ismeretlen beavatkozás a foghoz");
-  //     }
-  //   }
-  // }
 
   if (startDate && endDate && clinicId) {
     const overlap = await prisma.appointment.findFirst({

@@ -1,44 +1,28 @@
 "use client";
 
-import { Patient } from "@/generated/prisma/client";
-import style from "@/styles/components/post-appointment.module.scss";
-import { useMemo, useState } from "react";
+import style from "@/styles/components/teeth.module.scss";
+import { SelectedPatient } from "@/types/domain";
+import { useState } from "react";
 
 export default function Teeth({
-  selectedPatientId,
-  patients,
+  selectedPatient,
   operations,
 }: {
-  selectedPatientId: string;
-  patients: Array<
-    Patient & {
-      teeth: { toothCode: string; operations: { appointmentId: string }[] }[];
-    }
-  >;
+  selectedPatient: SelectedPatient;
   operations: Array<{ id: string; name: string; price: number }>;
 }) {
   const [toothOperations, setToothOperations] = useState<
     Record<string, string[]>
   >({});
 
-  const selectedPatient = useMemo(
-    () => patients.find((patient) => patient.id === selectedPatientId),
-    [patients, selectedPatientId],
-  );
+  const patientTeeth = (
+    selectedPatient?.teeth.map((tooth) => ({
+      toothCode: tooth.toothCode,
+      hasHistory: (tooth.operations?.length ?? 0) > 0,
+    })) ?? []
+  ).sort((a, b) => a.toothCode.localeCompare(b.toothCode));
 
-  const patientTeeth = useMemo(() => {
-    const teeth =
-      selectedPatient?.teeth.map((tooth) => ({
-        toothCode: tooth.toothCode,
-        hasHistory: (tooth.operations?.length ?? 0) > 0,
-      })) ?? [];
-    return teeth.sort((a, b) => a.toothCode.localeCompare(b.toothCode));
-  }, [selectedPatient]);
-
-  const selectedTeeth = useMemo(
-    () => Object.keys(toothOperations).sort(),
-    [toothOperations],
-  );
+  const selectedTeeth = Object.keys(toothOperations).sort();
 
   const toggleTooth = (toothCode: string) => {
     setToothOperations((prev) => {
@@ -62,15 +46,11 @@ export default function Teeth({
     });
   };
 
-  const serializedToothOperations = useMemo(
-    () =>
-      JSON.stringify(
-        selectedTeeth.map((toothCode) => ({
-          toothCode,
-          operationIds: toothOperations[toothCode] ?? [],
-        })),
-      ),
-    [selectedTeeth, toothOperations],
+  const serializedToothOperations = JSON.stringify(
+    selectedTeeth.map((toothCode) => ({
+      toothCode,
+      operationIds: toothOperations[toothCode] ?? [],
+    })),
   );
 
   return (
@@ -80,24 +60,98 @@ export default function Teeth({
         {!selectedPatient && <small>Válassz pácienst a fogakhoz.</small>}
         {selectedPatient && (
           <div className={style.teethGrid}>
-            {patientTeeth.map((tooth) => {
-              const isSelected = toothOperations[tooth.toothCode] !== undefined;
-              const className = isSelected
-                ? style.toothButtonSelected
-                : tooth.hasHistory
-                  ? style.toothButtonHistory
-                  : style.toothButton;
-              return (
-                <button
-                  key={tooth.toothCode}
-                  type="button"
-                  className={className}
-                  onClick={() => toggleTooth(tooth.toothCode)}
-                >
-                  {tooth.toothCode}
-                </button>
-              );
-            })}
+            <div className={style.teethRow}>
+              <div className={style.left}>
+                {patientTeeth.map((tooth) => {
+                  const isSelected =
+                    toothOperations[tooth.toothCode] !== undefined;
+                  const className = isSelected
+                    ? style.toothButtonSelected
+                    : tooth.hasHistory
+                      ? style.toothButtonHistory
+                      : style.toothButton;
+                  const toothCode = Number.parseInt(tooth.toothCode);
+                  return toothCode <= 18 ? (
+                    <button
+                      key={tooth.toothCode}
+                      type="button"
+                      className={className}
+                      onClick={() => toggleTooth(tooth.toothCode)}
+                    >
+                      {tooth.toothCode}
+                    </button>
+                  ) : null;
+                })}
+              </div>
+              <div className={style.right}>
+                {patientTeeth.map((tooth) => {
+                  const isSelected =
+                    toothOperations[tooth.toothCode] !== undefined;
+                  const className = isSelected
+                    ? style.toothButtonSelected
+                    : tooth.hasHistory
+                      ? style.toothButtonHistory
+                      : style.toothButton;
+                  const toothCode = Number.parseInt(tooth.toothCode);
+                  return toothCode >= 21 && toothCode <= 28 ? (
+                    <button
+                      key={tooth.toothCode}
+                      type="button"
+                      className={className}
+                      onClick={() => toggleTooth(tooth.toothCode)}
+                    >
+                      {tooth.toothCode}
+                    </button>
+                  ) : null;
+                })}
+              </div>
+            </div>
+            <div className={style.teethRow}>
+              <div className={style.left}>
+                {patientTeeth.map((tooth) => {
+                  const isSelected =
+                    toothOperations[tooth.toothCode] !== undefined;
+                  const className = isSelected
+                    ? style.toothButtonSelected
+                    : tooth.hasHistory
+                      ? style.toothButtonHistory
+                      : style.toothButton;
+                  const toothCode = Number.parseInt(tooth.toothCode);
+                  return toothCode >= 41 ? (
+                    <button
+                      key={tooth.toothCode}
+                      type="button"
+                      className={className}
+                      onClick={() => toggleTooth(tooth.toothCode)}
+                    >
+                      {tooth.toothCode}
+                    </button>
+                  ) : null;
+                })}
+              </div>
+              <div className={style.right}>
+                {patientTeeth.map((tooth) => {
+                  const isSelected =
+                    toothOperations[tooth.toothCode] !== undefined;
+                  const className = isSelected
+                    ? style.toothButtonSelected
+                    : tooth.hasHistory
+                      ? style.toothButtonHistory
+                      : style.toothButton;
+                  const toothCode = Number.parseInt(tooth.toothCode);
+                  return toothCode >= 31 && toothCode <= 38 ? (
+                    <button
+                      key={tooth.toothCode}
+                      type="button"
+                      className={className}
+                      onClick={() => toggleTooth(tooth.toothCode)}
+                    >
+                      {tooth.toothCode}
+                    </button>
+                  ) : null;
+                })}
+              </div>
+            </div>
           </div>
         )}
         {selectedTeeth.length > 0 && (
@@ -119,7 +173,7 @@ export default function Teeth({
                             toggleToothOperation(toothCode, operation.id)
                           }
                         />
-                        {operation.name}
+                        {operation.name} {operation.price} Ft
                       </label>
                     );
                   })}
