@@ -16,3 +16,12 @@ export const Sex = {
 } as const
 
 export type Sex = (typeof Sex)[keyof typeof Sex]
+
+
+export const ClinicRole = {
+  OWNER: 'OWNER',
+  ADMIN: 'ADMIN',
+  MEMBER: 'MEMBER'
+} as const
+
+export type ClinicRole = (typeof ClinicRole)[keyof typeof ClinicRole]

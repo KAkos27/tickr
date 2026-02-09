@@ -25,6 +25,71 @@ export async function main() {
     users[u.email] = up as { id: string; email: string; name: string | null };
   }
 
+  // Clinics
+  const clinicNames = ["Alpha Clinic", "Beta Clinic"] as const;
+  const clinics: Record<string, { id: string; name: string }> = {};
+  for (const name of clinicNames) {
+    const existing = await prisma.clinic.findFirst({ where: { name } });
+    const clinic =
+      existing ??
+      (await prisma.clinic.create({
+        data: { name },
+      }));
+    clinics[name] = clinic as { id: string; name: string };
+  }
+
+  const clinicMemberships: Array<{
+    clinicName: (typeof clinicNames)[number];
+    userEmail: string;
+    role: "OWNER" | "ADMIN" | "MEMBER";
+  }> = [
+    {
+      clinicName: "Alpha Clinic",
+      userEmail: "alice@example.com",
+      role: "OWNER",
+    },
+    { clinicName: "Alpha Clinic", userEmail: "bob@example.com", role: "ADMIN" },
+    {
+      clinicName: "Alpha Clinic",
+      userEmail: "carol@example.com",
+      role: "MEMBER",
+    },
+    { clinicName: "Beta Clinic", userEmail: "dave@example.com", role: "OWNER" },
+    { clinicName: "Beta Clinic", userEmail: "eve@example.com", role: "ADMIN" },
+    {
+      clinicName: "Beta Clinic",
+      userEmail: "frank@example.com",
+      role: "MEMBER",
+    },
+  ];
+
+  for (const membership of clinicMemberships) {
+    const clinic = clinics[membership.clinicName];
+    const user = users[membership.userEmail];
+    if (!clinic || !user) continue;
+
+    await prisma.clinicMember.upsert({
+      where: {
+        clinicId_email: { clinicId: clinic.id, email: user.email },
+      },
+      create: {
+        clinicId: clinic.id,
+        userId: user.id,
+        email: user.email,
+        role: membership.role,
+      },
+      update: {
+        userId: user.id,
+        role: membership.role,
+      },
+    });
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { activeClinicId: clinic.id },
+    });
+  }
+
   // Patients
   const patientsData = [
     {
@@ -33,6 +98,7 @@ export async function main() {
       name: "Anna Patient",
       birthDate: new Date("1990-02-15T00:00:00Z"),
       sex: "FEMALE" as const,
+      clinicName: "Alpha Clinic" as const,
     },
     {
       email: "patient.bela@example.com",
@@ -40,6 +106,7 @@ export async function main() {
       name: "Béla Páciens",
       birthDate: new Date("1985-06-20T00:00:00Z"),
       sex: "MALE" as const,
+      clinicName: "Alpha Clinic" as const,
     },
     {
       email: "patient.csilla@example.com",
@@ -47,6 +114,7 @@ export async function main() {
       name: "Csilla Páciens",
       birthDate: new Date("2000-11-05T00:00:00Z"),
       sex: "FEMALE" as const,
+      clinicName: "Alpha Clinic" as const,
     },
     {
       email: "patient.denes@example.com",
@@ -54,6 +122,7 @@ export async function main() {
       name: "Dénes Páciens",
       birthDate: new Date("1978-09-12T00:00:00Z"),
       sex: "OTHER" as const,
+      clinicName: "Beta Clinic" as const,
     },
     {
       email: "patient.eva@example.com",
@@ -61,6 +130,7 @@ export async function main() {
       name: "Éva Páciens",
       birthDate: new Date("1992-01-10T00:00:00Z"),
       sex: "FEMALE" as const,
+      clinicName: "Beta Clinic" as const,
     },
     {
       email: "patient.ferenc@example.com",
@@ -68,6 +138,7 @@ export async function main() {
       name: "Ferenc Páciens",
       birthDate: new Date("1989-03-03T00:00:00Z"),
       sex: "MALE" as const,
+      clinicName: "Beta Clinic" as const,
     },
     {
       email: "patient.gyorgy@example.com",
@@ -75,6 +146,7 @@ export async function main() {
       name: "György Páciens",
       birthDate: new Date("1975-12-25T00:00:00Z"),
       sex: "MALE" as const,
+      clinicName: "Beta Clinic" as const,
     },
     {
       email: "patient.hanna@example.com",
@@ -82,21 +154,32 @@ export async function main() {
       name: "Hanna Páciens",
       birthDate: new Date("2001-07-07T00:00:00Z"),
       sex: "FEMALE" as const,
+      clinicName: "Alpha Clinic" as const,
     },
   ];
 
   const patients: Record<string, { id: string; email: string; phone: string }> =
     {};
   for (const p of patientsData) {
+    const clinic = clinics[p.clinicName];
+    if (!clinic) continue;
     const up = await prisma.patient.upsert({
       where: { email: p.email },
-      create: p,
+      create: {
+        email: p.email,
+        phone: p.phone,
+        name: p.name,
+        birthDate: p.birthDate,
+        sex: p.sex,
+        clinicId: clinic.id,
+      },
       update: {
         // keep phone/name/birthDate updated if email already exists
         phone: p.phone,
         name: p.name,
         birthDate: p.birthDate,
         sex: p.sex,
+        clinicId: clinic.id,
       },
     });
     patients[p.email] = up as { id: string; email: string; phone: string };
@@ -168,25 +251,52 @@ export async function main() {
     });
   }
 
-  // Seed Operations used by appointments
-  const operationNames = ["Consultation", "Follow-up", "Checkup"] as const;
+  // Seed Operations used by appointments (global names)
+  const operationNames = ["Tömés", "Fogő eltávolítás", "Checkup"] as const;
   const operations: Record<string, { id: string; name: string }> = {};
   for (const name of operationNames) {
     const existingOp = await prisma.operation.findFirst({ where: { name } });
     const op =
       existingOp ??
       (await prisma.operation.create({
-        data: {
-          name,
-          price:
-            name === "Consultation"
-              ? 15000
-              : name === "Follow-up"
-                ? 12000
-                : 10000,
-        },
+        data: { name },
       }));
     operations[name] = op as { id: string; name: string };
+  }
+
+  for (const clinic of Object.values(clinics)) {
+    for (const name of operationNames) {
+      const price =
+        name === "Tömés"
+          ? clinic.name === "Alpha Clinic"
+            ? 15000
+            : 15500
+          : name === "Fogő eltávolítás"
+            ? clinic.name === "Alpha Clinic"
+              ? 12000
+              : 12500
+            : clinic.name === "Alpha Clinic"
+              ? 10000
+              : 10500;
+
+      const operation = operations[name];
+      if (!operation) continue;
+
+      await prisma.clinicOperationPrice.upsert({
+        where: {
+          clinicId_operationId: {
+            clinicId: clinic.id,
+            operationId: operation.id,
+          },
+        },
+        create: {
+          clinicId: clinic.id,
+          operationId: operation.id,
+          price,
+        },
+        update: { price },
+      });
+    }
   }
 
   const teethCodes = [
@@ -277,7 +387,7 @@ export async function main() {
       startMinute: 0,
       durationMinutes: 45,
       toothOperations: [
-        { toothCode: "11", operationName: "Consultation" },
+        { toothCode: "11", operationName: "Tömés" },
         { toothCode: "12", operationName: "Checkup" },
       ],
     },
@@ -289,7 +399,7 @@ export async function main() {
       startHour: 11,
       startMinute: 0,
       durationMinutes: 30,
-      toothOperations: [{ toothCode: "21", operationName: "Follow-up" }],
+      toothOperations: [{ toothCode: "21", operationName: "Fogő eltávolítás" }],
     },
     {
       doctorEmail: "bob@example.com",
@@ -300,7 +410,7 @@ export async function main() {
       startMinute: 0,
       durationMinutes: 45,
       toothOperations: [
-        { toothCode: "31", operationName: "Consultation" },
+        { toothCode: "31", operationName: "Tömés" },
         { toothCode: "32", operationName: "Checkup" },
       ],
     },
@@ -322,7 +432,7 @@ export async function main() {
       startHour: 9,
       startMinute: 30,
       durationMinutes: 45,
-      toothOperations: [{ toothCode: "16", operationName: "Consultation" }],
+      toothOperations: [{ toothCode: "16", operationName: "Tömés" }],
     },
   ];
 
@@ -330,6 +440,12 @@ export async function main() {
     const doctor = users[plan.doctorEmail];
     const pat = patients[plan.patientEmail];
     if (!doctor || !pat) continue;
+
+    const clinic = clinicMemberships.find(
+      (item) => item.userEmail === plan.doctorEmail,
+    )?.clinicName;
+    const clinicId = clinic ? clinics[clinic].id : null;
+    if (!clinicId) continue;
 
     await prisma.userPatient.upsert({
       where: { userId_patientId: { userId: doctor.id, patientId: pat.id } },
@@ -360,6 +476,7 @@ export async function main() {
         end: endTime,
         userId: doctor.id,
         patientId: pat.id,
+        clinicId,
       },
     });
 

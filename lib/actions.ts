@@ -8,63 +8,78 @@ import { redirect } from "next/navigation";
 
 import type {
   AppointmentFormError,
+  ClinicFormError,
   CreateAppointmentState,
+  CreateClinicState,
   CreateOperationState,
+  InviteClinicMemberState,
   OperationFormError,
 } from "@/types/common";
 import { AuthError } from "next-auth";
 import { parseDateTimeLocalValue } from "./utils";
 
+const getUserClinicContext = async () => {
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) {
+    throw new AuthError();
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      activeClinicId: true,
+      clinicMemberships: {
+        select: { clinicId: true, role: true },
+        orderBy: { createdAt: "asc" },
+      },
+    },
+  });
+
+  if (!user) {
+    throw new AuthError();
+  }
+
+  let clinicId = user.activeClinicId;
+  if (!clinicId && user.clinicMemberships.length > 0) {
+    clinicId = user.clinicMemberships[0].clinicId;
+    await prisma.user.update({
+      where: { id: userId },
+      data: { activeClinicId: clinicId },
+    });
+  }
+
+  const membership = clinicId
+    ? (user.clinicMemberships.find((item) => item.clinicId === clinicId) ??
+      null)
+    : null;
+
+  return { userId, clinicId, membership };
+};
+
 export const signInUser = async (formData: FormData) => {
   await signIn("resend", formData);
 };
 
-export const createOperation = async (
-  _prevState: CreateOperationState,
+export const createClinic = async (
+  _prevState: CreateClinicState,
   formData: FormData,
-): Promise<CreateOperationState> => {
+): Promise<CreateClinicState> => {
   const name = formData.get("name")?.toString().trim() ?? "";
-  const price = Number(formData.get("price")?.toString().trim() ?? "");
 
-  const errors: OperationFormError = {
+  const errors: ClinicFormError = {
     name: [],
-    price: [],
+    email: [],
   };
 
   if (!name) {
-    errors.name.push("Hibás név");
+    errors.name.push("Hiányzó név");
   }
 
-  if (Number.isNaN(price) || price < 0) {
-    errors.price.push("Hibás ár");
-  }
-
-  if (errors.name.length || errors.price.length) {
+  if (errors.name.length) {
     return { error: errors };
   }
-
-  try {
-    await prisma.operation.create({
-      data: { name, price },
-    });
-  } catch {
-    return { message: "Adatbázis hiba" };
-  }
-
-  revalidatePath("/", "layout");
-  redirect("/dashboard/operations");
-};
-
-export const createAppointment = async (
-  _prevState: CreateAppointmentState,
-  formData: FormData,
-): Promise<CreateAppointmentState> => {
-  // const title = formData.get("title")?.toString().trim() ?? "";
-  const patientId = formData.get("patient")?.toString().trim() ?? "";
-  const start = formData.get("start")?.toString().trim() ?? "";
-  const end = formData.get("end")?.toString().trim() ?? "";
-  const rawToothOperations =
-    formData.get("toothOperations")?.toString().trim() ?? "[]";
 
   const session = await auth();
   const userId = session?.user?.id;
@@ -73,8 +88,140 @@ export const createAppointment = async (
     throw new AuthError();
   }
 
+  try {
+    const clinic = await prisma.clinic.create({
+      data: {
+        name,
+        members: {
+          create: { userId, role: "OWNER" },
+        },
+      },
+    });
+
+    await prisma.user.update({
+      where: { id: userId },
+      data: { activeClinicId: clinic.id },
+    });
+  } catch {
+    return { message: "Adatbázis hiba" };
+  }
+
+  revalidatePath("/dashboard", "layout");
+  redirect("/dashboard");
+};
+
+export const setActiveClinic = async (formData: FormData) => {
+  const clinicId = formData.get("clinicId")?.toString().trim() ?? "";
+
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) {
+    throw new AuthError();
+  }
+
+  if (!clinicId) {
+    redirect("/dashboard/clinics");
+  }
+
+  const membership = await prisma.clinicMember.findFirst({
+    where: { clinicId, userId },
+  });
+
+  if (!membership) {
+    redirect("/dashboard/clinics");
+  }
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: { activeClinicId: clinicId },
+  });
+
+  revalidatePath("/dashboard", "layout");
+  redirect("/dashboard");
+};
+
+export const inviteClinicMember = async (
+  _prevState: InviteClinicMemberState,
+  formData: FormData,
+): Promise<InviteClinicMemberState> => {
+  const email = formData.get("email")?.toString().trim() ?? "";
+  const clinicId = formData.get("clinicId")?.toString().trim() ?? "";
+
+  const errors: ClinicFormError = {
+    name: [],
+    email: [],
+  };
+
+  if (!email) {
+    errors.email.push("Hiányzó email");
+  }
+
+  if (!clinicId) {
+    errors.email.push("Hiányzó rendelő");
+  }
+
+  if (errors.email.length) {
+    return { error: errors };
+  }
+
+  const { membership } = await getUserClinicContext();
+
+  if (!membership || membership.clinicId !== clinicId) {
+    return { message: "Nincs jogosultság" };
+  }
+
+  if (membership.role === "MEMBER") {
+    return { message: "Nincs jogosultság" };
+  }
+
+  const existing = await prisma.clinicMember.findFirst({
+    where: {
+      clinicId,
+      OR: [{ email }, { user: { email } }],
+    },
+  });
+
+  if (existing) {
+    return { message: "Már tag" };
+  }
+
+  const targetUser = await prisma.user.findUnique({
+    where: { email },
+  });
+
+  try {
+    await prisma.clinicMember.create({
+      data: {
+        clinicId,
+        email,
+        userId: targetUser?.id ?? null,
+        role: "MEMBER",
+      },
+    });
+  } catch {
+    return { message: "Adatbázis hiba" };
+  }
+
+  revalidatePath("/dashboard/clinics");
+  return { message: "Meghívó elküldve" };
+};
+
+export const createAppointment = async (
+  _prevState: CreateAppointmentState,
+  formData: FormData,
+): Promise<CreateAppointmentState> => {
+  const patientId = formData.get("patient")?.toString().trim() ?? "";
+  const start = formData.get("start")?.toString().trim() ?? "";
+  const end = formData.get("end")?.toString().trim() ?? "";
+  const rawToothOperations =
+    formData.get("toothOperations")?.toString().trim() ?? "[]";
+  const { userId, clinicId, membership } = await getUserClinicContext();
+
   const patient = patientId
-    ? await prisma.patient.findUnique({ where: { id: patientId } })
+    ? await prisma.patient.findFirst({
+        where: { id: patientId, clinicId: clinicId ?? "" },
+      })
     : null;
   const startDate = parseDateTimeLocalValue(start);
   const endDate = parseDateTimeLocalValue(end);
@@ -92,17 +239,14 @@ export const createAppointment = async (
 
   let toothOperations: ToothOperationInput[] = [];
   try {
-    const parsed = JSON.parse(rawToothOperations);
-    toothOperations = parsed;
+    toothOperations = JSON.parse(rawToothOperations);
   } catch {
     errors.teeth.push("Hibás fog adatok");
   }
 
-  console.log(toothOperations);
-
-  // if (!title) {
-  //   errors.title.push("Hiányzó cím");
-  // }
+  if (!clinicId || !membership) {
+    errors.patient.push("Nincs aktív rendelő");
+  }
 
   if (!patientId) {
     errors.patient.push("Hiányzó páciens");
@@ -117,16 +261,6 @@ export const createAppointment = async (
   if (startDate && endDate && endDate <= startDate) {
     errors.date.push("Hibás dátum");
   }
-
-  // if (patient && userId) {
-  //   const assignment = await prisma.userPatient.findUnique({
-  //     where: { userId_patientId: { userId, patientId: patient.id } },
-  //   });
-
-  //   if (!assignment) {
-  //     errors.patient.push("Nincs hozzárendelt páciens");
-  //   }
-  // }
 
   if (toothOperations.length === 0) {
     errors.teeth.push("Válassz legalább egy fogat");
@@ -153,13 +287,13 @@ export const createAppointment = async (
   //   }
   // }
 
-  // if (toothOperations.length > 0) {
+  // if (clinicId && toothOperations.length > 0) {
   //   const uniqueOperationIds = Array.from(
   //     new Set(toothOperations.flatMap((item) => item.operationIds)),
   //   );
   //   if (uniqueOperationIds.length > 0) {
   //     const validOperations = await prisma.operation.findMany({
-  //       where: { id: { in: uniqueOperationIds } },
+  //       where: { id: { in: uniqueOperationIds }, clinicId },
   //       select: { id: true },
   //     });
   //     const validOperationIds = new Set(validOperations.map((op) => op.id));
@@ -172,10 +306,10 @@ export const createAppointment = async (
   //   }
   // }
 
-  if (startDate && endDate && userId) {
+  if (startDate && endDate && clinicId) {
     const overlap = await prisma.appointment.findFirst({
       where: {
-        userId,
+        clinicId,
         start: { lt: endDate },
         end: { gt: startDate },
       },
@@ -198,6 +332,7 @@ export const createAppointment = async (
         end: endDate!,
         userId,
         patientId: patient!.id,
+        clinicId: clinicId!,
       },
     });
 
@@ -213,32 +348,6 @@ export const createAppointment = async (
         });
       });
     });
-
-    // await prisma.$transaction(async (tx) => {
-    //   const appointment = await tx.appointment.create({
-    //     data: {
-    //       title,
-    //       start: startDate!,
-    //       end: endDate!,
-    //       userId,
-    //       patientId: patient!.id,
-    //     },
-    //   });
-
-    //   if (toothOperations.length > 0) {
-    //     await tx.appointmentToothOperation.createMany({
-    //       data: toothOperations.flatMap((item) =>
-    //         item.operationIds.map((opId) => ({
-    //           appointmentId: appointment.id,
-    //           toothCode: item.toothCode,
-    //           patientId: patient!.id,
-    //           operationId: opId,
-    //         })),
-    //       ),
-    //       skipDuplicates: true,
-    //     });
-    //   }
-    // });
   } catch {
     return { message: "Adatbázis hiba" };
   }

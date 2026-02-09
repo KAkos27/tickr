@@ -19,6 +19,12 @@ enum Sex {
   OTHER
 }
 
+enum ClinicRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
@@ -28,14 +34,17 @@ model Session {
 }
 
 model User {
-  id            String        @id @default(cuid())
-  name          String?
-  email         String?       @unique
-  emailVerified DateTime?
-  image         String?
-  sessions      Session[]
-  patients      UserPatient[]
-  appointments  Appointment[]
+  id                String         @id @default(cuid())
+  name              String?
+  email             String?        @unique
+  emailVerified     DateTime?
+  image             String?
+  sessions          Session[]
+  patients          UserPatient[]
+  appointments      Appointment[]
+  clinicMemberships ClinicMember[]
+  activeClinicId    String?
+  activeClinic      Clinic?        @relation(fields: [activeClinicId], references: [id])
 }
 
 model VerificationToken {
@@ -53,6 +62,8 @@ model Patient {
   sex          Sex            @default(OTHER)
   phone        String         @unique
   email        String         @unique
+  clinic       Clinic         @relation(fields: [clinicId], references: [id])
+  clinicId     String
   doctors      UserPatient[]
   appointments Appointment[]
   teeth        PatientTooth[]
@@ -70,8 +81,8 @@ model UserPatient {
 model Operation {
   id              String                      @id @default(cuid())
   name            String                      @unique
-  price           Int
   toothOperations AppointmentToothOperation[]
+  clinicPrices    ClinicOperationPrice[]
 }
 
 model Appointment {
@@ -81,9 +92,47 @@ model Appointment {
   end             DateTime
   patient         Patient?                    @relation(fields: [patientId], references: [id])
   patientId       String
+  clinic          Clinic                      @relation(fields: [clinicId], references: [id])
+  clinicId        String
   user            User?                       @relation(fields: [userId], references: [id])
   userId          String
   toothOperations AppointmentToothOperation[]
+}
+
+model Clinic {
+  id              String                 @id @default(cuid())
+  name            String
+  createdAt       DateTime               @default(now())
+  members         ClinicMember[]
+  patients        Patient[]
+  appointments    Appointment[]
+  operationPrices ClinicOperationPrice[]
+  activeUsers     User[]
+}
+
+model ClinicOperationPrice {
+  id          String    @id @default(cuid())
+  clinic      Clinic    @relation(fields: [clinicId], references: [id])
+  clinicId    String
+  operation   Operation @relation(fields: [operationId], references: [id])
+  operationId String
+  price       Int
+
+  @@unique([clinicId, operationId])
+}
+
+model ClinicMember {
+  id        String     @id @default(cuid())
+  clinic    Clinic     @relation(fields: [clinicId], references: [id])
+  clinicId  String
+  user      User?      @relation(fields: [userId], references: [id])
+  userId    String?
+  email     String?
+  role      ClinicRole @default(MEMBER)
+  createdAt DateTime   @default(now())
+
+  @@unique([clinicId, userId])
+  @@unique([clinicId, email])
 }
 
 model Tooth {

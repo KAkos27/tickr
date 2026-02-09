@@ -75,6 +75,21 @@ export type Operation = Prisma.OperationModel
  */
 export type Appointment = Prisma.AppointmentModel
 /**
+ * Model Clinic
+ * 
+ */
+export type Clinic = Prisma.ClinicModel
+/**
+ * Model ClinicOperationPrice
+ * 
+ */
+export type ClinicOperationPrice = Prisma.ClinicOperationPriceModel
+/**
+ * Model ClinicMember
+ * 
+ */
+export type ClinicMember = Prisma.ClinicMemberModel
+/**
  * Model Tooth
  * 
  */

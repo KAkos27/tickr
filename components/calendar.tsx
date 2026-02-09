@@ -26,6 +26,10 @@ export default function Calendar({ events }: { events: CalendarEvent[] }) {
 
   const handleEventClick = (arg: EventClickArg) => {
     router.push(`/dashboard/appointments/${arg.event.id}`);
+    window.requestAnimationFrame(() => {
+      const eventSection = document.getElementById("appointment-event");
+      eventSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
   };
 
   return (

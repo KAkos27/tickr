@@ -11,6 +11,11 @@ export type OperationFormError = {
   price: string[];
 };
 
+export type ClinicFormError = {
+  name: string[];
+  email: string[];
+};
+
 export type ActionState<TError> = {
   error?: TError;
   message?: string;
@@ -23,3 +28,5 @@ export type FormAction<TState> = (
 
 export type CreateOperationState = ActionState<OperationFormError>;
 export type CreateAppointmentState = ActionState<AppointmentFormError>;
+export type CreateClinicState = ActionState<ClinicFormError>;
+export type InviteClinicMemberState = ActionState<ClinicFormError>;

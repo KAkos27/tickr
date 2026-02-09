@@ -179,6 +179,23 @@ export type IntWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedIntFilter<$PrismaModel>
 }
 
+export type EnumClinicRoleFilter<$PrismaModel = never> = {
+  equals?: $Enums.ClinicRole | Prisma.EnumClinicRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.ClinicRole[] | Prisma.ListEnumClinicRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ClinicRole[] | Prisma.ListEnumClinicRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumClinicRoleFilter<$PrismaModel> | $Enums.ClinicRole
+}
+
+export type EnumClinicRoleWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ClinicRole | Prisma.EnumClinicRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.ClinicRole[] | Prisma.ListEnumClinicRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ClinicRole[] | Prisma.ListEnumClinicRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumClinicRoleWithAggregatesFilter<$PrismaModel> | $Enums.ClinicRole
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumClinicRoleFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumClinicRoleFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -355,6 +372,23 @@ export type NestedFloatFilter<$PrismaModel = never> = {
   gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   not?: Prisma.NestedFloatFilter<$PrismaModel> | number
+}
+
+export type NestedEnumClinicRoleFilter<$PrismaModel = never> = {
+  equals?: $Enums.ClinicRole | Prisma.EnumClinicRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.ClinicRole[] | Prisma.ListEnumClinicRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ClinicRole[] | Prisma.ListEnumClinicRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumClinicRoleFilter<$PrismaModel> | $Enums.ClinicRole
+}
+
+export type NestedEnumClinicRoleWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ClinicRole | Prisma.EnumClinicRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.ClinicRole[] | Prisma.ListEnumClinicRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ClinicRole[] | Prisma.ListEnumClinicRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumClinicRoleWithAggregatesFilter<$PrismaModel> | $Enums.ClinicRole
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumClinicRoleFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumClinicRoleFilter<$PrismaModel>
 }
 
 

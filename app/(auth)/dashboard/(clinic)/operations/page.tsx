@@ -1,8 +1,8 @@
-import prisma from "@/lib/prisma";
+import { getOperations } from "@/lib/querys";
 import Link from "next/link";
 
 export default async function OperationsPage() {
-  const operations = await prisma.operation.findMany();
+  const operations = await getOperations();
 
   return (
     <div>

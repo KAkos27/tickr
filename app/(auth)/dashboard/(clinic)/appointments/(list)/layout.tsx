@@ -13,7 +13,9 @@ export default function AppointmentsLayout({
   return (
     <div className={style.container}>
       <section className={style.calendar}>{calendar}</section>
-      <section>{event}</section>
+      <section id="appointment-event" className={style.event}>
+        {event}
+      </section>
     </div>
   );
 }

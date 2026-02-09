@@ -20,64 +20,40 @@ export type OperationModel = runtime.Types.Result.DefaultSelection<Prisma.$Opera
 
 export type AggregateOperation = {
   _count: OperationCountAggregateOutputType | null
-  _avg: OperationAvgAggregateOutputType | null
-  _sum: OperationSumAggregateOutputType | null
   _min: OperationMinAggregateOutputType | null
   _max: OperationMaxAggregateOutputType | null
-}
-
-export type OperationAvgAggregateOutputType = {
-  price: number | null
-}
-
-export type OperationSumAggregateOutputType = {
-  price: number | null
 }
 
 export type OperationMinAggregateOutputType = {
   id: string | null
   name: string | null
-  price: number | null
 }
 
 export type OperationMaxAggregateOutputType = {
   id: string | null
   name: string | null
-  price: number | null
 }
 
 export type OperationCountAggregateOutputType = {
   id: number
   name: number
-  price: number
   _all: number
 }
 
 
-export type OperationAvgAggregateInputType = {
-  price?: true
-}
-
-export type OperationSumAggregateInputType = {
-  price?: true
-}
-
 export type OperationMinAggregateInputType = {
   id?: true
   name?: true
-  price?: true
 }
 
 export type OperationMaxAggregateInputType = {
   id?: true
   name?: true
-  price?: true
 }
 
 export type OperationCountAggregateInputType = {
   id?: true
   name?: true
-  price?: true
   _all?: true
 }
 
@@ -119,18 +95,6 @@ export type OperationAggregateArgs<ExtArgs extends runtime.Types.Extensions.Inte
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: OperationAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: OperationSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: OperationMinAggregateInputType
@@ -161,8 +125,6 @@ export type OperationGroupByArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   _count?: OperationCountAggregateInputType | true
-  _avg?: OperationAvgAggregateInputType
-  _sum?: OperationSumAggregateInputType
   _min?: OperationMinAggregateInputType
   _max?: OperationMaxAggregateInputType
 }
@@ -170,10 +132,7 @@ export type OperationGroupByArgs<ExtArgs extends runtime.Types.Extensions.Intern
 export type OperationGroupByOutputType = {
   id: string
   name: string
-  price: number
   _count: OperationCountAggregateOutputType | null
-  _avg: OperationAvgAggregateOutputType | null
-  _sum: OperationSumAggregateOutputType | null
   _min: OperationMinAggregateOutputType | null
   _max: OperationMaxAggregateOutputType | null
 }
@@ -199,15 +158,15 @@ export type OperationWhereInput = {
   NOT?: Prisma.OperationWhereInput | Prisma.OperationWhereInput[]
   id?: Prisma.StringFilter<"Operation"> | string
   name?: Prisma.StringFilter<"Operation"> | string
-  price?: Prisma.IntFilter<"Operation"> | number
   toothOperations?: Prisma.AppointmentToothOperationListRelationFilter
+  clinicPrices?: Prisma.ClinicOperationPriceListRelationFilter
 }
 
 export type OperationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  price?: Prisma.SortOrder
   toothOperations?: Prisma.AppointmentToothOperationOrderByRelationAggregateInput
+  clinicPrices?: Prisma.ClinicOperationPriceOrderByRelationAggregateInput
 }
 
 export type OperationWhereUniqueInput = Prisma.AtLeast<{
@@ -216,19 +175,16 @@ export type OperationWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.OperationWhereInput | Prisma.OperationWhereInput[]
   OR?: Prisma.OperationWhereInput[]
   NOT?: Prisma.OperationWhereInput | Prisma.OperationWhereInput[]
-  price?: Prisma.IntFilter<"Operation"> | number
   toothOperations?: Prisma.AppointmentToothOperationListRelationFilter
+  clinicPrices?: Prisma.ClinicOperationPriceListRelationFilter
 }, "id" | "name">
 
 export type OperationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  price?: Prisma.SortOrder
   _count?: Prisma.OperationCountOrderByAggregateInput
-  _avg?: Prisma.OperationAvgOrderByAggregateInput
   _max?: Prisma.OperationMaxOrderByAggregateInput
   _min?: Prisma.OperationMinOrderByAggregateInput
-  _sum?: Prisma.OperationSumOrderByAggregateInput
 }
 
 export type OperationScalarWhereWithAggregatesInput = {
@@ -237,79 +193,64 @@ export type OperationScalarWhereWithAggregatesInput = {
   NOT?: Prisma.OperationScalarWhereWithAggregatesInput | Prisma.OperationScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Operation"> | string
   name?: Prisma.StringWithAggregatesFilter<"Operation"> | string
-  price?: Prisma.IntWithAggregatesFilter<"Operation"> | number
 }
 
 export type OperationCreateInput = {
   id?: string
   name: string
-  price: number
   toothOperations?: Prisma.AppointmentToothOperationCreateNestedManyWithoutOperationInput
+  clinicPrices?: Prisma.ClinicOperationPriceCreateNestedManyWithoutOperationInput
 }
 
 export type OperationUncheckedCreateInput = {
   id?: string
   name: string
-  price: number
   toothOperations?: Prisma.AppointmentToothOperationUncheckedCreateNestedManyWithoutOperationInput
+  clinicPrices?: Prisma.ClinicOperationPriceUncheckedCreateNestedManyWithoutOperationInput
 }
 
 export type OperationUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
   toothOperations?: Prisma.AppointmentToothOperationUpdateManyWithoutOperationNestedInput
+  clinicPrices?: Prisma.ClinicOperationPriceUpdateManyWithoutOperationNestedInput
 }
 
 export type OperationUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
   toothOperations?: Prisma.AppointmentToothOperationUncheckedUpdateManyWithoutOperationNestedInput
+  clinicPrices?: Prisma.ClinicOperationPriceUncheckedUpdateManyWithoutOperationNestedInput
 }
 
 export type OperationCreateManyInput = {
   id?: string
   name: string
-  price: number
 }
 
 export type OperationUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type OperationUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type OperationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  price?: Prisma.SortOrder
-}
-
-export type OperationAvgOrderByAggregateInput = {
-  price?: Prisma.SortOrder
 }
 
 export type OperationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  price?: Prisma.SortOrder
 }
 
 export type OperationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  price?: Prisma.SortOrder
-}
-
-export type OperationSumOrderByAggregateInput = {
-  price?: Prisma.SortOrder
 }
 
 export type OperationScalarRelationFilter = {
@@ -317,12 +258,18 @@ export type OperationScalarRelationFilter = {
   isNot?: Prisma.OperationWhereInput
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
+export type OperationCreateNestedOneWithoutClinicPricesInput = {
+  create?: Prisma.XOR<Prisma.OperationCreateWithoutClinicPricesInput, Prisma.OperationUncheckedCreateWithoutClinicPricesInput>
+  connectOrCreate?: Prisma.OperationCreateOrConnectWithoutClinicPricesInput
+  connect?: Prisma.OperationWhereUniqueInput
+}
+
+export type OperationUpdateOneRequiredWithoutClinicPricesNestedInput = {
+  create?: Prisma.XOR<Prisma.OperationCreateWithoutClinicPricesInput, Prisma.OperationUncheckedCreateWithoutClinicPricesInput>
+  connectOrCreate?: Prisma.OperationCreateOrConnectWithoutClinicPricesInput
+  upsert?: Prisma.OperationUpsertWithoutClinicPricesInput
+  connect?: Prisma.OperationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OperationUpdateToOneWithWhereWithoutClinicPricesInput, Prisma.OperationUpdateWithoutClinicPricesInput>, Prisma.OperationUncheckedUpdateWithoutClinicPricesInput>
 }
 
 export type OperationCreateNestedOneWithoutToothOperationsInput = {
@@ -339,16 +286,56 @@ export type OperationUpdateOneRequiredWithoutToothOperationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.OperationUpdateToOneWithWhereWithoutToothOperationsInput, Prisma.OperationUpdateWithoutToothOperationsInput>, Prisma.OperationUncheckedUpdateWithoutToothOperationsInput>
 }
 
+export type OperationCreateWithoutClinicPricesInput = {
+  id?: string
+  name: string
+  toothOperations?: Prisma.AppointmentToothOperationCreateNestedManyWithoutOperationInput
+}
+
+export type OperationUncheckedCreateWithoutClinicPricesInput = {
+  id?: string
+  name: string
+  toothOperations?: Prisma.AppointmentToothOperationUncheckedCreateNestedManyWithoutOperationInput
+}
+
+export type OperationCreateOrConnectWithoutClinicPricesInput = {
+  where: Prisma.OperationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OperationCreateWithoutClinicPricesInput, Prisma.OperationUncheckedCreateWithoutClinicPricesInput>
+}
+
+export type OperationUpsertWithoutClinicPricesInput = {
+  update: Prisma.XOR<Prisma.OperationUpdateWithoutClinicPricesInput, Prisma.OperationUncheckedUpdateWithoutClinicPricesInput>
+  create: Prisma.XOR<Prisma.OperationCreateWithoutClinicPricesInput, Prisma.OperationUncheckedCreateWithoutClinicPricesInput>
+  where?: Prisma.OperationWhereInput
+}
+
+export type OperationUpdateToOneWithWhereWithoutClinicPricesInput = {
+  where?: Prisma.OperationWhereInput
+  data: Prisma.XOR<Prisma.OperationUpdateWithoutClinicPricesInput, Prisma.OperationUncheckedUpdateWithoutClinicPricesInput>
+}
+
+export type OperationUpdateWithoutClinicPricesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  toothOperations?: Prisma.AppointmentToothOperationUpdateManyWithoutOperationNestedInput
+}
+
+export type OperationUncheckedUpdateWithoutClinicPricesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  toothOperations?: Prisma.AppointmentToothOperationUncheckedUpdateManyWithoutOperationNestedInput
+}
+
 export type OperationCreateWithoutToothOperationsInput = {
   id?: string
   name: string
-  price: number
+  clinicPrices?: Prisma.ClinicOperationPriceCreateNestedManyWithoutOperationInput
 }
 
 export type OperationUncheckedCreateWithoutToothOperationsInput = {
   id?: string
   name: string
-  price: number
+  clinicPrices?: Prisma.ClinicOperationPriceUncheckedCreateNestedManyWithoutOperationInput
 }
 
 export type OperationCreateOrConnectWithoutToothOperationsInput = {
@@ -370,13 +357,13 @@ export type OperationUpdateToOneWithWhereWithoutToothOperationsInput = {
 export type OperationUpdateWithoutToothOperationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  clinicPrices?: Prisma.ClinicOperationPriceUpdateManyWithoutOperationNestedInput
 }
 
 export type OperationUncheckedUpdateWithoutToothOperationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  clinicPrices?: Prisma.ClinicOperationPriceUncheckedUpdateManyWithoutOperationNestedInput
 }
 
 
@@ -386,10 +373,12 @@ export type OperationUncheckedUpdateWithoutToothOperationsInput = {
 
 export type OperationCountOutputType = {
   toothOperations: number
+  clinicPrices: number
 }
 
 export type OperationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   toothOperations?: boolean | OperationCountOutputTypeCountToothOperationsArgs
+  clinicPrices?: boolean | OperationCountOutputTypeCountClinicPricesArgs
 }
 
 /**
@@ -409,36 +398,41 @@ export type OperationCountOutputTypeCountToothOperationsArgs<ExtArgs extends run
   where?: Prisma.AppointmentToothOperationWhereInput
 }
 
+/**
+ * OperationCountOutputType without action
+ */
+export type OperationCountOutputTypeCountClinicPricesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClinicOperationPriceWhereInput
+}
+
 
 export type OperationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  price?: boolean
   toothOperations?: boolean | Prisma.Operation$toothOperationsArgs<ExtArgs>
+  clinicPrices?: boolean | Prisma.Operation$clinicPricesArgs<ExtArgs>
   _count?: boolean | Prisma.OperationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["operation"]>
 
 export type OperationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  price?: boolean
 }, ExtArgs["result"]["operation"]>
 
 export type OperationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  price?: boolean
 }, ExtArgs["result"]["operation"]>
 
 export type OperationSelectScalar = {
   id?: boolean
   name?: boolean
-  price?: boolean
 }
 
-export type OperationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "price", ExtArgs["result"]["operation"]>
+export type OperationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name", ExtArgs["result"]["operation"]>
 export type OperationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   toothOperations?: boolean | Prisma.Operation$toothOperationsArgs<ExtArgs>
+  clinicPrices?: boolean | Prisma.Operation$clinicPricesArgs<ExtArgs>
   _count?: boolean | Prisma.OperationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OperationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -448,11 +442,11 @@ export type $OperationPayload<ExtArgs extends runtime.Types.Extensions.InternalA
   name: "Operation"
   objects: {
     toothOperations: Prisma.$AppointmentToothOperationPayload<ExtArgs>[]
+    clinicPrices: Prisma.$ClinicOperationPricePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
-    price: number
   }, ExtArgs["result"]["operation"]>
   composites: {}
 }
@@ -848,6 +842,7 @@ readonly fields: OperationFieldRefs;
 export interface Prisma__OperationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   toothOperations<T extends Prisma.Operation$toothOperationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Operation$toothOperationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AppointmentToothOperationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  clinicPrices<T extends Prisma.Operation$clinicPricesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Operation$clinicPricesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClinicOperationPricePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -879,7 +874,6 @@ export interface Prisma__OperationClient<T, Null = never, ExtArgs extends runtim
 export interface OperationFieldRefs {
   readonly id: Prisma.FieldRef<"Operation", 'String'>
   readonly name: Prisma.FieldRef<"Operation", 'String'>
-  readonly price: Prisma.FieldRef<"Operation", 'Int'>
 }
     
 
@@ -1289,6 +1283,30 @@ export type Operation$toothOperationsArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.AppointmentToothOperationScalarFieldEnum | Prisma.AppointmentToothOperationScalarFieldEnum[]
+}
+
+/**
+ * Operation.clinicPrices
+ */
+export type Operation$clinicPricesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClinicOperationPrice
+   */
+  select?: Prisma.ClinicOperationPriceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ClinicOperationPrice
+   */
+  omit?: Prisma.ClinicOperationPriceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClinicOperationPriceInclude<ExtArgs> | null
+  where?: Prisma.ClinicOperationPriceWhereInput
+  orderBy?: Prisma.ClinicOperationPriceOrderByWithRelationInput | Prisma.ClinicOperationPriceOrderByWithRelationInput[]
+  cursor?: Prisma.ClinicOperationPriceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClinicOperationPriceScalarFieldEnum | Prisma.ClinicOperationPriceScalarFieldEnum[]
 }
 
 /**

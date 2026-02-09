@@ -3,14 +3,70 @@
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 
+const ensureActiveClinicId = async (userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      activeClinicId: true,
+      clinicMemberships: {
+        select: { clinicId: true },
+        orderBy: { createdAt: "asc" },
+      },
+    },
+  });
+
+  if (!user) return null;
+  if (user.activeClinicId) return user.activeClinicId;
+
+  const fallbackClinicId = user.clinicMemberships[0]?.clinicId ?? null;
+  if (!fallbackClinicId) return null;
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: { activeClinicId: fallbackClinicId },
+  });
+
+  return fallbackClinicId;
+};
+
+export const getActiveClinic = async () => {
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) return null;
+
+  const activeClinicId = await ensureActiveClinicId(userId);
+  if (!activeClinicId) return null;
+
+  return await prisma.clinic.findUnique({ where: { id: activeClinicId } });
+};
+
+export const getUserClinics = async () => {
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) return [];
+
+  const memberships = await prisma.clinicMember.findMany({
+    where: { userId },
+    include: { clinic: true },
+    orderBy: { createdAt: "asc" },
+  });
+
+  return memberships;
+};
+
 export const getAppointments = async () => {
   const session = await auth();
   const userId = session?.user?.id;
 
   if (!userId) return [];
 
+  const clinicId = await ensureActiveClinicId(userId);
+  if (!clinicId) return [];
+
   const appointments = await prisma.appointment.findMany({
-    where: { userId },
+    where: { clinicId },
     orderBy: { start: "asc" },
   });
 
@@ -18,7 +74,15 @@ export const getAppointments = async () => {
 };
 
 export const getPatients = async () => {
-  return await prisma.patient.findMany();
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) return [];
+
+  const clinicId = await ensureActiveClinicId(userId);
+  if (!clinicId) return [];
+
+  return await prisma.patient.findMany({ where: { clinicId } });
 };
 
 export const getUserPatients = async () => {
@@ -27,15 +91,27 @@ export const getUserPatients = async () => {
 
   if (!userId) return [];
 
+  const clinicId = await ensureActiveClinicId(userId);
+  if (!clinicId) return [];
+
   const patients = await prisma.patient.findMany({
-    where: { doctors: { some: { userId } } },
+    where: { clinicId },
   });
 
   return patients;
 };
 
 export const getPatientsWithTeeth = async () => {
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) return [];
+
+  const clinicId = await ensureActiveClinicId(userId);
+  if (!clinicId) return [];
+
   const patients = await prisma.patient.findMany({
+    where: { clinicId },
     include: {
       teeth: {
         select: {
@@ -53,9 +129,46 @@ export const getPatientsWithTeeth = async () => {
 };
 
 export const getOperations = async () => {
-  return await prisma.operation.findMany();
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) return [];
+
+  const clinicId = await ensureActiveClinicId(userId);
+  if (!clinicId) return [];
+
+  const prices = await prisma.clinicOperationPrice.findMany({
+    where: { clinicId },
+    include: { operation: true },
+    orderBy: { operation: { name: "asc" } },
+  });
+
+  return prices.map((price) => ({
+    id: price.operationId,
+    name: price.operation.name,
+    price: price.price,
+  }));
 };
 
 export const getOperation = async (id: string) => {
-  return await prisma.operation.findUnique({ where: { id } });
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) return null;
+
+  const clinicId = await ensureActiveClinicId(userId);
+  if (!clinicId) return null;
+
+  const price = await prisma.clinicOperationPrice.findFirst({
+    where: { clinicId, operationId: id },
+    include: { operation: true },
+  });
+
+  if (!price) return null;
+
+  return {
+    id: price.operationId,
+    name: price.operation.name,
+    price: price.price,
+  };
 };
