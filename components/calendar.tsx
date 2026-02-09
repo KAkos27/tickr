@@ -21,38 +21,36 @@ export default function Calendar({ events }: { events: CalendarEvent[] }) {
     const start = toDateTimeLocalValue(selected.start);
     const end = toDateTimeLocalValue(selected.end);
 
-    router.push(`/dashboard/calendar/new/${start}/${end}`);
+    router.push(`/dashboard/appointments/new/${start}/${end}`);
   };
 
   const handleEventClick = (arg: EventClickArg) => {
-    router.push(`/dashboard/calendar/${arg.event.id}`);
+    router.push(`/dashboard/appointments/${arg.event.id}`);
   };
 
   return (
-    <>
-      <div className={style.container}>
-        <FullCalendar
-          height={720}
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          headerToolbar={{
-            left: "prev,next today",
-            center: "title",
-            right: "dayGridMonth,timeGridWeek,timeGridDay",
-          }}
-          initialView="timeGridWeek"
-          scrollTime="09:00:00"
-          expandRows
-          editable={true}
-          selectable={true}
-          selectMirror={false}
-          dayMaxEvents={true}
-          select={handleDateClick}
-          eventClick={handleEventClick}
-          events={events}
-          locales={allLocales}
-          locale={"hu"}
-        />
-      </div>
-    </>
+    <div className={style.container}>
+      <FullCalendar
+        height={720}
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+        headerToolbar={{
+          left: "prev,next today",
+          center: "title",
+          right: "dayGridMonth,timeGridWeek,timeGridDay",
+        }}
+        initialView="timeGridWeek"
+        scrollTime="09:00:00"
+        expandRows
+        editable={true}
+        selectable={true}
+        selectMirror={false}
+        dayMaxEvents={true}
+        select={handleDateClick}
+        eventClick={handleEventClick}
+        events={events}
+        locales={allLocales}
+        locale={"hu"}
+      />
+    </div>
   );
 }

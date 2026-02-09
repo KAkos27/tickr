@@ -1,13 +1,13 @@
 import PostAppointment from "@/components/post-appointment";
 import { createAppointment } from "@/lib/actions";
-import { getOperations, getPatients } from "@/lib/querys";
+import { getOperations, getPatientsWithTeeth } from "@/lib/querys";
 import { decode } from "@/lib/utils";
 import type { NewAppointmentParams, Params } from "@/types/route";
 import { notFound } from "next/navigation";
 
-import style from "@/styles/auth/dashboard/calendar/new/page.module.scss";
+import style from "@/styles/pages/new-appointment-page.module.scss";
 
-export default async function NewAppointmenttPage({
+export default async function NewAppointmentPage({
   params,
 }: Params<NewAppointmentParams>) {
   const { time } = await params;
@@ -16,13 +16,11 @@ export default async function NewAppointmenttPage({
     notFound();
   }
 
-  const patients = await getPatients();
+  const patients = await getPatientsWithTeeth();
   const operations = await getOperations();
 
   const start = decode(time?.[0]);
   const end = decode(time?.[1]);
-
-  console.log(start, end);
 
   return (
     <div className={style.container}>

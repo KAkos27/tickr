@@ -1,10 +1,9 @@
 export type ChildrenProps = Readonly<{ children: React.ReactNode }>;
 
 export type AppointmentFormError = {
-  title: string[];
   patient: string[];
-  operation: string[];
   date: string[];
+  teeth: string[];
 };
 
 export type OperationFormError = {

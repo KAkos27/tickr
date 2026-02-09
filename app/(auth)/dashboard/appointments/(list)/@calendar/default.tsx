@@ -1,7 +1,7 @@
 import Calendar from "@/components/calendar";
 import { getAppointments } from "@/lib/querys";
 
-import style from "@/styles/auth/dashboard/calendar/page.module.scss";
+import style from "@/styles/pages/calendar-page.module.scss";
 
 export default async function CalendarPage() {
   const appointments = await getAppointments();

@@ -59,11 +59,12 @@ export const createAppointment = async (
   _prevState: CreateAppointmentState,
   formData: FormData,
 ): Promise<CreateAppointmentState> => {
-  const title = formData.get("title")?.toString().trim() ?? "";
+  // const title = formData.get("title")?.toString().trim() ?? "";
   const patientId = formData.get("patient")?.toString().trim() ?? "";
-  const operationId = formData.get("operation")?.toString().trim() ?? "";
   const start = formData.get("start")?.toString().trim() ?? "";
   const end = formData.get("end")?.toString().trim() ?? "";
+  const rawToothOperations =
+    formData.get("toothOperations")?.toString().trim() ?? "[]";
 
   const session = await auth();
   const userId = session?.user?.id;
@@ -72,30 +73,41 @@ export const createAppointment = async (
     throw new AuthError();
   }
 
-  const patient = await prisma.patient.findUnique({ where: { id: patientId } });
-  const operation = await prisma.operation.findUnique({
-    where: { id: operationId },
-  });
+  const patient = patientId
+    ? await prisma.patient.findUnique({ where: { id: patientId } })
+    : null;
   const startDate = parseDateTimeLocalValue(start);
   const endDate = parseDateTimeLocalValue(end);
 
   const errors: AppointmentFormError = {
-    title: [],
     patient: [],
-    operation: [],
     date: [],
+    teeth: [],
   };
 
-  if (!title) {
-    errors.title.push("Hiányzó cím");
+  type ToothOperationInput = {
+    toothCode: string;
+    operationIds: string[];
+  };
+
+  let toothOperations: ToothOperationInput[] = [];
+  try {
+    const parsed = JSON.parse(rawToothOperations);
+    toothOperations = parsed;
+  } catch {
+    errors.teeth.push("Hibás fog adatok");
   }
 
-  if (!patient) {
-    errors.patient.push("Nincs hozzárendelt páciens");
-  }
+  console.log(toothOperations);
 
-  if (!operation) {
-    errors.operation.push("Nincs hozzárendelt kezelés");
+  // if (!title) {
+  //   errors.title.push("Hiányzó cím");
+  // }
+
+  if (!patientId) {
+    errors.patient.push("Hiányzó páciens");
+  } else if (!patient) {
+    errors.patient.push("Ismeretlen páciens");
   }
 
   if (!startDate || !endDate) {
@@ -106,30 +118,131 @@ export const createAppointment = async (
     errors.date.push("Hibás dátum");
   }
 
-  if (
-    errors.date.length ||
-    errors.operation.length ||
-    errors.patient.length ||
-    errors.title.length
-  ) {
+  // if (patient && userId) {
+  //   const assignment = await prisma.userPatient.findUnique({
+  //     where: { userId_patientId: { userId, patientId: patient.id } },
+  //   });
+
+  //   if (!assignment) {
+  //     errors.patient.push("Nincs hozzárendelt páciens");
+  //   }
+  // }
+
+  if (toothOperations.length === 0) {
+    errors.teeth.push("Válassz legalább egy fogat");
+  } else {
+    const missingOperations = toothOperations.filter(
+      (item) => item.operationIds.length === 0,
+    );
+    if (missingOperations.length > 0) {
+      errors.teeth.push("Válassz beavatkozást minden kijelölt foghoz");
+    }
+  }
+
+  // if (patient && toothOperations.length > 0) {
+  //   const patientTeeth = await prisma.patientTooth.findMany({
+  //     where: { patientId: patient.id },
+  //     select: { toothCode: true },
+  //   });
+  //   const allowedTeeth = new Set(patientTeeth.map((t) => t.toothCode));
+  //   const invalidTeeth = toothOperations.filter(
+  //     (item) => !allowedTeeth.has(item.toothCode),
+  //   );
+  //   if (invalidTeeth.length > 0) {
+  //     errors.teeth.push("Ismeretlen fog(ak) a páciensnél");
+  //   }
+  // }
+
+  // if (toothOperations.length > 0) {
+  //   const uniqueOperationIds = Array.from(
+  //     new Set(toothOperations.flatMap((item) => item.operationIds)),
+  //   );
+  //   if (uniqueOperationIds.length > 0) {
+  //     const validOperations = await prisma.operation.findMany({
+  //       where: { id: { in: uniqueOperationIds } },
+  //       select: { id: true },
+  //     });
+  //     const validOperationIds = new Set(validOperations.map((op) => op.id));
+  //     const invalidOperation = toothOperations.some((item) =>
+  //       item.operationIds.some((opId) => !validOperationIds.has(opId)),
+  //     );
+  //     if (invalidOperation) {
+  //       errors.teeth.push("Ismeretlen beavatkozás a foghoz");
+  //     }
+  //   }
+  // }
+
+  if (startDate && endDate && userId) {
+    const overlap = await prisma.appointment.findFirst({
+      where: {
+        userId,
+        start: { lt: endDate },
+        end: { gt: startDate },
+      },
+    });
+
+    if (overlap) {
+      errors.date.push("Az idősáv már foglalt");
+    }
+  }
+
+  if (errors.date.length || errors.patient.length || errors.teeth.length) {
     return { error: errors };
   }
 
   try {
-    await prisma.appointment.create({
+    const currentAppointment = await prisma.appointment.create({
       data: {
-        title,
+        title: patient!.name,
         start: startDate!,
         end: endDate!,
         userId,
         patientId: patient!.id,
-        operationId: operation!.id,
       },
     });
+
+    toothOperations.forEach((operation) => {
+      operation.operationIds.forEach(async (_id, i) => {
+        await prisma.appointmentToothOperation.create({
+          data: {
+            appointmentId: currentAppointment.id,
+            toothCode: operation.toothCode,
+            operationId: operation.operationIds[i],
+            patientId: patient!.id,
+          },
+        });
+      });
+    });
+
+    // await prisma.$transaction(async (tx) => {
+    //   const appointment = await tx.appointment.create({
+    //     data: {
+    //       title,
+    //       start: startDate!,
+    //       end: endDate!,
+    //       userId,
+    //       patientId: patient!.id,
+    //     },
+    //   });
+
+    //   if (toothOperations.length > 0) {
+    //     await tx.appointmentToothOperation.createMany({
+    //       data: toothOperations.flatMap((item) =>
+    //         item.operationIds.map((opId) => ({
+    //           appointmentId: appointment.id,
+    //           toothCode: item.toothCode,
+    //           patientId: patient!.id,
+    //           operationId: opId,
+    //         })),
+    //       ),
+    //       skipDuplicates: true,
+    //     });
+    //   }
+    // });
   } catch {
     return { message: "Adatbázis hiba" };
   }
 
-  revalidatePath("/dashboard/calendar");
-  redirect("/dashboard/calendar");
+  revalidatePath("/dashboard/appointments");
+  redirect("/dashboard/appointments");
 };

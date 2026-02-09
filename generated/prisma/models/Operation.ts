@@ -200,14 +200,14 @@ export type OperationWhereInput = {
   id?: Prisma.StringFilter<"Operation"> | string
   name?: Prisma.StringFilter<"Operation"> | string
   price?: Prisma.IntFilter<"Operation"> | number
-  appointments?: Prisma.AppointmentListRelationFilter
+  toothOperations?: Prisma.AppointmentToothOperationListRelationFilter
 }
 
 export type OperationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   price?: Prisma.SortOrder
-  appointments?: Prisma.AppointmentOrderByRelationAggregateInput
+  toothOperations?: Prisma.AppointmentToothOperationOrderByRelationAggregateInput
 }
 
 export type OperationWhereUniqueInput = Prisma.AtLeast<{
@@ -217,7 +217,7 @@ export type OperationWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.OperationWhereInput[]
   NOT?: Prisma.OperationWhereInput | Prisma.OperationWhereInput[]
   price?: Prisma.IntFilter<"Operation"> | number
-  appointments?: Prisma.AppointmentListRelationFilter
+  toothOperations?: Prisma.AppointmentToothOperationListRelationFilter
 }, "id" | "name">
 
 export type OperationOrderByWithAggregationInput = {
@@ -244,28 +244,28 @@ export type OperationCreateInput = {
   id?: string
   name: string
   price: number
-  appointments?: Prisma.AppointmentCreateNestedManyWithoutOperationInput
+  toothOperations?: Prisma.AppointmentToothOperationCreateNestedManyWithoutOperationInput
 }
 
 export type OperationUncheckedCreateInput = {
   id?: string
   name: string
   price: number
-  appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutOperationInput
+  toothOperations?: Prisma.AppointmentToothOperationUncheckedCreateNestedManyWithoutOperationInput
 }
 
 export type OperationUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.IntFieldUpdateOperationsInput | number
-  appointments?: Prisma.AppointmentUpdateManyWithoutOperationNestedInput
+  toothOperations?: Prisma.AppointmentToothOperationUpdateManyWithoutOperationNestedInput
 }
 
 export type OperationUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.IntFieldUpdateOperationsInput | number
-  appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutOperationNestedInput
+  toothOperations?: Prisma.AppointmentToothOperationUncheckedUpdateManyWithoutOperationNestedInput
 }
 
 export type OperationCreateManyInput = {
@@ -312,9 +312,9 @@ export type OperationSumOrderByAggregateInput = {
   price?: Prisma.SortOrder
 }
 
-export type OperationNullableScalarRelationFilter = {
-  is?: Prisma.OperationWhereInput | null
-  isNot?: Prisma.OperationWhereInput | null
+export type OperationScalarRelationFilter = {
+  is?: Prisma.OperationWhereInput
+  isNot?: Prisma.OperationWhereInput
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -325,57 +325,55 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type OperationCreateNestedOneWithoutAppointmentsInput = {
-  create?: Prisma.XOR<Prisma.OperationCreateWithoutAppointmentsInput, Prisma.OperationUncheckedCreateWithoutAppointmentsInput>
-  connectOrCreate?: Prisma.OperationCreateOrConnectWithoutAppointmentsInput
+export type OperationCreateNestedOneWithoutToothOperationsInput = {
+  create?: Prisma.XOR<Prisma.OperationCreateWithoutToothOperationsInput, Prisma.OperationUncheckedCreateWithoutToothOperationsInput>
+  connectOrCreate?: Prisma.OperationCreateOrConnectWithoutToothOperationsInput
   connect?: Prisma.OperationWhereUniqueInput
 }
 
-export type OperationUpdateOneWithoutAppointmentsNestedInput = {
-  create?: Prisma.XOR<Prisma.OperationCreateWithoutAppointmentsInput, Prisma.OperationUncheckedCreateWithoutAppointmentsInput>
-  connectOrCreate?: Prisma.OperationCreateOrConnectWithoutAppointmentsInput
-  upsert?: Prisma.OperationUpsertWithoutAppointmentsInput
-  disconnect?: Prisma.OperationWhereInput | boolean
-  delete?: Prisma.OperationWhereInput | boolean
+export type OperationUpdateOneRequiredWithoutToothOperationsNestedInput = {
+  create?: Prisma.XOR<Prisma.OperationCreateWithoutToothOperationsInput, Prisma.OperationUncheckedCreateWithoutToothOperationsInput>
+  connectOrCreate?: Prisma.OperationCreateOrConnectWithoutToothOperationsInput
+  upsert?: Prisma.OperationUpsertWithoutToothOperationsInput
   connect?: Prisma.OperationWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.OperationUpdateToOneWithWhereWithoutAppointmentsInput, Prisma.OperationUpdateWithoutAppointmentsInput>, Prisma.OperationUncheckedUpdateWithoutAppointmentsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OperationUpdateToOneWithWhereWithoutToothOperationsInput, Prisma.OperationUpdateWithoutToothOperationsInput>, Prisma.OperationUncheckedUpdateWithoutToothOperationsInput>
 }
 
-export type OperationCreateWithoutAppointmentsInput = {
+export type OperationCreateWithoutToothOperationsInput = {
   id?: string
   name: string
   price: number
 }
 
-export type OperationUncheckedCreateWithoutAppointmentsInput = {
+export type OperationUncheckedCreateWithoutToothOperationsInput = {
   id?: string
   name: string
   price: number
 }
 
-export type OperationCreateOrConnectWithoutAppointmentsInput = {
+export type OperationCreateOrConnectWithoutToothOperationsInput = {
   where: Prisma.OperationWhereUniqueInput
-  create: Prisma.XOR<Prisma.OperationCreateWithoutAppointmentsInput, Prisma.OperationUncheckedCreateWithoutAppointmentsInput>
+  create: Prisma.XOR<Prisma.OperationCreateWithoutToothOperationsInput, Prisma.OperationUncheckedCreateWithoutToothOperationsInput>
 }
 
-export type OperationUpsertWithoutAppointmentsInput = {
-  update: Prisma.XOR<Prisma.OperationUpdateWithoutAppointmentsInput, Prisma.OperationUncheckedUpdateWithoutAppointmentsInput>
-  create: Prisma.XOR<Prisma.OperationCreateWithoutAppointmentsInput, Prisma.OperationUncheckedCreateWithoutAppointmentsInput>
+export type OperationUpsertWithoutToothOperationsInput = {
+  update: Prisma.XOR<Prisma.OperationUpdateWithoutToothOperationsInput, Prisma.OperationUncheckedUpdateWithoutToothOperationsInput>
+  create: Prisma.XOR<Prisma.OperationCreateWithoutToothOperationsInput, Prisma.OperationUncheckedCreateWithoutToothOperationsInput>
   where?: Prisma.OperationWhereInput
 }
 
-export type OperationUpdateToOneWithWhereWithoutAppointmentsInput = {
+export type OperationUpdateToOneWithWhereWithoutToothOperationsInput = {
   where?: Prisma.OperationWhereInput
-  data: Prisma.XOR<Prisma.OperationUpdateWithoutAppointmentsInput, Prisma.OperationUncheckedUpdateWithoutAppointmentsInput>
+  data: Prisma.XOR<Prisma.OperationUpdateWithoutToothOperationsInput, Prisma.OperationUncheckedUpdateWithoutToothOperationsInput>
 }
 
-export type OperationUpdateWithoutAppointmentsInput = {
+export type OperationUpdateWithoutToothOperationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
-export type OperationUncheckedUpdateWithoutAppointmentsInput = {
+export type OperationUncheckedUpdateWithoutToothOperationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.IntFieldUpdateOperationsInput | number
@@ -387,11 +385,11 @@ export type OperationUncheckedUpdateWithoutAppointmentsInput = {
  */
 
 export type OperationCountOutputType = {
-  appointments: number
+  toothOperations: number
 }
 
 export type OperationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  appointments?: boolean | OperationCountOutputTypeCountAppointmentsArgs
+  toothOperations?: boolean | OperationCountOutputTypeCountToothOperationsArgs
 }
 
 /**
@@ -407,8 +405,8 @@ export type OperationCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ex
 /**
  * OperationCountOutputType without action
  */
-export type OperationCountOutputTypeCountAppointmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AppointmentWhereInput
+export type OperationCountOutputTypeCountToothOperationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AppointmentToothOperationWhereInput
 }
 
 
@@ -416,7 +414,7 @@ export type OperationSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   id?: boolean
   name?: boolean
   price?: boolean
-  appointments?: boolean | Prisma.Operation$appointmentsArgs<ExtArgs>
+  toothOperations?: boolean | Prisma.Operation$toothOperationsArgs<ExtArgs>
   _count?: boolean | Prisma.OperationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["operation"]>
 
@@ -440,7 +438,7 @@ export type OperationSelectScalar = {
 
 export type OperationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "price", ExtArgs["result"]["operation"]>
 export type OperationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  appointments?: boolean | Prisma.Operation$appointmentsArgs<ExtArgs>
+  toothOperations?: boolean | Prisma.Operation$toothOperationsArgs<ExtArgs>
   _count?: boolean | Prisma.OperationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OperationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -449,7 +447,7 @@ export type OperationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
 export type $OperationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Operation"
   objects: {
-    appointments: Prisma.$AppointmentPayload<ExtArgs>[]
+    toothOperations: Prisma.$AppointmentToothOperationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -849,7 +847,7 @@ readonly fields: OperationFieldRefs;
  */
 export interface Prisma__OperationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  appointments<T extends Prisma.Operation$appointmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Operation$appointmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  toothOperations<T extends Prisma.Operation$toothOperationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Operation$toothOperationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AppointmentToothOperationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1270,27 +1268,27 @@ export type OperationDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 /**
- * Operation.appointments
+ * Operation.toothOperations
  */
-export type Operation$appointmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Operation$toothOperationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Appointment
+   * Select specific fields to fetch from the AppointmentToothOperation
    */
-  select?: Prisma.AppointmentSelect<ExtArgs> | null
+  select?: Prisma.AppointmentToothOperationSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Appointment
+   * Omit specific fields from the AppointmentToothOperation
    */
-  omit?: Prisma.AppointmentOmit<ExtArgs> | null
+  omit?: Prisma.AppointmentToothOperationOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.AppointmentInclude<ExtArgs> | null
-  where?: Prisma.AppointmentWhereInput
-  orderBy?: Prisma.AppointmentOrderByWithRelationInput | Prisma.AppointmentOrderByWithRelationInput[]
-  cursor?: Prisma.AppointmentWhereUniqueInput
+  include?: Prisma.AppointmentToothOperationInclude<ExtArgs> | null
+  where?: Prisma.AppointmentToothOperationWhereInput
+  orderBy?: Prisma.AppointmentToothOperationOrderByWithRelationInput | Prisma.AppointmentToothOperationOrderByWithRelationInput[]
+  cursor?: Prisma.AppointmentToothOperationWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.AppointmentScalarFieldEnum | Prisma.AppointmentScalarFieldEnum[]
+  distinct?: Prisma.AppointmentToothOperationScalarFieldEnum | Prisma.AppointmentToothOperationScalarFieldEnum[]
 }
 
 /**

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { ChildrenProps } from "@/types/common";
 
-import "@/styles/layout.scss";
+import "@/styles/layouts/root-layout.scss";
 
 export const metadata: Metadata = {
   title: "Create Next App",

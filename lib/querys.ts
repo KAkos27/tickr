@@ -7,6 +7,8 @@ export const getAppointments = async () => {
   const session = await auth();
   const userId = session?.user?.id;
 
+  if (!userId) return [];
+
   const appointments = await prisma.appointment.findMany({
     where: { userId },
     orderBy: { start: "asc" },
@@ -23,8 +25,28 @@ export const getUserPatients = async () => {
   const session = await auth();
   const userId = session?.user?.id;
 
+  if (!userId) return [];
+
   const patients = await prisma.patient.findMany({
     where: { doctors: { some: { userId } } },
+  });
+
+  return patients;
+};
+
+export const getPatientsWithTeeth = async () => {
+  const patients = await prisma.patient.findMany({
+    include: {
+      teeth: {
+        select: {
+          toothCode: true,
+          operations: {
+            select: { appointmentId: true },
+            take: 1,
+          },
+        },
+      },
+    },
   });
 
   return patients;

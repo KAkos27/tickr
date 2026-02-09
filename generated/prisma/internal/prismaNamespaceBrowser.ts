@@ -57,7 +57,10 @@ export const ModelName = {
   Patient: 'Patient',
   UserPatient: 'UserPatient',
   Operation: 'Operation',
-  Appointment: 'Appointment'
+  Appointment: 'Appointment',
+  Tooth: 'Tooth',
+  PatientTooth: 'PatientTooth',
+  AppointmentToothOperation: 'AppointmentToothOperation'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -141,11 +144,35 @@ export const AppointmentScalarFieldEnum = {
   start: 'start',
   end: 'end',
   patientId: 'patientId',
-  operationId: 'operationId',
   userId: 'userId'
 } as const
 
 export type AppointmentScalarFieldEnum = (typeof AppointmentScalarFieldEnum)[keyof typeof AppointmentScalarFieldEnum]
+
+
+export const ToothScalarFieldEnum = {
+  code: 'code'
+} as const
+
+export type ToothScalarFieldEnum = (typeof ToothScalarFieldEnum)[keyof typeof ToothScalarFieldEnum]
+
+
+export const PatientToothScalarFieldEnum = {
+  patientId: 'patientId',
+  toothCode: 'toothCode'
+} as const
+
+export type PatientToothScalarFieldEnum = (typeof PatientToothScalarFieldEnum)[keyof typeof PatientToothScalarFieldEnum]
+
+
+export const AppointmentToothOperationScalarFieldEnum = {
+  appointmentId: 'appointmentId',
+  toothCode: 'toothCode',
+  patientId: 'patientId',
+  operationId: 'operationId'
+} as const
+
+export type AppointmentToothOperationScalarFieldEnum = (typeof AppointmentToothOperationScalarFieldEnum)[keyof typeof AppointmentToothOperationScalarFieldEnum]
 
 
 export const SortOrder = {

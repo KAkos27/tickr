@@ -189,78 +189,155 @@ export async function main() {
     operations[name] = op as { id: string; name: string };
   }
 
-  // Create appointments for a specific user id
-  const targetUserId = "cmkjv3fg900005oavplni2zzg";
-  let targetUser = await prisma.user.findUnique({
-    where: { id: targetUserId },
-  });
-  if (!targetUser) {
-    // Create a placeholder doctor user with the exact id
-    targetUser = await prisma.user.create({
-      data: {
-        id: targetUserId,
-        email: "doctor.seed@example.com",
-        name: "Seed Doctor",
-      },
-    });
-  }
-
-  // Ensure the target doctor has some patients assigned
-  const targetPatientsEmails = [
-    "patient.anna@example.com",
-    "patient.csilla@example.com",
-    "patient.hanna@example.com",
+  const teethCodes = [
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "21",
+    "22",
+    "23",
+    "24",
+    "25",
+    "26",
+    "27",
+    "28",
+    "31",
+    "32",
+    "33",
+    "34",
+    "35",
+    "36",
+    "37",
+    "38",
+    "41",
+    "42",
+    "43",
+    "44",
+    "45",
+    "46",
+    "47",
+    "48",
   ];
-  for (const pEmail of targetPatientsEmails) {
-    const pat = patients[pEmail];
-    if (!pat) continue;
-    await prisma.userPatient.upsert({
-      where: { userId_patientId: { userId: targetUserId, patientId: pat.id } },
-      create: { userId: targetUserId, patientId: pat.id },
+
+  for (const code of teethCodes) {
+    await prisma.tooth.upsert({
+      where: { code },
+      create: { code },
       update: {},
     });
   }
 
-  // Create some time-based appointments for the target doctor
-  const now = new Date();
-  const toISODate = (d: Date) => d;
+  for (const patient of Object.values(patients)) {
+    await prisma.patientTooth.createMany({
+      data: teethCodes.map((toothCode) => ({
+        patientId: patient.id,
+        toothCode,
+      })),
+      skipDuplicates: true,
+    });
+  }
+
+  // Create time-based appointments for seeded doctors
+  const baseDate = new Date(2026, 1, 10, 9, 0, 0, 0);
+  const buildDate = (dayOffset: number, hour: number, minute: number) =>
+    new Date(
+      baseDate.getFullYear(),
+      baseDate.getMonth(),
+      baseDate.getDate() + dayOffset,
+      hour,
+      minute,
+      0,
+      0,
+    );
 
   const appointmentPlan: Array<{
+    doctorEmail: string;
     patientEmail: string;
     title: string;
-    operationName: (typeof operationNames)[number];
-    startOffsetMinutes: number;
+    dayOffset: number;
+    startHour: number;
+    startMinute: number;
     durationMinutes: number;
+    toothOperations: Array<{
+      toothCode: string;
+      operationName: (typeof operationNames)[number];
+    }>;
   }> = [
     {
+      doctorEmail: "alice@example.com",
       patientEmail: "patient.anna@example.com",
-      title: "Consultation with Anna",
-      operationName: "Consultation",
-      startOffsetMinutes: 60,
+      title: "Konzultáció - Anna",
+      dayOffset: 0,
+      startHour: 9,
+      startMinute: 0,
       durationMinutes: 45,
+      toothOperations: [
+        { toothCode: "11", operationName: "Consultation" },
+        { toothCode: "12", operationName: "Checkup" },
+      ],
     },
     {
+      doctorEmail: "alice@example.com",
       patientEmail: "patient.csilla@example.com",
-      title: "Follow-up with Csilla",
-      operationName: "Follow-up",
-      startOffsetMinutes: 180,
+      title: "Kontroll - Csilla",
+      dayOffset: 0,
+      startHour: 11,
+      startMinute: 0,
       durationMinutes: 30,
+      toothOperations: [{ toothCode: "21", operationName: "Follow-up" }],
     },
     {
-      patientEmail: "patient.hanna@example.com",
-      title: "Routine checkup for Hanna",
-      operationName: "Checkup",
-      startOffsetMinutes: 300,
+      doctorEmail: "bob@example.com",
+      patientEmail: "patient.bela@example.com",
+      title: "Állapotfelmérés - Béla",
+      dayOffset: 1,
+      startHour: 10,
+      startMinute: 0,
+      durationMinutes: 45,
+      toothOperations: [
+        { toothCode: "31", operationName: "Consultation" },
+        { toothCode: "32", operationName: "Checkup" },
+      ],
+    },
+    {
+      doctorEmail: "carol@example.com",
+      patientEmail: "patient.eva@example.com",
+      title: "Rutin vizsgálat - Éva",
+      dayOffset: 1,
+      startHour: 13,
+      startMinute: 30,
       durationMinutes: 30,
+      toothOperations: [{ toothCode: "41", operationName: "Checkup" }],
+    },
+    {
+      doctorEmail: "dave@example.com",
+      patientEmail: "patient.denes@example.com",
+      title: "Konzultáció - Dénes",
+      dayOffset: 2,
+      startHour: 9,
+      startMinute: 30,
+      durationMinutes: 45,
+      toothOperations: [{ toothCode: "16", operationName: "Consultation" }],
     },
   ];
 
   for (const plan of appointmentPlan) {
+    const doctor = users[plan.doctorEmail];
     const pat = patients[plan.patientEmail];
-    const op = operations[plan.operationName];
-    if (!pat || !op) continue;
+    if (!doctor || !pat) continue;
 
-    const start = new Date(now.getTime() + plan.startOffsetMinutes * 60 * 1000);
+    await prisma.userPatient.upsert({
+      where: { userId_patientId: { userId: doctor.id, patientId: pat.id } },
+      create: { userId: doctor.id, patientId: pat.id },
+      update: {},
+    });
+
+    const start = buildDate(plan.dayOffset, plan.startHour, plan.startMinute);
     const endTime = new Date(
       start.getTime() + plan.durationMinutes * 60 * 1000,
     );
@@ -269,23 +346,51 @@ export async function main() {
     const existing = await prisma.appointment.findFirst({
       where: {
         title: plan.title,
-        userId: targetUserId,
+        userId: doctor.id,
         patientId: pat.id,
         start,
       },
     });
     if (existing) continue;
 
-    await prisma.appointment.create({
+    const appointment = await prisma.appointment.create({
       data: {
         title: plan.title,
-        start: toISODate(start),
-        end: toISODate(endTime),
-        userId: targetUserId,
+        start,
+        end: endTime,
+        userId: doctor.id,
         patientId: pat.id,
-        operationId: op.id,
       },
     });
+
+    const appointmentToothOperations = plan.toothOperations
+      .map((item) => {
+        const op = operations[item.operationName];
+        if (!op) return null;
+        return {
+          appointmentId: appointment.id,
+          toothCode: item.toothCode,
+          patientId: pat.id,
+          operationId: op.id,
+        };
+      })
+      .filter(
+        (
+          item,
+        ): item is {
+          appointmentId: string;
+          toothCode: string;
+          patientId: string;
+          operationId: string;
+        } => Boolean(item),
+      );
+
+    if (appointmentToothOperations.length > 0) {
+      await prisma.appointmentToothOperation.createMany({
+        data: appointmentToothOperations,
+        skipDuplicates: true,
+      });
+    }
   }
 }
 

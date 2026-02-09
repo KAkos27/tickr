@@ -1,9 +1,8 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
-import Nav from "@/components/nav";
 import DashboardHeader from "@/components/dashboard-header";
 
-import style from "@/styles/auth/layout.module.scss";
+import style from "@/styles/layouts/auth-layout.module.scss";
 import { ReactNode } from "react";
 
 export default async function AuthLayout({
@@ -20,10 +19,7 @@ export default async function AuthLayout({
   return (
     <div className={style.dashboardContainer}>
       <DashboardHeader />
-      <div className={style.container}>
-        <Nav />
-        {children}
-      </div>
+      <div className={style.container}>{children}</div>
     </div>
   );
 }

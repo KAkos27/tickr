@@ -390,7 +390,10 @@ export const ModelName = {
   Patient: 'Patient',
   UserPatient: 'UserPatient',
   Operation: 'Operation',
-  Appointment: 'Appointment'
+  Appointment: 'Appointment',
+  Tooth: 'Tooth',
+  PatientTooth: 'PatientTooth',
+  AppointmentToothOperation: 'AppointmentToothOperation'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -406,7 +409,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "session" | "user" | "verificationToken" | "patient" | "userPatient" | "operation" | "appointment"
+    modelProps: "session" | "user" | "verificationToken" | "patient" | "userPatient" | "operation" | "appointment" | "tooth" | "patientTooth" | "appointmentToothOperation"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -928,6 +931,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Tooth: {
+      payload: Prisma.$ToothPayload<ExtArgs>
+      fields: Prisma.ToothFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ToothFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ToothPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ToothFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ToothPayload>
+        }
+        findFirst: {
+          args: Prisma.ToothFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ToothPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ToothFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ToothPayload>
+        }
+        findMany: {
+          args: Prisma.ToothFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ToothPayload>[]
+        }
+        create: {
+          args: Prisma.ToothCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ToothPayload>
+        }
+        createMany: {
+          args: Prisma.ToothCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ToothCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ToothPayload>[]
+        }
+        delete: {
+          args: Prisma.ToothDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ToothPayload>
+        }
+        update: {
+          args: Prisma.ToothUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ToothPayload>
+        }
+        deleteMany: {
+          args: Prisma.ToothDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ToothUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ToothUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ToothPayload>[]
+        }
+        upsert: {
+          args: Prisma.ToothUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ToothPayload>
+        }
+        aggregate: {
+          args: Prisma.ToothAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTooth>
+        }
+        groupBy: {
+          args: Prisma.ToothGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ToothGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ToothCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ToothCountAggregateOutputType> | number
+        }
+      }
+    }
+    PatientTooth: {
+      payload: Prisma.$PatientToothPayload<ExtArgs>
+      fields: Prisma.PatientToothFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PatientToothFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientToothPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PatientToothFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientToothPayload>
+        }
+        findFirst: {
+          args: Prisma.PatientToothFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientToothPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PatientToothFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientToothPayload>
+        }
+        findMany: {
+          args: Prisma.PatientToothFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientToothPayload>[]
+        }
+        create: {
+          args: Prisma.PatientToothCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientToothPayload>
+        }
+        createMany: {
+          args: Prisma.PatientToothCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PatientToothCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientToothPayload>[]
+        }
+        delete: {
+          args: Prisma.PatientToothDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientToothPayload>
+        }
+        update: {
+          args: Prisma.PatientToothUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientToothPayload>
+        }
+        deleteMany: {
+          args: Prisma.PatientToothDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PatientToothUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PatientToothUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientToothPayload>[]
+        }
+        upsert: {
+          args: Prisma.PatientToothUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientToothPayload>
+        }
+        aggregate: {
+          args: Prisma.PatientToothAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePatientTooth>
+        }
+        groupBy: {
+          args: Prisma.PatientToothGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PatientToothGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PatientToothCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PatientToothCountAggregateOutputType> | number
+        }
+      }
+    }
+    AppointmentToothOperation: {
+      payload: Prisma.$AppointmentToothOperationPayload<ExtArgs>
+      fields: Prisma.AppointmentToothOperationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AppointmentToothOperationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppointmentToothOperationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AppointmentToothOperationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppointmentToothOperationPayload>
+        }
+        findFirst: {
+          args: Prisma.AppointmentToothOperationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppointmentToothOperationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AppointmentToothOperationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppointmentToothOperationPayload>
+        }
+        findMany: {
+          args: Prisma.AppointmentToothOperationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppointmentToothOperationPayload>[]
+        }
+        create: {
+          args: Prisma.AppointmentToothOperationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppointmentToothOperationPayload>
+        }
+        createMany: {
+          args: Prisma.AppointmentToothOperationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AppointmentToothOperationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppointmentToothOperationPayload>[]
+        }
+        delete: {
+          args: Prisma.AppointmentToothOperationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppointmentToothOperationPayload>
+        }
+        update: {
+          args: Prisma.AppointmentToothOperationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppointmentToothOperationPayload>
+        }
+        deleteMany: {
+          args: Prisma.AppointmentToothOperationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AppointmentToothOperationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AppointmentToothOperationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppointmentToothOperationPayload>[]
+        }
+        upsert: {
+          args: Prisma.AppointmentToothOperationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppointmentToothOperationPayload>
+        }
+        aggregate: {
+          args: Prisma.AppointmentToothOperationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAppointmentToothOperation>
+        }
+        groupBy: {
+          args: Prisma.AppointmentToothOperationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AppointmentToothOperationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AppointmentToothOperationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AppointmentToothOperationCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1032,11 +1257,35 @@ export const AppointmentScalarFieldEnum = {
   start: 'start',
   end: 'end',
   patientId: 'patientId',
-  operationId: 'operationId',
   userId: 'userId'
 } as const
 
 export type AppointmentScalarFieldEnum = (typeof AppointmentScalarFieldEnum)[keyof typeof AppointmentScalarFieldEnum]
+
+
+export const ToothScalarFieldEnum = {
+  code: 'code'
+} as const
+
+export type ToothScalarFieldEnum = (typeof ToothScalarFieldEnum)[keyof typeof ToothScalarFieldEnum]
+
+
+export const PatientToothScalarFieldEnum = {
+  patientId: 'patientId',
+  toothCode: 'toothCode'
+} as const
+
+export type PatientToothScalarFieldEnum = (typeof PatientToothScalarFieldEnum)[keyof typeof PatientToothScalarFieldEnum]
+
+
+export const AppointmentToothOperationScalarFieldEnum = {
+  appointmentId: 'appointmentId',
+  toothCode: 'toothCode',
+  patientId: 'patientId',
+  operationId: 'operationId'
+} as const
+
+export type AppointmentToothOperationScalarFieldEnum = (typeof AppointmentToothOperationScalarFieldEnum)[keyof typeof AppointmentToothOperationScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1240,6 +1489,9 @@ export type GlobalOmitConfig = {
   userPatient?: Prisma.UserPatientOmit
   operation?: Prisma.OperationOmit
   appointment?: Prisma.AppointmentOmit
+  tooth?: Prisma.ToothOmit
+  patientTooth?: Prisma.PatientToothOmit
+  appointmentToothOperation?: Prisma.AppointmentToothOperationOmit
 }
 
 /* Types for Logging */

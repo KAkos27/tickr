@@ -47,14 +47,15 @@ model VerificationToken {
 }
 
 model Patient {
-  id           String        @id @default(cuid())
+  id           String         @id @default(cuid())
   name         String
   birthDate    DateTime
-  sex          Sex           @default(OTHER)
-  phone        String        @unique
-  email        String        @unique
+  sex          Sex            @default(OTHER)
+  phone        String         @unique
+  email        String         @unique
   doctors      UserPatient[]
   appointments Appointment[]
+  teeth        PatientTooth[]
 }
 
 model UserPatient {
@@ -67,21 +68,49 @@ model UserPatient {
 }
 
 model Operation {
-  id           String        @id @default(cuid())
-  name         String        @unique
-  price        Int
-  appointments Appointment[]
+  id              String                      @id @default(cuid())
+  name            String                      @unique
+  price           Int
+  toothOperations AppointmentToothOperation[]
 }
 
 model Appointment {
-  id          String     @id @default(cuid())
-  title       String
-  start       DateTime
-  end         DateTime
-  patient     Patient?   @relation(fields: [patientId], references: [id])
-  patientId   String
-  operation   Operation? @relation(fields: [operationId], references: [id])
-  operationId String
-  user        User?      @relation(fields: [userId], references: [id])
-  userId      String
+  id              String                      @id @default(cuid())
+  title           String
+  start           DateTime
+  end             DateTime
+  patient         Patient?                    @relation(fields: [patientId], references: [id])
+  patientId       String
+  user            User?                       @relation(fields: [userId], references: [id])
+  userId          String
+  toothOperations AppointmentToothOperation[]
+}
+
+model Tooth {
+  code            String                      @id
+  toothOperations AppointmentToothOperation[]
+  patientTeeth    PatientTooth[]
+}
+
+model PatientTooth {
+  patient    Patient                     @relation(fields: [patientId], references: [id])
+  patientId  String
+  tooth      Tooth                       @relation(fields: [toothCode], references: [code])
+  toothCode  String
+  operations AppointmentToothOperation[]
+
+  @@id([patientId, toothCode])
+}
+
+model AppointmentToothOperation {
+  appointment   Appointment  @relation(fields: [appointmentId], references: [id])
+  appointmentId String
+  tooth         Tooth        @relation(fields: [toothCode], references: [code])
+  toothCode     String
+  patientTooth  PatientTooth @relation(fields: [patientId, toothCode], references: [patientId, toothCode])
+  patientId     String
+  operation     Operation    @relation(fields: [operationId], references: [id])
+  operationId   String
+
+  @@id([appointmentId, toothCode, operationId])
 }
