@@ -4,6 +4,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  gap: 16px;
 
   .calendar {
     width: 100%;
@@ -12,9 +13,19 @@
   .event {
     background-color: $primary-color;
     min-height: 500px;
+  }
+}
 
-    div {
-      height: 100%;
-    }
+.container:has(.calendar [data-view="row"]) {
+  flex-direction: row;
+  align-items: stretch;
+
+  .calendar {
+    flex: 2;
+  }
+
+  .event {
+    flex: 1;
+    min-height: 720px;
   }
 }

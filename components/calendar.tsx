@@ -14,7 +14,15 @@ import type { CalendarEvent } from "@/types/domain";
 
 import style from "@/styles/components/calendar.module.scss";
 
-export default function Calendar({ events }: { events: CalendarEvent[] }) {
+export default function Calendar({
+  events,
+  view,
+  orientation,
+}: {
+  events: CalendarEvent[];
+  view: string;
+  orientation: string;
+}) {
   const router = useRouter();
 
   const handleDateClick = (selected: DateSelectArg) => {
@@ -33,7 +41,7 @@ export default function Calendar({ events }: { events: CalendarEvent[] }) {
   };
 
   return (
-    <div className={style.container}>
+    <div className={style.container} data-view={orientation}>
       <FullCalendar
         height={720}
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -42,7 +50,7 @@ export default function Calendar({ events }: { events: CalendarEvent[] }) {
           center: "title",
           right: "dayGridMonth,timeGridWeek,timeGridDay",
         }}
-        initialView="timeGridWeek"
+        initialView={view}
         scrollTime="09:00:00"
         expandRows
         editable={true}

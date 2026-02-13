@@ -26,3 +26,16 @@ export const parseDateTimeLocalValue = (value: string) => {
 
 export const decode = (value: string | undefined) =>
   value ? decodeURIComponent(value) : null;
+
+export const formatDate = (date: Date) =>
+  date.toLocaleDateString("hu-HU", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+export const formatTime = (date: Date) =>
+  date.toLocaleTimeString("hu-HU", { hour: "2-digit", minute: "2-digit" });
+
+export const formatCurrency = (value: number) =>
+  `${new Intl.NumberFormat("hu-HU").format(value)} Ft`;

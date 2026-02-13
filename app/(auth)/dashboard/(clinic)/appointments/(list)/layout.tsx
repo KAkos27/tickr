@@ -1,12 +1,11 @@
 import style from "@/styles/layouts/appointments-layout.module.scss";
 
 type AppointmentsLayoutProps = Readonly<{
-  children: React.ReactNode;
   calendar: React.ReactNode;
   event: React.ReactNode;
 }>;
 
-export default function AppointmentsLayout({
+export default async function AppointmentsLayout({
   calendar,
   event,
 }: AppointmentsLayoutProps) {

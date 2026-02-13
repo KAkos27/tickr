@@ -8,7 +8,7 @@ export default function Teeth({
   selectedPatient,
   operations,
 }: {
-  selectedPatient: SelectedPatient;
+  selectedPatient: SelectedPatient | null;
   operations: Array<{ id: string; name: string; price: number }>;
 }) {
   const [toothOperations, setToothOperations] = useState<

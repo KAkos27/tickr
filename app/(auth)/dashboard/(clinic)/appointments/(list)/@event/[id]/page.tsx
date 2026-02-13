@@ -1,5 +1,11 @@
+import Teeth from "@/components/teeth";
 import prisma from "@/lib/prisma";
-import { getActiveClinic } from "@/lib/querys";
+import {
+  getActiveClinic,
+  getOperation,
+  getOperations,
+  getPatientWithTeeth,
+} from "@/lib/querys";
 import type { Params } from "@/types/route";
 import { notFound } from "next/navigation";
 
@@ -14,7 +20,15 @@ export default async function AppointmentPage({
     where: { id: appointmentId, clinicId: activeClinic!.id },
   });
 
+  const selectedPatient = await getPatientWithTeeth(appointment?.patientId);
+  const operations = await getOperations();
+
   if (!appointment) notFound();
 
-  return <div>{appointmentId}</div>;
+  return (
+    <div>
+      {appointmentId}
+      <Teeth selectedPatient={selectedPatient} operations={operations} />
+    </div>
+  );
 }

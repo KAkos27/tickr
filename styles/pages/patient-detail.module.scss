@@ -1,0 +1,266 @@
+@use "../partials" as *;
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+}
+
+.summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 20px 24px;
+  background: $white;
+  border: 1px solid $grey;
+  border-radius: 16px;
+  box-shadow: 0 18px 40px rgba(17, 24, 39, 0.08);
+}
+
+.summaryMain {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  h1 {
+    font-size: 28px;
+    margin: 0;
+    color: $secondary-color;
+  }
+}
+
+.summarySubtitle {
+  font-size: 14px;
+  color: rgba(17, 24, 39, 0.65);
+}
+
+.summaryInfo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px 20px;
+  min-width: 280px;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+    color: rgba(17, 24, 39, 0.65);
+
+    strong {
+      font-size: 15px;
+      color: $secondary-color;
+    }
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.panel {
+  padding: 20px;
+  border-radius: 18px;
+  background: $white;
+  border: 1px solid $grey;
+  box-shadow: 0 10px 25px rgba(17, 24, 39, 0.06);
+}
+
+.panelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 16px;
+
+  h2 {
+    margin: 0;
+    font-size: 18px;
+    color: $secondary-color;
+  }
+
+  span {
+    font-size: 13px;
+    color: rgba(17, 24, 39, 0.65);
+  }
+}
+
+.historyPanel {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(140deg, #f8fafc 0%, #eef3f7 48%, #e5edf4 100%);
+}
+
+.historyPanel::before {
+  content: "";
+  position: absolute;
+  inset: -40% -10% auto auto;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(
+    circle,
+    rgba(93, 141, 168, 0.18),
+    transparent 65%
+  );
+  pointer-events: none;
+}
+
+.historyPanel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.dayGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 22px;
+  animation: riseFade 0.6s ease both;
+}
+
+.dayHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  color: $secondary-color;
+
+  span {
+    font-weight: 500;
+    color: rgba(17, 24, 39, 0.6);
+  }
+}
+
+.dayDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: $primary-color;
+}
+
+.dayCards {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.appointmentCard {
+  padding: 16px 18px;
+  background: $white;
+  border-radius: 16px;
+  border: 1px solid $grey;
+  box-shadow: 0 12px 25px rgba(17, 24, 39, 0.08);
+  animation: riseFade 0.6s ease both;
+}
+
+.cardHeader {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: rgba(17, 24, 39, 0.6);
+}
+
+.cardTime {
+  font-weight: 600;
+  color: $secondary-color;
+}
+
+.cardTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cardTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.cardTable thead th {
+  text-align: left;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(17, 24, 39, 0.55);
+  padding-bottom: 8px;
+  border-bottom: 1px solid $grey;
+}
+
+.cardTable tbody td {
+  padding: 10px 0;
+  border-bottom: 1px solid $grey;
+  color: $secondary-color;
+}
+
+.cardTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.cellTeeth {
+  font-weight: 600;
+  color: $primary-color;
+}
+
+.cellPrice,
+.cellTotal,
+.cellUnit {
+  text-align: right;
+}
+
+.cellTotal {
+  font-weight: 600;
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  font-size: 13px;
+  color: rgba(17, 24, 39, 0.6);
+}
+
+.cardTotal {
+  font-size: 16px;
+  font-weight: 700;
+  color: $secondary-color;
+}
+
+.emptyState {
+  padding: 18px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px dashed $grey;
+  color: rgba(17, 24, 39, 0.65);
+}
+
+@keyframes riseFade {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 980px) {
+  .summary {
+    flex-direction: column;
+  }
+
+  .summaryInfo {
+    width: 100%;
+  }
+}

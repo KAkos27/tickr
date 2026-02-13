@@ -101,6 +101,71 @@ export const getUserPatients = async () => {
   return patients;
 };
 
+export const getPatientWithTeeth = async (id: string | undefined) => {
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) return null;
+
+  if (!id) return null;
+
+  const clinicId = await ensureActiveClinicId(userId);
+  if (!clinicId) return null;
+
+  const patient = await prisma.patient.findFirst({
+    where: { id, clinicId },
+    include: {
+      teeth: {
+        select: {
+          toothCode: true,
+          operations: {
+            select: { appointmentId: true },
+            take: 1,
+          },
+        },
+      },
+    },
+  });
+
+  return patient;
+};
+
+export const getPatientAppointmentHistory = async (
+  patientId: string | undefined,
+) => {
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) return [];
+
+  if (!patientId) return [];
+
+  const clinicId = await ensureActiveClinicId(userId);
+  if (!clinicId) return [];
+
+  return await prisma.appointment.findMany({
+    where: { patientId, clinicId },
+    orderBy: { start: "desc" },
+    include: {
+      user: { select: { name: true } },
+      toothOperations: {
+        select: {
+          toothCode: true,
+          operation: {
+            select: {
+              name: true,
+              clinicPrices: {
+                where: { clinicId },
+                select: { price: true },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+};
+
 export const getPatientsWithTeeth = async () => {
   const session = await auth();
   const userId = session?.user?.id;
