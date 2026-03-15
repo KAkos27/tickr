@@ -3,7 +3,11 @@ import { getAppointments } from "@/lib/querys";
 
 import style from "@/styles/pages/calendar-page.module.scss";
 
-export default async function CalendarPage({ searchParams }) {
+export default async function CalendarPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ view: string; orientation: string }>;
+}) {
   const appointments = await getAppointments();
   const view = (await searchParams).view || "timeGridWeek";
   const orientation = (await searchParams).orientation;
