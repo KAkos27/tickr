@@ -15,6 +15,8 @@ export default async function CalendarPage({ searchParams }) {
     end: appointment.end.toISOString(),
   }));
 
+  // TODO megszuntetni a parelell routot, mert csak szopat
+
   return (
     <div className={style.container}>
       <Calendar
@@ -22,6 +24,7 @@ export default async function CalendarPage({ searchParams }) {
         events={events}
         view={view}
         orientation={orientation}
+        // appointmentId={}
       />
     </div>
   );

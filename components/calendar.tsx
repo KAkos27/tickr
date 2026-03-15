@@ -18,10 +18,12 @@ export default function Calendar({
   events,
   view,
   orientation,
+  // appointmentId,
 }: {
   events: CalendarEvent[];
   view: string;
   orientation: string;
+  // appointmentId: string;
 }) {
   const router = useRouter();
 
@@ -40,8 +42,15 @@ export default function Calendar({
     });
   };
 
+  const handleChangeOrientation = () => {
+    // router.push(
+    //   `/dashboard/appointments/${appointmentId}?view=timeGridDay&orientation=column`,
+    // );
+  };
+
   return (
     <div className={style.container} data-view={orientation}>
+      <button onClick={handleChangeOrientation}>{orientation}</button>
       <FullCalendar
         height={720}
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
