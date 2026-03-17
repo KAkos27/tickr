@@ -1,7 +1,75 @@
-$white: #fff;
-$grey: #e9e8e8;
+$font-family-base: "Space Grotesk", "Sora", sans-serif;
 
-$primary-color: #5d8da8;
-$secondary-color: #111827;
+$color-white: #fff;
+$color-surface: #fff;
+$color-surface-muted: #f8fafc;
+$color-surface-soft: #eef3f7;
+$color-surface-tint: #e5edf4;
+$color-surface-elevated: rgba(248, 250, 252, 0.95);
+$color-surface-glass: rgba(255, 255, 255, 0.85);
 
-$error-color: red;
+$color-border: #e9e8e8;
+$color-border-soft: rgba(17, 24, 39, 0.08);
+$color-border-muted: rgba(17, 24, 39, 0.16);
+$color-border-accent: rgba(93, 141, 168, 0.18);
+
+$color-primary: #5d8da8;
+$color-primary-hover: #4f7992;
+$color-primary-strong: #457693;
+$color-primary-soft: rgba(93, 141, 168, 0.08);
+$color-primary-soft-strong: rgba(93, 141, 168, 0.12);
+$color-primary-soft-highlight: rgba(93, 141, 168, 0.18);
+
+$color-text: #111827;
+$color-text-muted: rgba(17, 24, 39, 0.72);
+$color-text-soft: rgba(17, 24, 39, 0.68);
+$color-text-subtle: rgba(17, 24, 39, 0.64);
+$color-text-faint: rgba(17, 24, 39, 0.58);
+$color-text-quiet: rgba(17, 24, 39, 0.5);
+
+$color-success: #047857;
+$color-warning: #a16207;
+$error-color: #dc2626;
+
+$gradient-accent-surface: linear-gradient(
+  140deg,
+  #f8fafc 0%,
+  #eef3f7 48%,
+  #e5edf4 100%
+);
+$gradient-primary: linear-gradient(135deg, #5d8da8 0%, #457693 100%);
+$gradient-page-background: radial-gradient(
+    circle at top,
+    rgba(93, 141, 168, 0.14),
+    transparent 36%
+  ),
+  linear-gradient(180deg, #f7f9fb 0%, #eef3f7 100%);
+
+$shadow-soft: 0 8px 18px rgba(17, 24, 39, 0.08);
+$shadow-md: 0 12px 28px rgba(17, 24, 39, 0.07);
+$shadow-lg: 0 16px 34px rgba(17, 24, 39, 0.08);
+$shadow-xl: 0 18px 40px rgba(17, 24, 39, 0.08);
+$shadow-panel: 0 10px 25px rgba(17, 24, 39, 0.06);
+
+$radius-xs: 6px;
+$radius-sm: 12px;
+$radius-md: 16px;
+$radius-lg: 18px;
+$radius-xl: 20px;
+$radius-pill: 999px;
+
+$space-1: 4px;
+$space-2: 8px;
+$space-3: 12px;
+$space-4: 16px;
+$space-5: 20px;
+$space-6: 24px;
+$space-7: 32px;
+
+$transition-base: 0.2s ease;
+$content-max-width: 1440px;
+
+$white: $color-white;
+$grey: $color-border;
+$primary-color: $color-primary;
+$secondary-color: $color-text;

@@ -93,8 +93,16 @@ export default function PostAppointment({
           <small key={error}>{error}</small>
         ))}
       </div>
-      <button onClick={handleCancelNewAppointment}>Mégsem</button>
-      <FormSubmit buttonText="OK" pedingText="Betöltés..." />
+      <div className={style.actions}>
+        <button
+          type="button"
+          className={style.cancelButton}
+          onClick={handleCancelNewAppointment}
+        >
+          Mégsem
+        </button>
+        <FormSubmit buttonText="OK" pedingText="Betöltés..." />
+      </div>
     </form>
   );
 }

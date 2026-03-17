@@ -1,39 +1,27 @@
 @use "../partials" as *;
 
 .page {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  padding: 24px;
+  @include page-shell();
 }
 
 .summary {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 24px;
-  padding: 20px 24px;
-  background: $white;
-  border: 1px solid $grey;
-  border-radius: 16px;
-  box-shadow: 0 18px 40px rgba(17, 24, 39, 0.08);
+  @include surface-panel(20px 24px, $radius-md, $shadow-xl);
+  @include cluster($space-6, space-between, flex-start);
 }
 
 .summaryMain {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  @include stack(6px);
 
   h1 {
-    font-size: 28px;
     margin: 0;
-    color: $secondary-color;
+    font-size: 28px;
+    color: $color-text;
   }
 }
 
 .summarySubtitle {
   font-size: 14px;
-  color: rgba(17, 24, 39, 0.65);
+  color: $color-text-subtle;
 }
 
 .summaryInfo {
@@ -43,56 +31,45 @@
   min-width: 280px;
 
   div {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    @include stack(4px);
     font-size: 13px;
-    color: rgba(17, 24, 39, 0.65);
+    color: $color-text-subtle;
 
     strong {
       font-size: 15px;
-      color: $secondary-color;
+      color: $color-text;
     }
   }
 }
 
 .content {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+  @include stack($space-6);
 }
 
 .panel {
-  padding: 20px;
-  border-radius: 18px;
-  background: $white;
-  border: 1px solid $grey;
-  box-shadow: 0 10px 25px rgba(17, 24, 39, 0.06);
+  @include surface-panel(20px, $radius-lg, $shadow-panel);
 }
 
 .panelHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 12px;
-  margin-bottom: 16px;
+  @include cluster($space-3, space-between, baseline);
+  margin-bottom: $space-4;
 
   h2 {
     margin: 0;
     font-size: 18px;
-    color: $secondary-color;
+    color: $color-text;
   }
 
   span {
     font-size: 13px;
-    color: rgba(17, 24, 39, 0.65);
+    color: $color-text-subtle;
   }
 }
 
 .historyPanel {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(140deg, #f8fafc 0%, #eef3f7 48%, #e5edf4 100%);
+  background: $gradient-accent-surface;
 }
 
 .historyPanel::before {
@@ -103,7 +80,7 @@
   height: 320px;
   background: radial-gradient(
     circle,
-    rgba(93, 141, 168, 0.18),
+    $color-primary-soft-highlight,
     transparent 65%
   );
   pointer-events: none;
@@ -115,23 +92,19 @@
 }
 
 .dayGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  @include stack($space-3);
   margin-bottom: 22px;
   animation: riseFade 0.6s ease both;
 }
 
 .dayHeader {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  @include cluster($space-3, flex-start, center);
   font-weight: 600;
-  color: $secondary-color;
+  color: $color-text;
 
   span {
     font-weight: 500;
-    color: rgba(17, 24, 39, 0.6);
+    color: $color-text-faint;
   }
 }
 
@@ -139,49 +112,41 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: $primary-color;
+  background: $color-primary;
 }
 
 .dayCards {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+  @include stack(14px);
 }
 
 .appointmentCard {
-  padding: 16px 18px;
-  background: $white;
-  border-radius: 16px;
-  border: 1px solid $grey;
-  box-shadow: 0 12px 25px rgba(17, 24, 39, 0.08);
+  @include surface-panel(16px 18px, $radius-md, $shadow-md);
   animation: riseFade 0.6s ease both;
 }
 
 .cardHeader {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
+  @include cluster(10px, space-between, center);
   font-size: 13px;
-  color: rgba(17, 24, 39, 0.6);
+  color: $color-text-faint;
+
+  a {
+    @include subtle-button(8px 12px, $radius-pill);
+  }
 }
 
 .cardTime {
   font-weight: 600;
-  color: $secondary-color;
+  color: $color-text;
 }
 
 .cardTitle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  @include cluster($space-2, flex-start, center, nowrap);
 }
 
 .cardTable {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 12px;
+  margin-top: $space-3;
   font-size: 14px;
 }
 
@@ -190,15 +155,15 @@
   font-size: 11px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: rgba(17, 24, 39, 0.55);
+  color: $color-text-quiet;
   padding-bottom: 8px;
-  border-bottom: 1px solid $grey;
+  border-bottom: 1px solid $color-border;
 }
 
 .cardTable tbody td {
   padding: 10px 0;
-  border-bottom: 1px solid $grey;
-  color: $secondary-color;
+  border-bottom: 1px solid $color-border;
+  color: $color-text;
 }
 
 .cardTable tbody tr:last-child td {
@@ -207,7 +172,7 @@
 
 .cellTeeth {
   font-weight: 600;
-  color: $primary-color;
+  color: $color-primary;
 }
 
 .cellPrice,
@@ -221,26 +186,20 @@
 }
 
 .cardFooter {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 12px;
+  @include cluster($space-3, space-between, center);
+  margin-top: $space-3;
   font-size: 13px;
-  color: rgba(17, 24, 39, 0.6);
+  color: $color-text-faint;
 }
 
 .cardTotal {
   font-size: 16px;
   font-weight: 700;
-  color: $secondary-color;
+  color: $color-text;
 }
 
 .emptyState {
-  padding: 18px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.8);
-  border: 1px dashed $grey;
-  color: rgba(17, 24, 39, 0.65);
+  @include empty-state(18px, 14px);
 }
 
 @keyframes riseFade {

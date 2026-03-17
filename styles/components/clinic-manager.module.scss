@@ -1,0 +1,139 @@
+@use "../partials" as *;
+
+.page {
+  @include page-shell();
+}
+
+.hero {
+  @include surface-hero();
+}
+
+.heroCopy {
+  @include stack($space-3);
+  max-width: 720px;
+
+  h1 {
+    margin: 0;
+    font-size: 32px;
+    color: $color-text;
+  }
+
+  p {
+    margin: 0;
+    color: $color-text-muted;
+  }
+}
+
+.eyebrow {
+  @include eyebrow;
+}
+
+.grid {
+  @include card-grid(320px, $space-5);
+  align-items: start;
+}
+
+.panel {
+  @include surface-panel(24px, $radius-lg, $shadow-panel);
+  @include stack($space-4);
+}
+
+.panelHeader {
+  @include cluster($space-3, space-between, flex-start);
+
+  h2 {
+    margin: 0;
+    font-size: 20px;
+  }
+
+  span {
+    color: $color-text-subtle;
+    font-size: 13px;
+  }
+}
+
+.form {
+  @include stack($space-3);
+
+  button[type="submit"] {
+    @include submitButton;
+    align-self: flex-start;
+  }
+
+  button[disabled] {
+    opacity: 0.7;
+    cursor: wait;
+  }
+}
+
+.field {
+  @include stack($space-2);
+
+  label {
+    font-size: 14px;
+    font-weight: 700;
+    color: $color-text;
+  }
+
+  input {
+    @include input;
+    width: 100%;
+  }
+}
+
+.errorText {
+  margin: 0;
+  color: $error-color;
+  font-size: 13px;
+}
+
+.statusText {
+  margin: 0;
+  color: $color-text-subtle;
+  font-size: 14px;
+}
+
+.list {
+  @include stack($space-3);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.listItem {
+  @include surface-soft(16px, $radius-md);
+  @include cluster($space-3, space-between, center);
+}
+
+.listItemCopy {
+  @include stack(4px);
+
+  strong {
+    color: $color-text;
+  }
+
+  span {
+    color: $color-text-faint;
+    font-size: 12px;
+    word-break: break-all;
+  }
+}
+
+.activeBadge {
+  @include subtle-button(8px 12px, $radius-pill);
+  background: $color-primary-soft-strong;
+}
+
+.emptyState {
+  @include empty-state(20px, $radius-md);
+}
+
+@media (max-width: 720px) {
+  .heroCopy h1 {
+    font-size: 28px;
+  }
+
+  .form button[type="submit"] {
+    width: 100%;
+  }
+}

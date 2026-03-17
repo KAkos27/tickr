@@ -1,0 +1,37 @@
+@use "../partials" as *;
+
+.page {
+  @include page-shell();
+}
+
+.backLink {
+  @include subtle-button(10px 16px);
+  align-self: flex-start;
+}
+
+.hero {
+  @include surface-hero();
+  @include stack($space-3);
+  max-width: 720px;
+
+  h1 {
+    margin: 0;
+    font-size: 32px;
+    color: $color-text;
+  }
+
+  p {
+    margin: 0;
+    color: $color-text-muted;
+  }
+}
+
+.eyebrow {
+  @include eyebrow;
+}
+
+.price {
+  font-size: 36px;
+  font-weight: 700;
+  color: $color-primary;
+}

@@ -1,33 +1,98 @@
 @use "../partials" as *;
 
 .header {
-  background-color: $primary-color;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding: $space-5 $space-6 0;
+}
+
+.inner {
+  @include surface-panel(14px 18px, $radius-xl, $shadow-soft);
+  @include cluster($space-4, space-between, center);
   width: 100%;
-  height: 40px;
-  padding: 0 1rem 0 0;
-  display: flex;
-  justify-content: space-between;
+  max-width: none;
+  margin: 0 auto;
+  border-color: $color-border-accent;
+  backdrop-filter: blur(10px);
+}
 
-  div {
-    height: 100%;
-    display: flex;
-    align-items: center;
+.nav {
+  @include cluster($space-2);
+  flex: 1 1 auto;
+}
 
-    .selected {
-      background-color: $secondary-color;
-    }
+.brand {
+  @include primary-button(10px 16px);
+}
 
-    a {
-      display: flex;
-      align-items: center;
-      height: 100%;
-      text-decoration: none;
-      color: #fff;
-      padding: 0 1rem;
+.navLink {
+  @include subtle-button(10px 14px);
+}
 
-      &:hover {
-        background-color: $secondary-color;
-      }
-    }
+.utilities {
+  @include cluster($space-3, flex-end, center);
+  flex: 1 1 auto;
+}
+
+.switcher {
+  @include cluster($space-2, flex-end, center, nowrap);
+}
+
+.switcherSelect {
+  @include input;
+  min-width: 180px;
+  background-color: $color-surface;
+}
+
+.switcherButton {
+  @include primary-button(10px 14px);
+}
+
+.userBadge {
+  @include surface-soft(10px 14px, $radius-pill);
+  @include stack(2px);
+  min-width: 0;
+
+  span {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $color-text-faint;
+  }
+
+  strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+    color: $color-text;
+  }
+}
+
+@media (max-width: 1120px) {
+  .inner {
+    align-items: flex-start;
+  }
+
+  .nav,
+  .utilities {
+    width: 100%;
+  }
+}
+
+@media (max-width: 720px) {
+  .header {
+    padding: $space-4 $space-4 0;
+  }
+
+  .switcher {
+    width: 100%;
+  }
+
+  .switcherSelect,
+  .switcherButton {
+    width: 100%;
   }
 }

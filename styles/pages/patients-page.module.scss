@@ -29,19 +29,18 @@
   @include eyebrow;
 }
 
-.primaryAction {
-  @include primary-button(12px 18px);
+.summaryBadge {
+  @include subtle-button(10px 14px);
 }
 
 .grid {
-  @include card-grid(220px, $space-4);
+  @include card-grid(240px, $space-4);
 }
 
 .card {
-  @include surface-panel(20px, $radius-md, $shadow-panel);
-  @include stack($space-3);
-  min-height: 150px;
-  justify-content: space-between;
+  @include surface-panel(18px, $radius-md, $shadow-panel);
+  @include stack($space-4);
+  min-height: 180px;
   transition:
     transform $transition-base,
     box-shadow $transition-base;
@@ -52,16 +51,43 @@
   }
 }
 
-.cardName {
-  font-size: 18px;
-  font-weight: 700;
-  color: $color-text;
+.cardHeader,
+.cardFooter {
+  @include cluster($space-3, space-between, center);
 }
 
-.cardPrice {
+.cardHeader {
+  strong {
+    font-size: 18px;
+    color: $color-text;
+  }
+
+  span {
+    color: $color-primary;
+    font-size: 13px;
+    font-weight: 700;
+  }
+}
+
+.cardMeta {
+  @include stack(6px);
+  color: $color-text-subtle;
+  font-size: 14px;
+}
+
+.cardFooter {
+  margin-top: auto;
+
+  span:first-child {
+    color: $color-text-faint;
+    font-size: 13px;
+  }
+}
+
+.cardAction {
   color: $color-primary;
-  font-size: 18px;
   font-weight: 700;
+  font-size: 13px;
 }
 
 .emptyState {

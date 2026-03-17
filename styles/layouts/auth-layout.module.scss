@@ -1,9 +1,24 @@
+@use "../partials" as *;
+
 .dashboardContainer {
-  height: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .container {
   display: flex;
-  flex-direction: row;
-  height: 100%;
+  flex: 1;
+  flex-direction: column;
+  width: 100%;
+  min-height: calc(100vh - 96px);
+  margin: 0 auto;
+  padding: 0 0 $space-7;
+  box-sizing: border-box;
+}
+
+@media (max-width: 720px) {
+  .container {
+    padding: 0 0 $space-6;
+  }
 }

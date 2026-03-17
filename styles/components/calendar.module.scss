@@ -1,3 +1,132 @@
+@use "../partials" as *;
+
 .container {
+  @include stack($space-4);
   width: 100%;
+  min-width: 0;
+}
+
+.controls {
+  @include cluster($space-3, flex-end, center);
+}
+
+.controlsLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: $color-text-subtle;
+}
+
+.toggleGroup {
+  @include cluster($space-1, flex-start, center, nowrap);
+  padding: 4px;
+  border-radius: $radius-pill;
+  border: 1px solid $color-border-soft;
+  background: $color-primary-soft;
+}
+
+.toggleButton {
+  @include subtle-button(8px 14px, $radius-pill);
+  border-color: transparent;
+  background: transparent;
+  color: $color-text-muted;
+}
+
+.toggleButtonActive {
+  background: $color-surface;
+  color: $color-text;
+  box-shadow: $shadow-soft;
+}
+
+.calendarFrame {
+  min-width: 0;
+}
+
+.selectedEvent {
+  box-shadow: 0 0 0 2px rgba(17, 24, 39, 0.88) inset;
+}
+
+.container :global(.fc) {
+  font-family: inherit;
+}
+
+.container :global(.fc .fc-toolbar) {
+  gap: $space-3;
+  flex-wrap: wrap;
+}
+
+.container :global(.fc .fc-toolbar-title) {
+  font-size: 20px;
+  color: $color-text;
+}
+
+.container :global(.fc .fc-button-primary) {
+  background: $color-primary;
+  border-color: $color-primary;
+  box-shadow: none;
+}
+
+.container :global(.fc .fc-button-primary:hover) {
+  background: $color-primary-hover;
+  border-color: $color-primary-hover;
+}
+
+.container :global(.fc .fc-button-primary:not(:disabled).fc-button-active),
+.container :global(.fc .fc-button-primary:focus) {
+  background: $color-text;
+  border-color: $color-text;
+  box-shadow: none;
+}
+
+.container :global(.fc .fc-scrollgrid),
+.container :global(.fc-theme-standard td),
+.container :global(.fc-theme-standard th) {
+  border-color: $color-border-soft;
+}
+
+.container :global(.fc .fc-col-header-cell-cushion),
+.container :global(.fc .fc-timegrid-axis-cushion),
+.container :global(.fc .fc-timegrid-slot-label-cushion) {
+  color: $color-text-subtle;
+  font-weight: 600;
+}
+
+.container :global(.fc .fc-day-today) {
+  background: $color-primary-soft !important;
+}
+
+.container :global(.fc .fc-event) {
+  border: none;
+  border-radius: $radius-sm;
+  background: $gradient-primary;
+  padding: 2px 4px;
+}
+
+.container :global(.fc .fc-timegrid-event .fc-event-main) {
+  padding: 4px 6px;
+}
+
+.container :global(.fc .fc-highlight) {
+  background: $color-primary-soft-highlight;
+}
+
+@media (max-width: 640px) {
+  .controls {
+    justify-content: space-between;
+  }
+
+  .controlsLabel {
+    width: 100%;
+  }
+
+  .toggleGroup {
+    width: 100%;
+  }
+
+  .toggleButton {
+    flex: 1;
+  }
+
+  .container :global(.fc .fc-toolbar-title) {
+    font-size: 18px;
+  }
 }

@@ -6,7 +6,6 @@
 
 .hero {
   @include surface-hero();
-  @include cluster($space-4, space-between, flex-start);
 }
 
 .heroCopy {
@@ -29,10 +28,6 @@
   @include eyebrow;
 }
 
-.primaryAction {
-  @include primary-button(12px 18px);
-}
-
 .grid {
   @include card-grid(220px, $space-4);
 }
@@ -40,32 +35,24 @@
 .card {
   @include surface-panel(20px, $radius-md, $shadow-panel);
   @include stack($space-3);
-  min-height: 150px;
-  justify-content: space-between;
+  min-height: 170px;
   transition:
     transform $transition-base,
     box-shadow $transition-base;
+
+  strong {
+    font-size: 18px;
+    color: $color-text;
+  }
+
+  span {
+    color: $color-text-subtle;
+  }
 
   &:hover {
     transform: translateY(-2px);
     box-shadow: $shadow-lg;
   }
-}
-
-.cardName {
-  font-size: 18px;
-  font-weight: 700;
-  color: $color-text;
-}
-
-.cardPrice {
-  color: $color-primary;
-  font-size: 18px;
-  font-weight: 700;
-}
-
-.emptyState {
-  @include empty-state(22px, $radius-md);
 }
 
 @media (max-width: 720px) {

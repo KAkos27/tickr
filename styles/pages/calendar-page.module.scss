@@ -1,5 +1,118 @@
-.container {
+@use "../partials" as *;
+
+.page {
+  @include page-shell();
+}
+
+.summary {
+  @include surface-hero();
+  @include cluster($space-6, space-between, flex-start);
+}
+
+.summaryCopy {
+  @include stack($space-3);
+  max-width: 640px;
+
+  h1 {
+    margin: 0;
+    font-size: 32px;
+    color: $color-text;
+  }
+
+  p {
+    margin: 0;
+    color: $color-text-muted;
+    line-height: 1.6;
+  }
+}
+
+.summaryEyebrow {
+  @include eyebrow;
+}
+
+.summaryBadges {
+  @include cluster($space-2, flex-end, center);
+}
+
+.summaryBadge {
+  @include subtle-button(10px 14px);
+  background: $color-surface-glass;
+}
+
+.content {
+  display: grid;
+  gap: $space-6;
+  align-items: start;
+  justify-items: stretch;
   width: 100%;
-  overflow: scroll;
-  padding: 1rem;
+  min-width: 0;
+}
+
+.content[data-orientation="row"] {
+  grid-template-columns: minmax(0, 2.1fr) minmax(340px, 0.9fr);
+}
+
+.content[data-orientation="column"] {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.content > * {
+  width: 100%;
+  min-width: 0;
+}
+
+.content[data-orientation="column"] > * {
+  grid-column: 1 / -1;
+}
+
+.panel {
+  @include surface-panel(20px, $radius-lg, $shadow-md);
+}
+
+.panelHeader {
+  @include cluster($space-3, space-between, flex-start);
+  margin-bottom: 18px;
+
+  h2 {
+    margin: 0 0 6px;
+    font-size: 20px;
+    color: $color-text;
+  }
+
+  p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: $color-text-subtle;
+  }
+}
+
+.calendarPanel,
+.detailsPanel {
+  min-width: 0;
+}
+
+.content[data-orientation="row"] .detailsPanel {
+  position: sticky;
+  top: 24px;
+}
+
+@media (max-width: 1100px) {
+  .content[data-orientation="row"] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .content[data-orientation="row"] .detailsPanel {
+    position: static;
+  }
+}
+
+@media (max-width: 720px) {
+  .page {
+    padding: $space-4;
+  }
+
+  .summaryCopy h1 {
+    font-size: 28px;
+  }
 }

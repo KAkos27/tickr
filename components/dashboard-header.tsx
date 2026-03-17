@@ -10,28 +10,54 @@ export default async function DashboardHeader() {
   const activeClinic = await getActiveClinic();
 
   return (
-    <div className={style.header}>
-      <div>
-        <Link href={"/"}>Home</Link>
-        <Link href={"/dashboard/clinics"}>Rendelők</Link>
-        <Link href={"/dashboard/patients"}>Páciensek</Link>
-        <Link href={"/dashboard/appointments"}>Naptár</Link>
-        <Link href={"/dashboard/operations"}>Beavatkozások</Link>
-        <Link href={"/"}>Felhasználók</Link>
+    <header className={style.header}>
+      <div className={style.inner}>
+        <nav className={style.nav} aria-label="Dashboard navigation">
+          <Link href="/" className={style.brand}>
+            Tickr
+          </Link>
+          <Link href="/dashboard/clinics" className={style.navLink}>
+            Rendelők
+          </Link>
+          <Link href="/dashboard/patients" className={style.navLink}>
+            Páciensek
+          </Link>
+          <Link href="/dashboard/appointments" className={style.navLink}>
+            Naptár
+          </Link>
+          <Link href="/dashboard/operations" className={style.navLink}>
+            Beavatkozások
+          </Link>
+        </nav>
+
+        <div className={style.utilities}>
+          {clinics.length > 0 && (
+            <form action={setActiveClinic} className={style.switcher}>
+              <select
+                className={style.switcherSelect}
+                name="clinicId"
+                defaultValue={activeClinic?.id ?? ""}
+              >
+                {clinics.map((membership) => (
+                  <option key={membership.clinicId} value={membership.clinicId}>
+                    {membership.clinic.name}
+                  </option>
+                ))}
+              </select>
+              <button type="submit" className={style.switcherButton}>
+                Váltás
+              </button>
+            </form>
+          )}
+
+          {session?.user && (
+            <div className={style.userBadge}>
+              <span>Bejelentkezve</span>
+              <strong>{session.user.email}</strong>
+            </div>
+          )}
+        </div>
       </div>
-      {clinics.length > 0 && (
-        <form action={setActiveClinic}>
-          <select name="clinicId" defaultValue={activeClinic?.id ?? ""}>
-            {clinics.map((membership) => (
-              <option key={membership.clinicId} value={membership.clinicId}>
-                {membership.clinic.name}
-              </option>
-            ))}
-          </select>
-          <button type="submit">Váltás</button>
-        </form>
-      )}
-      {session?.user && <div>Signed in as {session.user.email}</div>}
-    </div>
+    </header>
   );
 }

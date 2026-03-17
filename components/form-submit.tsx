@@ -11,9 +11,9 @@ export default function FormSubmit({
 }) {
   const status = useFormStatus();
 
-  if (status.pending) {
-    return <p>{pedingText}</p>;
-  }
-
-  return <input type="submit" value={buttonText} />;
+  return (
+    <button type="submit" disabled={status.pending}>
+      {status.pending ? pedingText : buttonText}
+    </button>
+  );
 }

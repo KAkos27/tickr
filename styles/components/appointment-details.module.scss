@@ -1,0 +1,170 @@
+@use "../partials" as *;
+
+.wrapper {
+  @include stack(22px);
+}
+
+.emptyState {
+  @include empty-state(24px, $radius-lg);
+  @include stack($space-3);
+  justify-content: center;
+  min-height: 280px;
+  background: $gradient-accent-surface;
+
+  h2 {
+    margin: 0;
+    font-size: 24px;
+    color: $color-text;
+  }
+
+  p {
+    margin: 0;
+    line-height: 1.6;
+    color: $color-text-soft;
+  }
+}
+
+.header {
+  @include cluster($space-4, space-between, flex-start);
+}
+
+.headerCopy {
+  @include stack($space-2);
+
+  h2 {
+    margin: 0;
+    font-size: 28px;
+    color: $color-text;
+  }
+
+  p {
+    margin: 0;
+    color: $color-text-soft;
+  }
+}
+
+.eyebrow {
+  @include eyebrow;
+}
+
+.badges {
+  @include cluster($space-2, flex-end, center);
+}
+
+.badge {
+  @include subtle-button(8px 12px, $radius-pill);
+  background: $color-primary-soft-strong;
+}
+
+.metaGrid {
+  @include card-grid(180px, $space-3);
+}
+
+.metaCard {
+  @include surface-soft(16px, $radius-md);
+  @include stack(6px);
+
+  span {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: $color-text-quiet;
+  }
+
+  strong {
+    color: $color-text;
+    line-height: 1.5;
+  }
+}
+
+.metaLink {
+  font-size: 13px;
+  font-weight: 600;
+  color: $color-primary;
+}
+
+.section {
+  @include stack(14px);
+}
+
+.sectionHeader {
+  @include cluster($space-3, space-between, center);
+
+  h3 {
+    margin: 0;
+    font-size: 17px;
+    color: $color-text;
+  }
+
+  span,
+  strong {
+    color: $color-text-subtle;
+  }
+}
+
+.teethList {
+  @include cluster($space-2);
+}
+
+.toothChip {
+  min-width: 48px;
+  padding: 10px 12px;
+  border-radius: $radius-sm;
+  background: $color-primary-soft-strong;
+  color: $color-text;
+  font-weight: 700;
+  text-align: center;
+}
+
+.operationsList {
+  @include stack($space-3);
+}
+
+.operationRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: $space-3;
+  @include surface-soft(14px 16px, $radius-md);
+  background: $color-surface;
+}
+
+.operationMeta {
+  @include stack(4px);
+}
+
+.operationName {
+  font-weight: 600;
+  color: $color-text;
+}
+
+.operationTooth {
+  font-size: 13px;
+  color: $color-text-faint;
+}
+
+.operationPrice {
+  font-weight: 700;
+  color: $color-text;
+}
+
+.emptyNotice {
+  @include empty-state(16px, 14px);
+}
+
+@media (max-width: 720px) {
+  .header {
+    flex-direction: column;
+  }
+
+  .badges {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 560px) {
+  .operationRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

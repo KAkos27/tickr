@@ -1,28 +1,61 @@
 @use "../partials" as *;
 
 .appointmentForm {
-  display: flex;
-  padding: 16px 0;
-  width: 50%;
-  flex-direction: column;
-  gap: 16px;
-
-  & > input {
-    @include submitButton;
-  }
+  @include surface-panel(24px, $radius-xl, $shadow-lg);
+  @include stack($space-5);
+  width: min(760px, 100%);
+  margin: 0 auto;
 
   & > div {
-    display: flex;
-    gap: 4px;
-    flex-direction: column;
+    @include stack($space-2);
+
+    label {
+      font-size: 14px;
+      font-weight: 700;
+      color: $color-text;
+    }
 
     input,
     select {
       @include input;
+      width: 100%;
     }
 
     small {
+      font-size: 13px;
       color: $error-color;
+    }
+  }
+
+  button[type="submit"] {
+    @include submitButton;
+    min-width: 140px;
+  }
+
+  button[disabled] {
+    opacity: 0.7;
+    cursor: wait;
+  }
+}
+
+.actions {
+  @include cluster($space-3, flex-end, center);
+}
+
+.cancelButton {
+  @include subtle-button(10px 18px);
+}
+
+@media (max-width: 720px) {
+  .appointmentForm {
+    padding: $space-5;
+  }
+
+  .actions {
+    width: 100%;
+
+    button {
+      width: 100%;
     }
   }
 }

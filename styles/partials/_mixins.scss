@@ -1,22 +1,156 @@
 @use "variables" as *;
 
+@mixin stack($gap: $space-4, $align: stretch) {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+  align-items: $align;
+}
+
+@mixin cluster(
+  $gap: $space-3,
+  $justify: flex-start,
+  $align: center,
+  $wrap: wrap
+) {
+  display: flex;
+  flex-wrap: $wrap;
+  align-items: $align;
+  justify-content: $justify;
+  gap: $gap;
+}
+
+@mixin page-shell($padding: $space-6, $gap: $space-6) {
+  @include stack($gap);
+  width: 100%;
+  min-width: 0;
+  padding: $padding;
+  box-sizing: border-box;
+}
+
+@mixin card-grid($min-width: 220px, $gap: $space-4) {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax($min-width, 1fr));
+  gap: $gap;
+}
+
+@mixin surface-panel(
+  $padding: $space-5,
+  $radius: $radius-lg,
+  $shadow: $shadow-md
+) {
+  width: 100%;
+  min-width: 0;
+  padding: $padding;
+  border-radius: $radius;
+  background: $color-surface;
+  border: 1px solid $color-border;
+  box-shadow: $shadow;
+  box-sizing: border-box;
+}
+
+@mixin surface-hero(
+  $padding: $space-6,
+  $radius: $radius-xl,
+  $shadow: $shadow-lg
+) {
+  @include surface-panel($padding, $radius, $shadow);
+  border-color: $color-border-accent;
+  background: $gradient-accent-surface;
+}
+
+@mixin surface-soft($padding: $space-4, $radius: $radius-md) {
+  padding: $padding;
+  border-radius: $radius;
+  border: 1px solid $color-border;
+  background: $color-surface-elevated;
+}
+
+@mixin empty-state($padding: 18px, $radius: 14px) {
+  padding: $padding;
+  border-radius: $radius;
+  border: 1px dashed $color-border-muted;
+  background: rgba(248, 250, 252, 0.8);
+  color: $color-text-subtle;
+}
+
+@mixin eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $color-primary;
+}
+
+@mixin button-base($padding: 10px 16px, $radius: $radius-pill) {
+  @include cluster($space-2, center, center, nowrap);
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: $radius;
+  padding: $padding;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background-color $transition-base,
+    border-color $transition-base,
+    color $transition-base,
+    box-shadow $transition-base,
+    transform $transition-base;
+}
+
+@mixin primary-button($padding: 10px 16px, $radius: $radius-pill) {
+  @include button-base($padding, $radius);
+  background: $color-primary;
+  color: $color-white;
+
+  &:hover {
+    background: $color-primary-hover;
+    box-shadow: $shadow-soft;
+  }
+}
+
+@mixin secondary-button($padding: 10px 16px, $radius: $radius-pill) {
+  @include button-base($padding, $radius);
+  background: $color-text;
+  color: $color-white;
+
+  &:hover {
+    box-shadow: $shadow-soft;
+  }
+}
+
+@mixin subtle-button($padding: 10px 16px, $radius: $radius-pill) {
+  @include button-base($padding, $radius);
+  background: $color-primary-soft;
+  border-color: $color-border-soft;
+  color: $color-text;
+
+  &:hover {
+    background: $color-surface;
+    box-shadow: $shadow-soft;
+  }
+}
+
 @mixin input {
-  height: 40px;
-  border-radius: 6px;
-  border: 0.5px solid $secondary-color;
-  background-color: $grey;
-  padding: 4px 8px;
+  height: 44px;
+  border-radius: $radius-xs;
+  border: 1px solid $color-border-soft;
+  background-color: $color-surface-muted;
+  padding: 0 12px;
+  color: $color-text;
+  transition:
+    border-color $transition-base,
+    box-shadow $transition-base,
+    background-color $transition-base;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+    background: $color-surface;
+    box-shadow: 0 0 0 3px rgba(93, 141, 168, 0.16);
+  }
 }
 
 @mixin submitButton {
-  cursor: pointer;
-  border-radius: 6px;
-  color: $white;
-  height: 40px;
-  border: none;
-  background-color: $primary-color;
-
-  &:hover {
-    color: $secondary-color;
-  }
+  @include primary-button(10px 18px, $radius-pill);
 }

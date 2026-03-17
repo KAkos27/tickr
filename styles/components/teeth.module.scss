@@ -1,67 +1,113 @@
 @use "../partials" as *;
 
 .teethSection {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  @include stack($space-4);
 
-  .teethRow {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-
-    .left {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .right {
-      display: flex;
-      gap: 0.5rem;
-    }
+  label {
+    font-size: 14px;
+    font-weight: 700;
+    color: $color-text;
   }
 
-  .toothButton,
-  .toothButtonSelected {
-    border: 1px solid $grey;
-    border-radius: 6px;
-    padding: 8px 0;
-    background: $white;
-    cursor: pointer;
-    font-weight: 600;
-    height: 90px;
-    width: 30px;
+  small {
+    color: $color-text-subtle;
+  }
+}
+
+.teethGrid {
+  @include surface-soft(16px, $radius-lg);
+  @include stack($space-3);
+}
+
+.teethRow {
+  @include cluster($space-2, center, stretch, nowrap);
+}
+
+.left,
+.right {
+  @include cluster($space-2, center, stretch, nowrap);
+}
+
+.toothButton,
+.toothButtonSelected,
+.toothButtonHistory {
+  border: 1px solid $color-border;
+  border-radius: $radius-xs;
+  padding: 8px 0;
+  background: $color-surface;
+  cursor: pointer;
+  font-weight: 700;
+  height: 90px;
+  width: 34px;
+  transition:
+    border-color $transition-base,
+    background-color $transition-base,
+    color $transition-base,
+    box-shadow $transition-base;
+}
+
+.toothButton:hover,
+.toothButtonSelected:hover,
+.toothButtonHistory:hover {
+  box-shadow: $shadow-soft;
+}
+
+.toothButton:hover {
+  border-color: $color-primary;
+}
+
+.toothButtonSelected {
+  background: $color-primary;
+  color: $color-white;
+  border-color: $color-primary;
+}
+
+.toothButtonHistory {
+  background: $color-text;
+  color: $color-white;
+  border-color: $color-text;
+}
+
+.toothOperations {
+  @include stack($space-3);
+}
+
+.toothOperationGroup {
+  @include surface-soft(14px, $radius-md);
+  @include stack($space-2);
+
+  span {
+    font-weight: 700;
+    color: $color-text;
+  }
+}
+
+.toothOperationList {
+  @include stack($space-2);
+
+  label {
+    @include cluster($space-2, flex-start, center, nowrap);
+    padding: 8px 10px;
+    border-radius: $radius-sm;
+    background: $color-surface-muted;
+    color: $color-text-subtle;
   }
 
-  .toothButtonSelected {
-    background: $primary-color;
-    color: $white;
-    border-color: $primary-color;
+  input {
+    accent-color: $color-primary;
   }
+}
 
-  .toothButtonHistory {
-    background: $secondary-color;
-    color: $white;
-    border-color: $secondary-color;
-    height: 90px;
-    width: 30px;
-  }
-
-  .toothOperations {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .toothOperationGroup {
-    display: flex;
-    flex-direction: column;
+@media (max-width: 640px) {
+  .teethRow,
+  .left,
+  .right {
     gap: 6px;
   }
 
-  .toothOperationList {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+  .toothButton,
+  .toothButtonSelected,
+  .toothButtonHistory {
+    width: 30px;
   }
 }

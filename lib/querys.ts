@@ -73,6 +73,53 @@ export const getAppointments = async () => {
   return appointments;
 };
 
+export const getAppointmentDetails = async (id: string | undefined) => {
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) return null;
+
+  if (!id) return null;
+
+  const clinicId = await ensureActiveClinicId(userId);
+  if (!clinicId) return null;
+
+  return await prisma.appointment.findFirst({
+    where: { id, clinicId },
+    include: {
+      user: { select: { name: true } },
+      patient: {
+        include: {
+          teeth: {
+            select: {
+              toothCode: true,
+              operations: {
+                select: { appointmentId: true },
+                take: 1,
+              },
+            },
+          },
+        },
+      },
+      toothOperations: {
+        select: {
+          toothCode: true,
+          operation: {
+            select: {
+              id: true,
+              name: true,
+              clinicPrices: {
+                where: { clinicId },
+                select: { price: true },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+};
+
 export const getPatients = async () => {
   const session = await auth();
   const userId = session?.user?.id;
