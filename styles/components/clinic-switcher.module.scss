@@ -1,0 +1,141 @@
+@use "../partials" as *;
+
+.wrapper {
+  position: relative;
+}
+
+// Single clinic (no dropdown)
+.single {
+  @include cluster(6px, flex-start, center, nowrap);
+  padding: 6px 12px;
+  border: 1px solid $color-border-soft;
+  border-radius: $radius-pill;
+  background: $color-surface;
+}
+
+.singleLabel {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: $color-text-faint;
+}
+
+.singleName {
+  font-size: 13px;
+  color: $color-text;
+}
+
+// Trigger button
+.trigger {
+  @include cluster(6px, flex-start, center, nowrap);
+  cursor: pointer;
+  border: 1px solid $color-border-soft;
+  border-radius: $radius-pill;
+  padding: 6px 12px;
+  background: $color-surface;
+  transition:
+    border-color $transition-base,
+    box-shadow $transition-base;
+
+  &:hover {
+    border-color: $color-border-muted;
+    box-shadow: $shadow-soft;
+  }
+}
+
+.triggerLabel {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: $color-text-faint;
+}
+
+.triggerName {
+  font-size: 13px;
+  color: $color-text;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.triggerArrow {
+  font-size: 12px;
+  color: $color-text-subtle;
+  transition: transform $transition-base;
+}
+
+.triggerArrowOpen {
+  transform: rotate(180deg);
+}
+
+// Dropdown
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 50;
+  padding: 10px;
+  border-radius: $radius-md;
+  background: $color-surface;
+  border: 1px solid $color-border;
+  box-shadow: $shadow-lg;
+  min-width: 220px;
+}
+
+.dropdownLabel {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: $color-text-quiet;
+  padding: 0 6px;
+  margin-bottom: 8px;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  @include stack(2px);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: $radius-xs;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    background-color $transition-base;
+
+  &:hover {
+    background: $color-surface-muted;
+  }
+}
+
+.optionActive {
+  background: rgba(17, 24, 39, 0.04);
+}
+
+.optionName {
+  font-size: 13px;
+  font-weight: 600;
+  color: $color-text;
+}
+
+.optionBadge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: $radius-pill;
+  background: $color-primary;
+  color: white;
+}

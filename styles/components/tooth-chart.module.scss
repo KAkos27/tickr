@@ -1,0 +1,423 @@
+@use "../partials" as *;
+
+.container {
+  @include stack($space-5);
+}
+
+// ── Dentition toggle ─────────────────────────
+.dentitionToggle {
+  display: flex;
+  gap: 2px;
+  background: $color-surface-muted;
+  border-radius: $radius-sm;
+  padding: 3px;
+  width: fit-content;
+}
+
+.dentitionButton {
+  padding: 5px 14px;
+  border: none;
+  border-radius: $radius-xs;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 700;
+  color: $color-text-subtle;
+  cursor: pointer;
+  transition:
+    background-color $transition-base,
+    color $transition-base,
+    box-shadow $transition-base;
+
+  &:hover {
+    color: $color-text;
+  }
+}
+
+.dentitionButtonActive {
+  background: $color-surface;
+  color: $color-text;
+  box-shadow: $shadow-soft;
+}
+
+.chart {
+  @include surface-soft(20px, $radius-lg);
+  @include stack($space-1);
+}
+
+.jaw {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0;
+}
+
+.quadrant {
+  display: flex;
+  gap: 4px;
+}
+
+.divider {
+  width: 2px;
+  background: $color-border-muted;
+  margin: 0 6px;
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+
+.jawSeparator {
+  height: 2px;
+  background: $color-border-muted;
+  border-radius: 1px;
+  margin: 2px 0;
+}
+
+.tooth {
+  @include stack(4px, center);
+  position: relative;
+  width: 38px;
+  height: 72px;
+  padding: 6px 0 0;
+  border: 2px solid $color-border;
+  border-radius: $radius-xs;
+  background: $color-surface;
+  cursor: pointer;
+  transition:
+    border-color $transition-base,
+    background-color $transition-base,
+    box-shadow $transition-base,
+    transform $transition-base;
+
+  &:hover {
+    border-color: $color-primary;
+    box-shadow: $shadow-soft;
+    transform: translateY(-2px);
+  }
+}
+
+.toothSelected {
+  border-color: $color-text;
+  background: rgba(17, 24, 39, 0.04);
+  box-shadow: 0 0 0 2px $color-surface, 0 0 0 4px $color-text;
+
+  &:hover {
+    border-color: $color-text;
+  }
+}
+
+.toothMissing {
+  opacity: 0.5;
+  background: $color-surface-muted;
+}
+
+.toothCode {
+  font-size: 11px;
+  font-weight: 700;
+  color: $color-text;
+  line-height: 1;
+}
+
+.toothStatusBar {
+  width: 24px;
+  height: 4px;
+  border-radius: 2px;
+  margin-top: auto;
+  margin-bottom: 8px;
+}
+
+.toothHistoryDot {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: $color-primary;
+}
+
+// Legend
+.legend {
+  @include cluster(10px, center, center);
+}
+
+.legendItem {
+  @include cluster(5px, flex-start, center, nowrap);
+  font-size: 11px;
+  font-weight: 600;
+  color: $color-text-subtle;
+}
+
+.legendDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+// Status panel (patient page)
+.statusPanel {
+  @include surface-soft(16px, $radius-md);
+  @include stack($space-3);
+}
+
+.statusPanelHeader {
+  @include cluster($space-3, space-between, center);
+
+  h3 {
+    margin: 0;
+    font-size: 16px;
+    color: $color-text;
+  }
+}
+
+.currentStatus {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.statusGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 6px;
+}
+
+.statusOption {
+  @include cluster(6px, flex-start, center, nowrap);
+  width: 100%;
+  padding: 8px 10px;
+  border: 2px solid $color-border;
+  border-radius: $radius-xs;
+  background: $color-surface;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: $color-text;
+  transition:
+    border-color $transition-base,
+    background-color $transition-base,
+    box-shadow $transition-base;
+
+  &:hover {
+    border-color: $color-border-muted;
+    box-shadow: $shadow-soft;
+  }
+}
+
+.statusOptionActive {
+  background: rgba(17, 24, 39, 0.03);
+  box-shadow: $shadow-soft;
+}
+
+.statusDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.statusFeedback {
+  font-size: 12px;
+  color: $color-text-subtle;
+}
+
+// Treatment section (appointment form)
+.treatmentSection {
+  @include stack($space-4);
+}
+
+// ── Chip bar (selected teeth) ────────────────
+.chipBar {
+  @include stack($space-2);
+}
+
+.chipBarLabel {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: $color-text-quiet;
+}
+
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  @include cluster(6px, flex-start, center, nowrap);
+  padding: 5px 10px;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-pill;
+  background: $color-surface;
+  font-size: 13px;
+  font-weight: 700;
+  color: $color-text;
+  cursor: pointer;
+  transition:
+    border-color $transition-base,
+    background-color $transition-base,
+    box-shadow $transition-base;
+
+  &:hover {
+    border-color: $color-border-muted;
+    box-shadow: $shadow-soft;
+  }
+}
+
+.chipActive {
+  border-color: $color-text;
+  background: rgba(17, 24, 39, 0.04);
+  box-shadow: 0 0 0 1px $color-text;
+}
+
+.chipBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: $color-primary;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.chipRemove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-size: 14px;
+  line-height: 1;
+  color: $color-text-subtle;
+  cursor: pointer;
+  transition:
+    background-color $transition-base,
+    color $transition-base;
+
+  &:hover {
+    background: rgba(239, 68, 68, 0.12);
+    color: #ef4444;
+  }
+}
+
+// ── Treatment group (per-tooth operations) ────
+.treatmentGroup {
+  @include surface-soft(14px, $radius-md);
+  @include stack($space-2);
+}
+
+.treatmentGroupHeader {
+  @include cluster($space-3, space-between, center);
+}
+
+.treatmentGroupTitle {
+  font-weight: 700;
+  font-size: 14px;
+  color: $color-text;
+}
+
+.treatmentGroupStatus {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.treatmentList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 6px;
+}
+
+.treatmentOption {
+  @include cluster($space-2, flex-start, center, nowrap);
+  padding: 6px 10px;
+  border-radius: $radius-xs;
+  border: 1.5px solid transparent;
+  background: $color-surface-muted;
+  cursor: pointer;
+  transition:
+    background-color $transition-base,
+    border-color $transition-base;
+
+  &:hover {
+    background: $color-surface;
+  }
+
+  input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
+    flex-shrink: 0;
+    accent-color: $color-primary;
+    cursor: pointer;
+    margin: 0;
+  }
+}
+
+.treatmentOptionChecked {
+  border-color: $color-primary;
+  background: rgba($color-primary, 0.06);
+}
+
+.treatmentName {
+  font-size: 13px;
+  font-weight: 600;
+  color: $color-text;
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.treatmentPrice {
+  font-size: 12px;
+  font-weight: 700;
+  color: $color-text-subtle;
+  white-space: nowrap;
+}
+
+// ── Total summary ────────────────────────────
+.treatmentTotal {
+  @include cluster($space-3, space-between, center);
+  padding: 12px 16px;
+  border-radius: $radius-md;
+  background: rgba(17, 24, 39, 0.03);
+  border-top: 2px solid $color-border;
+
+  span {
+    font-size: 14px;
+    font-weight: 600;
+    color: $color-text-subtle;
+  }
+
+  strong {
+    font-size: 16px;
+    font-weight: 800;
+    color: $color-text;
+  }
+}
+
+@media (max-width: 640px) {
+  .quadrant {
+    gap: 3px;
+  }
+
+  .tooth {
+    width: 32px;
+    height: 60px;
+  }
+
+  .toothCode {
+    font-size: 10px;
+  }
+
+  .statusGrid {
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  }
+}

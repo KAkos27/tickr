@@ -1,0 +1,23 @@
+@use "../partials" as *;
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: $space-6;
+}
+
+.card {
+  @include surface-panel(32px, $radius-xl, $shadow-xl);
+  @include stack($space-5);
+  width: min(420px, 100%);
+  text-align: center;
+}
+
+.brand {
+  font-size: 28px;
+  font-weight: 800;
+  color: $color-primary;
+  letter-spacing: -0.02em;
+}

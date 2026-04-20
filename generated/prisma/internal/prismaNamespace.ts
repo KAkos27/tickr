@@ -1515,6 +1515,7 @@ export const ClinicMemberScalarFieldEnum = {
   userId: 'userId',
   email: 'email',
   role: 'role',
+  color: 'color',
   createdAt: 'createdAt'
 } as const
 
@@ -1530,7 +1531,8 @@ export type ToothScalarFieldEnum = (typeof ToothScalarFieldEnum)[keyof typeof To
 
 export const PatientToothScalarFieldEnum = {
   patientId: 'patientId',
-  toothCode: 'toothCode'
+  toothCode: 'toothCode',
+  status: 'status'
 } as const
 
 export type PatientToothScalarFieldEnum = (typeof PatientToothScalarFieldEnum)[keyof typeof PatientToothScalarFieldEnum]
@@ -1643,6 +1645,20 @@ export type EnumClinicRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$Prism
  * Reference to a field of type 'ClinicRole[]'
  */
 export type ListEnumClinicRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ClinicRole[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ToothStatus'
+ */
+export type EnumToothStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ToothStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'ToothStatus[]'
+ */
+export type ListEnumToothStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ToothStatus[]'>
     
 
 

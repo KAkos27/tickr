@@ -25,6 +25,18 @@ enum ClinicRole {
   MEMBER
 }
 
+enum ToothStatus {
+  HEALTHY
+  CARIES
+  MISSING
+  CROWN
+  FILLING
+  IMPACTED
+  ROOT_CANAL
+  BRIDGE
+  IMPLANT
+}
+
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
@@ -129,6 +141,7 @@ model ClinicMember {
   userId    String?
   email     String?
   role      ClinicRole @default(MEMBER)
+  color     String     @default("#5d8da8")
   createdAt DateTime   @default(now())
 
   @@unique([clinicId, userId])
@@ -146,6 +159,7 @@ model PatientTooth {
   patientId  String
   tooth      Tooth                       @relation(fields: [toothCode], references: [code])
   toothCode  String
+  status     ToothStatus                 @default(HEALTHY)
   operations AppointmentToothOperation[]
 
   @@id([patientId, toothCode])

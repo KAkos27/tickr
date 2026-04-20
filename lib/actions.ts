@@ -16,6 +16,10 @@ import type {
 import { AuthError } from "next-auth";
 import { parseDateTimeLocalValue } from "./utils";
 import { ClinicRole } from "@/generated/prisma/enums";
+import { ToothStatus } from "@/generated/prisma/enums";
+import { ALLOWED_COLORS } from "@/lib/colors";
+import { TOOTH_STATUS_OPTIONS } from "@/lib/tooth-status";
+import { OPERATION_STATUS_MAP } from "@/lib/operation-status-map";
 
 const getUserClinicContext = async () => {
   const session = await auth();
@@ -291,28 +295,88 @@ export const createAppointment = async (
   }
 
   try {
-    const currentAppointment = await prisma.appointment.create({
-      data: {
-        title: patient!.name,
-        start: startDate!,
-        end: endDate!,
-        userId,
-        patientId: patient!.id,
-        clinicId: clinicId!,
-      },
+    // Collect all referenced operation IDs and pre-fetch their names in one query
+    const allOperationIds = [
+      ...new Set(toothOperations.flatMap((t) => t.operationIds)),
+    ];
+    const operationRows = await prisma.operation.findMany({
+      where: { id: { in: allOperationIds } },
+      select: { id: true, name: true },
     });
+    const operationNameById = new Map(
+      operationRows.map((o) => [o.id, o.name]),
+    );
 
-    toothOperations.forEach((operation) => {
-      operation.operationIds.forEach(async (_id, i) => {
-        await prisma.appointmentToothOperation.create({
-          data: {
-            appointmentId: currentAppointment.id,
-            toothCode: operation.toothCode,
-            operationId: operation.operationIds[i],
-            patientId: patient!.id,
-          },
-        });
+    await prisma.$transaction(async (tx) => {
+      // 1. Create the appointment
+      const currentAppointment = await tx.appointment.create({
+        data: {
+          title: patient!.name,
+          start: startDate!,
+          end: endDate!,
+          userId,
+          patientId: patient!.id,
+          clinicId: clinicId!,
+        },
       });
+
+      // 2. Upsert teeth in parallel (one per tooth code)
+      await Promise.all(
+        toothOperations.map((t) =>
+          tx.patientTooth.upsert({
+            where: {
+              patientId_toothCode: {
+                patientId: patient!.id,
+                toothCode: t.toothCode,
+              },
+            },
+            update: {},
+            create: {
+              patientId: patient!.id,
+              toothCode: t.toothCode,
+            },
+          }),
+        ),
+      );
+
+      // 3. Bulk-create all tooth-operation links
+      const toothOpData = toothOperations.flatMap((t) =>
+        t.operationIds.map((operationId) => ({
+          appointmentId: currentAppointment.id,
+          toothCode: t.toothCode,
+          operationId,
+          patientId: patient!.id,
+        })),
+      );
+      await tx.appointmentToothOperation.createMany({ data: toothOpData });
+
+      // 4. Compute & apply status changes in parallel
+      const statusUpdates: { toothCode: string; status: ToothStatus }[] = [];
+      for (const t of toothOperations) {
+        let resultingStatus: ToothStatus | null = null;
+        for (const opId of t.operationIds) {
+          const name = operationNameById.get(opId);
+          if (name && name in OPERATION_STATUS_MAP) {
+            resultingStatus = OPERATION_STATUS_MAP[name];
+          }
+        }
+        if (resultingStatus) {
+          statusUpdates.push({ toothCode: t.toothCode, status: resultingStatus });
+        }
+      }
+      await Promise.all(
+        statusUpdates.map((u) =>
+          tx.patientTooth.update({
+            where: {
+              patientId_toothCode: {
+                patientId: patient!.id,
+                toothCode: u.toothCode,
+              },
+            },
+            data: { status: u.status },
+          }),
+        ),
+      );
     });
   } catch {
     return { message: "Adatbázis hiba" };
@@ -320,4 +384,85 @@ export const createAppointment = async (
 
   revalidatePath("/dashboard/appointments");
   redirect("/dashboard/appointments");
+};
+
+export const updateMemberColor = async (
+  _prevState: { message?: string },
+  formData: FormData,
+): Promise<{ message?: string }> => {
+  const color = formData.get("color")?.toString().trim() ?? "";
+
+  if (!(ALLOWED_COLORS as readonly string[]).includes(color)) {
+    return { message: "Érvénytelen szín" };
+  }
+
+  const { userId, clinicId } = await getUserClinicContext();
+
+  if (!clinicId) {
+    return { message: "Nincs aktív rendelő" };
+  }
+
+  try {
+    await prisma.clinicMember.updateMany({
+      where: { clinicId, userId },
+      data: { color },
+    });
+  } catch {
+    return { message: "Adatbázis hiba" };
+  }
+
+  revalidatePath("/dashboard", "layout");
+  return { message: "Szín frissítve" };
+};
+
+export const updateToothStatus = async (
+  _prevState: { message?: string },
+  formData: FormData,
+): Promise<{ message?: string }> => {
+  const patientId = formData.get("patientId")?.toString().trim() ?? "";
+  const toothCode = formData.get("toothCode")?.toString().trim() ?? "";
+  const status = formData.get("status")?.toString().trim() ?? "";
+
+  if (!patientId || !toothCode) {
+    return { message: "Hiányzó adatok" };
+  }
+
+  if (
+    !(TOOTH_STATUS_OPTIONS as readonly string[]).includes(status)
+  ) {
+    return { message: "Érvénytelen státusz" };
+  }
+
+  const { clinicId } = await getUserClinicContext();
+
+  if (!clinicId) {
+    return { message: "Nincs aktív rendelő" };
+  }
+
+  const patient = await prisma.patient.findFirst({
+    where: { id: patientId, clinicId },
+  });
+
+  if (!patient) {
+    return { message: "Ismeretlen páciens" };
+  }
+
+  try {
+    await prisma.patientTooth.upsert({
+      where: {
+        patientId_toothCode: { patientId, toothCode },
+      },
+      update: { status: status as ToothStatus },
+      create: {
+        patientId,
+        toothCode,
+        status: status as ToothStatus,
+      },
+    });
+  } catch {
+    return { message: "Adatbázis hiba" };
+  }
+
+  revalidatePath(`/dashboard/patients/${patientId}`);
+  return { message: "Státusz frissítve" };
 };

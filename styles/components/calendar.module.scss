@@ -7,7 +7,11 @@
 }
 
 .controls {
-  @include cluster($space-3, flex-end, center);
+  @include cluster($space-4, flex-end, center);
+}
+
+.controlGroup {
+  @include cluster($space-3, flex-start, center, nowrap);
 }
 
 .controlsLabel {
@@ -97,7 +101,6 @@
 .container :global(.fc .fc-event) {
   border: none;
   border-radius: $radius-sm;
-  background: $gradient-primary;
   padding: 2px 4px;
 }
 
@@ -107,6 +110,14 @@
 
 .container :global(.fc .fc-highlight) {
   background: $color-primary-soft-highlight;
+}
+
+.skeleton {
+  display: grid;
+  place-items: center;
+  min-height: 480px;
+  color: $color-text-muted;
+  font-size: 14px;
 }
 
 @media (max-width: 640px) {

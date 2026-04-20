@@ -16,8 +16,10 @@ export default async function NewAppointmentPage({
     notFound();
   }
 
-  const patients = await getPatientsWithTeeth();
-  const operations = await getOperations();
+  const [patients, operations] = await Promise.all([
+    getPatientsWithTeeth(),
+    getOperations(),
+  ]);
 
   const start = decode(time?.[0]);
   const end = decode(time?.[1]);

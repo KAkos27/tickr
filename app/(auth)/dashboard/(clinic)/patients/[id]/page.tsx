@@ -4,9 +4,11 @@ import {
   getPatientAppointmentHistory,
   getPatientWithTeeth,
 } from "@/lib/querys";
+import { updateToothStatus } from "@/lib/actions";
 
 import type { Params } from "@/types/route";
-import Teeth from "@/components/teeth";
+import type { ToothStatus } from "@/generated/prisma/enums";
+import ToothChart from "@/components/tooth-chart";
 import style from "@/styles/pages/patient-detail.module.scss";
 import { formatCurrency, formatDate, formatTime } from "@/lib/utils";
 import Link from "next/link";
@@ -14,13 +16,22 @@ import Link from "next/link";
 export default async function PatientPage({ params }: Params<{ id: string }>) {
   const { id } = await params;
 
-  const patient = await getPatientWithTeeth(id);
-  const operations = await getOperations();
-  const history = await getPatientAppointmentHistory(id);
+  const [patient, operations, history] = await Promise.all([
+    getPatientWithTeeth(id),
+    getOperations(),
+    getPatientAppointmentHistory(id),
+  ]);
 
   if (!patient) {
     notFound();
   }
+
+  const teeth = patient.teeth.map((tooth) => ({
+    toothCode: tooth.toothCode,
+    status: tooth.status as ToothStatus,
+    hasHistory: (tooth.operations?.length ?? 0) > 0,
+  }));
+
   const groupedHistory = history.reduce((acc, appointment) => {
     const dayKey = appointment.start.toISOString().slice(0, 10);
     const entry = acc.get(dayKey) ?? {
@@ -51,7 +62,7 @@ export default async function PatientPage({ params }: Params<{ id: string }>) {
             <strong>{patient.phone}</strong>
           </div>
           <div>
-            <span>Szuletesi datum</span>
+            <span>Születési dátum</span>
             <strong>{formatDate(patient.birthDate)}</strong>
           </div>
         </div>
@@ -61,9 +72,14 @@ export default async function PatientPage({ params }: Params<{ id: string }>) {
         <section className={style.panel}>
           <div className={style.panelHeader}>
             <h2>Fogak</h2>
-            <span>Valassz kezeleshez</span>
+            <span>Kattints egy fogra a státusz módosításához</span>
           </div>
-          <Teeth selectedPatient={patient} operations={operations} />
+          <ToothChart
+            teeth={teeth}
+            mode="status"
+            patientId={patient.id}
+            updateStatusAction={updateToothStatus}
+          />
         </section>
         <section className={`${style.panel} ${style.historyPanel}`}>
           <div className={style.panelHeader}>
@@ -73,7 +89,7 @@ export default async function PatientPage({ params }: Params<{ id: string }>) {
 
           {dayGroups.length === 0 && (
             <div className={style.emptyState}>
-              Meg nincs rogzitett kezeles a pacienshez.
+              Még nincs rögzített kezelés a pácienshez.
             </div>
           )}
 

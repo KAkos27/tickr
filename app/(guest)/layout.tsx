@@ -1,7 +1,8 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-
 import { ReactNode } from "react";
+
+import style from "@/styles/layouts/guest-layout.module.scss";
 
 export default async function GuestLayout({
   children,
@@ -13,10 +14,13 @@ export default async function GuestLayout({
   if (session && session?.user) {
     redirect("/dashboard");
   }
+
   return (
-    <div>
-      <h2>GuestLayout</h2>
-      {children}
+    <div className={style.container}>
+      <div className={style.card}>
+        <div className={style.brand}>Tickr</div>
+        {children}
+      </div>
     </div>
   );
 }

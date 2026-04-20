@@ -1,11 +1,12 @@
 "use client";
 
+import { memo, useCallback, useMemo } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import allLocales from "@fullcalendar/core/locales-all";
+import huLocale from "@fullcalendar/core/locales/hu";
 import {
   DateSelectArg,
   type DateInput,
@@ -16,8 +17,10 @@ import {
 import {
   DEFAULT_APPOINTMENTS_VIEW,
   DEFAULT_SELECTED_APPOINTMENT_ORIENTATION,
+  DEFAULT_APPOINTMENTS_FILTER,
   type CalendarOrientation,
   type CalendarView,
+  type CalendarFilter,
   parseCalendarView,
 } from "@/lib/appointments";
 import { toDateTimeLocalValue } from "@/lib/utils";
@@ -26,10 +29,15 @@ import type { CalendarEvent } from "@/types/domain";
 
 import style from "@/styles/components/calendar.module.scss";
 
+const FC_PLUGINS = [dayGridPlugin, timeGridPlugin, interactionPlugin];
+const FC_LOCALES = [huLocale];
+
 export type CalendarProps = {
   events: CalendarEvent[];
   view: CalendarView;
   orientation: CalendarOrientation;
+  filter: CalendarFilter;
+  currentUserId: string | null;
   initialDate?: DateInput;
   selectedEventId?: string;
 };
@@ -38,6 +46,8 @@ function Calendar({
   events,
   view,
   orientation,
+  filter,
+  currentUserId,
   initialDate,
   selectedEventId,
 }: CalendarProps) {
@@ -45,92 +55,161 @@ function Calendar({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const buildSearch = (
-    nextView: CalendarView,
-    nextOrientation: CalendarOrientation,
-  ) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("view", nextView);
-    params.set("orientation", nextOrientation);
-    return params.toString();
-  };
+  const filteredEvents = useMemo(
+    () =>
+      filter === "mine" && currentUserId
+        ? events.filter((e) => e.userId === currentUserId)
+        : events,
+    [events, filter, currentUserId],
+  );
 
-  const handleDateClick = (selected: DateSelectArg) => {
-    const start = toDateTimeLocalValue(selected.start);
-    const end = toDateTimeLocalValue(selected.end);
+  const buildSearch = useCallback(
+    (
+      nextView: CalendarView,
+      nextOrientation: CalendarOrientation,
+      nextFilter: CalendarFilter,
+    ) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("view", nextView);
+      params.set("orientation", nextOrientation);
+      params.set("filter", nextFilter);
+      return params.toString();
+    },
+    [searchParams],
+  );
 
-    router.push(`/dashboard/appointments/new/${start}/${end}`);
-  };
+  const handleDateClick = useCallback(
+    (selected: DateSelectArg) => {
+      const start = toDateTimeLocalValue(selected.start);
+      const end = toDateTimeLocalValue(selected.end);
+      router.push(`/dashboard/appointments/new/${start}/${end}`);
+    },
+    [router],
+  );
 
-  const handleEventClick = (arg: EventClickArg) => {
-    const params = new URLSearchParams();
-    params.set("view", DEFAULT_APPOINTMENTS_VIEW);
-    params.set("orientation", DEFAULT_SELECTED_APPOINTMENT_ORIENTATION);
+  const handleEventClick = useCallback(
+    (arg: EventClickArg) => {
+      const params = new URLSearchParams();
+      params.set("view", DEFAULT_APPOINTMENTS_VIEW);
+      params.set("orientation", DEFAULT_SELECTED_APPOINTMENT_ORIENTATION);
+      params.set("filter", filter);
+      router.push(
+        `/dashboard/appointments/${arg.event.id}?${params.toString()}#appointment-event`,
+      );
+    },
+    [router, filter],
+  );
 
-    router.push(
-      `/dashboard/appointments/${arg.event.id}?${params.toString()}#appointment-event`,
-    );
-  };
+  const handleDatesSet = useCallback(
+    (arg: DatesSetArg) => {
+      const nextView = parseCalendarView(arg.view.type, view);
+      if (nextView === view) return;
+      router.replace(
+        `${pathname}?${buildSearch(nextView, orientation, filter)}`,
+        { scroll: false },
+      );
+    },
+    [router, pathname, buildSearch, view, orientation, filter],
+  );
 
-  const handleDatesSet = (arg: DatesSetArg) => {
-    const nextView = parseCalendarView(arg.view.type, view);
+  const handleOrientationChange = useCallback(
+    (nextOrientation: CalendarOrientation) => {
+      if (nextOrientation === orientation) return;
+      router.replace(
+        `${pathname}?${buildSearch(view, nextOrientation, filter)}`,
+        { scroll: false },
+      );
+    },
+    [router, pathname, buildSearch, view, orientation, filter],
+  );
 
-    if (nextView === view) {
-      return;
-    }
+  const handleFilterChange = useCallback(
+    (nextFilter: CalendarFilter) => {
+      if (nextFilter === filter) return;
+      router.replace(
+        `${pathname}?${buildSearch(view, orientation, nextFilter)}`,
+        { scroll: false },
+      );
+    },
+    [router, pathname, buildSearch, view, orientation, filter],
+  );
 
-    router.replace(`${pathname}?${buildSearch(nextView, orientation)}`, {
-      scroll: false,
-    });
-  };
+  const eventClassNames = useCallback(
+    (arg: { event: { id: string } }) =>
+      arg.event.id === selectedEventId ? [style.selectedEvent] : [],
+    [selectedEventId],
+  );
 
-  const handleOrientationChange = (nextOrientation: CalendarOrientation) => {
-    if (nextOrientation === orientation) {
-      return;
-    }
-
-    router.replace(`${pathname}?${buildSearch(view, nextOrientation)}`, {
-      scroll: false,
-    });
-  };
+  const headerToolbar = useMemo(
+    () => ({
+      left: "prev,next today",
+      center: "title",
+      right: "dayGridMonth,timeGridWeek,timeGridDay",
+    }),
+    [],
+  );
 
   return (
     <div className={style.container}>
       <div className={style.controls}>
-        <span className={style.controlsLabel}>Részletek elrendezése</span>
-        <div className={style.toggleGroup}>
-          <button
-            type="button"
-            className={`${style.toggleButton} ${
-              orientation === "row" ? style.toggleButtonActive : ""
-            }`}
-            aria-pressed={orientation === "row"}
-            onClick={() => handleOrientationChange("row")}
-          >
-            Egymás mellett
-          </button>
-          <button
-            type="button"
-            className={`${style.toggleButton} ${
-              orientation === "column" ? style.toggleButtonActive : ""
-            }`}
-            aria-pressed={orientation === "column"}
-            onClick={() => handleOrientationChange("column")}
-          >
-            Egymás alatt
-          </button>
+        <div className={style.controlGroup}>
+          <span className={style.controlsLabel}>Szűrés</span>
+          <div className={style.toggleGroup}>
+            <button
+              type="button"
+              className={`${style.toggleButton} ${
+                filter === "all" ? style.toggleButtonActive : ""
+              }`}
+              aria-pressed={filter === "all"}
+              onClick={() => handleFilterChange("all")}
+            >
+              Mindenki
+            </button>
+            <button
+              type="button"
+              className={`${style.toggleButton} ${
+                filter === "mine" ? style.toggleButtonActive : ""
+              }`}
+              aria-pressed={filter === "mine"}
+              onClick={() => handleFilterChange("mine")}
+            >
+              Saját
+            </button>
+          </div>
+        </div>
+
+        <div className={style.controlGroup}>
+          <span className={style.controlsLabel}>Részletek elrendezése</span>
+          <div className={style.toggleGroup}>
+            <button
+              type="button"
+              className={`${style.toggleButton} ${
+                orientation === "row" ? style.toggleButtonActive : ""
+              }`}
+              aria-pressed={orientation === "row"}
+              onClick={() => handleOrientationChange("row")}
+            >
+              Egymás mellett
+            </button>
+            <button
+              type="button"
+              className={`${style.toggleButton} ${
+                orientation === "column" ? style.toggleButtonActive : ""
+              }`}
+              aria-pressed={orientation === "column"}
+              onClick={() => handleOrientationChange("column")}
+            >
+              Egymás alatt
+            </button>
+          </div>
         </div>
       </div>
 
       <div className={style.calendarFrame}>
         <FullCalendar
           height={720}
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          headerToolbar={{
-            left: "prev,next today",
-            center: "title",
-            right: "dayGridMonth,timeGridWeek,timeGridDay",
-          }}
+          plugins={FC_PLUGINS}
+          headerToolbar={headerToolbar}
           initialView={view}
           initialDate={initialDate}
           scrollTime="09:00:00"
@@ -143,16 +222,14 @@ function Calendar({
           select={handleDateClick}
           datesSet={handleDatesSet}
           eventClick={handleEventClick}
-          eventClassNames={(arg) =>
-            arg.event.id === selectedEventId ? [style.selectedEvent] : []
-          }
-          events={events}
-          locales={allLocales}
-          locale={"hu"}
+          eventClassNames={eventClassNames}
+          events={filteredEvents}
+          locales={FC_LOCALES}
+          locale="hu"
         />
       </div>
     </div>
   );
 }
 
-export default Calendar;
+export default memo(Calendar);

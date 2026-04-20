@@ -25,3 +25,18 @@ export const ClinicRole = {
 } as const
 
 export type ClinicRole = (typeof ClinicRole)[keyof typeof ClinicRole]
+
+
+export const ToothStatus = {
+  HEALTHY: 'HEALTHY',
+  CARIES: 'CARIES',
+  MISSING: 'MISSING',
+  CROWN: 'CROWN',
+  FILLING: 'FILLING',
+  IMPACTED: 'IMPACTED',
+  ROOT_CANAL: 'ROOT_CANAL',
+  BRIDGE: 'BRIDGE',
+  IMPLANT: 'IMPLANT'
+} as const
+
+export type ToothStatus = (typeof ToothStatus)[keyof typeof ToothStatus]

@@ -1,7 +1,14 @@
 "use server";
 
+import { cache } from "react";
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
+
+// ── Per-request deduplication ────────────────────────────────────────────────
+// React cache() memoises within a single server render so repeated calls
+// from different query functions hit the DB only once per request.
+const getSession = cache(() => auth());
+const getClinicId = cache((userId: string) => ensureActiveClinicId(userId));
 
 const ensureActiveClinicId = async (userId: string) => {
   const user = await prisma.user.findUnique({
@@ -30,19 +37,19 @@ const ensureActiveClinicId = async (userId: string) => {
 };
 
 export const getActiveClinic = async () => {
-  const session = await auth();
+  const session = await getSession();
   const userId = session?.user?.id;
 
   if (!userId) return null;
 
-  const activeClinicId = await ensureActiveClinicId(userId);
+  const activeClinicId = await getClinicId(userId);
   if (!activeClinicId) return null;
 
   return await prisma.clinic.findUnique({ where: { id: activeClinicId } });
 };
 
 export const getUserClinics = async () => {
-  const session = await auth();
+  const session = await getSession();
   const userId = session?.user?.id;
 
   if (!userId) return [];
@@ -57,31 +64,51 @@ export const getUserClinics = async () => {
 };
 
 export const getAppointments = async () => {
-  const session = await auth();
+  const session = await getSession();
   const userId = session?.user?.id;
 
   if (!userId) return [];
 
-  const clinicId = await ensureActiveClinicId(userId);
+  const clinicId = await getClinicId(userId);
   if (!clinicId) return [];
 
   const appointments = await prisma.appointment.findMany({
     where: { clinicId },
     orderBy: { start: "asc" },
+    include: {
+      user: {
+        select: {
+          id: true,
+          clinicMemberships: {
+            where: { clinicId },
+            select: { color: true },
+            take: 1,
+          },
+        },
+      },
+    },
   });
 
-  return appointments;
+  return appointments.map((a) => ({
+    ...a,
+    user: a.user
+      ? {
+          id: a.user.id,
+          color: a.user.clinicMemberships[0]?.color ?? "#5d8da8",
+        }
+      : null,
+  }));
 };
 
 export const getAppointmentDetails = async (id: string | undefined) => {
-  const session = await auth();
+  const session = await getSession();
   const userId = session?.user?.id;
 
   if (!userId) return null;
 
   if (!id) return null;
 
-  const clinicId = await ensureActiveClinicId(userId);
+  const clinicId = await getClinicId(userId);
   if (!clinicId) return null;
 
   return await prisma.appointment.findFirst({
@@ -89,16 +116,12 @@ export const getAppointmentDetails = async (id: string | undefined) => {
     include: {
       user: { select: { name: true } },
       patient: {
-        include: {
-          teeth: {
-            select: {
-              toothCode: true,
-              operations: {
-                select: { appointmentId: true },
-                take: 1,
-              },
-            },
-          },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+          birthDate: true,
         },
       },
       toothOperations: {
@@ -121,24 +144,24 @@ export const getAppointmentDetails = async (id: string | undefined) => {
 };
 
 export const getPatients = async () => {
-  const session = await auth();
+  const session = await getSession();
   const userId = session?.user?.id;
 
   if (!userId) return [];
 
-  const clinicId = await ensureActiveClinicId(userId);
+  const clinicId = await getClinicId(userId);
   if (!clinicId) return [];
 
   return await prisma.patient.findMany({ where: { clinicId } });
 };
 
 export const getUserPatients = async () => {
-  const session = await auth();
+  const session = await getSession();
   const userId = session?.user?.id;
 
   if (!userId) return [];
 
-  const clinicId = await ensureActiveClinicId(userId);
+  const clinicId = await getClinicId(userId);
   if (!clinicId) return [];
 
   const patients = await prisma.patient.findMany({
@@ -149,14 +172,14 @@ export const getUserPatients = async () => {
 };
 
 export const getPatientWithTeeth = async (id: string | undefined) => {
-  const session = await auth();
+  const session = await getSession();
   const userId = session?.user?.id;
 
   if (!userId) return null;
 
   if (!id) return null;
 
-  const clinicId = await ensureActiveClinicId(userId);
+  const clinicId = await getClinicId(userId);
   if (!clinicId) return null;
 
   const patient = await prisma.patient.findFirst({
@@ -165,6 +188,7 @@ export const getPatientWithTeeth = async (id: string | undefined) => {
       teeth: {
         select: {
           toothCode: true,
+          status: true,
           operations: {
             select: { appointmentId: true },
             take: 1,
@@ -180,14 +204,14 @@ export const getPatientWithTeeth = async (id: string | undefined) => {
 export const getPatientAppointmentHistory = async (
   patientId: string | undefined,
 ) => {
-  const session = await auth();
+  const session = await getSession();
   const userId = session?.user?.id;
 
   if (!userId) return [];
 
   if (!patientId) return [];
 
-  const clinicId = await ensureActiveClinicId(userId);
+  const clinicId = await getClinicId(userId);
   if (!clinicId) return [];
 
   return await prisma.appointment.findMany({
@@ -214,12 +238,12 @@ export const getPatientAppointmentHistory = async (
 };
 
 export const getPatientsWithTeeth = async () => {
-  const session = await auth();
+  const session = await getSession();
   const userId = session?.user?.id;
 
   if (!userId) return [];
 
-  const clinicId = await ensureActiveClinicId(userId);
+  const clinicId = await getClinicId(userId);
   if (!clinicId) return [];
 
   const patients = await prisma.patient.findMany({
@@ -228,6 +252,7 @@ export const getPatientsWithTeeth = async () => {
       teeth: {
         select: {
           toothCode: true,
+          status: true,
           operations: {
             select: { appointmentId: true },
             take: 1,
@@ -241,12 +266,12 @@ export const getPatientsWithTeeth = async () => {
 };
 
 export const getOperations = async () => {
-  const session = await auth();
+  const session = await getSession();
   const userId = session?.user?.id;
 
   if (!userId) return [];
 
-  const clinicId = await ensureActiveClinicId(userId);
+  const clinicId = await getClinicId(userId);
   if (!clinicId) return [];
 
   const prices = await prisma.clinicOperationPrice.findMany({
@@ -263,12 +288,12 @@ export const getOperations = async () => {
 };
 
 export const getOperation = async (id: string) => {
-  const session = await auth();
+  const session = await getSession();
   const userId = session?.user?.id;
 
   if (!userId) return null;
 
-  const clinicId = await ensureActiveClinicId(userId);
+  const clinicId = await getClinicId(userId);
   if (!clinicId) return null;
 
   const price = await prisma.clinicOperationPrice.findFirst({
@@ -283,4 +308,26 @@ export const getOperation = async (id: string) => {
     name: price.operation.name,
     price: price.price,
   };
+};
+
+export const getCurrentMemberColor = async () => {
+  const session = await getSession();
+  const userId = session?.user?.id;
+
+  if (!userId) return "#5d8da8";
+
+  const clinicId = await getClinicId(userId);
+  if (!clinicId) return "#5d8da8";
+
+  const member = await prisma.clinicMember.findFirst({
+    where: { clinicId, userId },
+    select: { color: true },
+  });
+
+  return member?.color ?? "#5d8da8";
+};
+
+export const getCurrentUserId = async () => {
+  const session = await getSession();
+  return session?.user?.id ?? null;
 };

@@ -35,20 +35,6 @@
   flex: 1 1 auto;
 }
 
-.switcher {
-  @include cluster($space-2, flex-end, center, nowrap);
-}
-
-.switcherSelect {
-  @include input;
-  min-width: 180px;
-  background-color: $color-surface;
-}
-
-.switcherButton {
-  @include primary-button(10px 14px);
-}
-
 .userBadge {
   @include surface-soft(10px 14px, $radius-pill);
   @include stack(2px);
@@ -85,14 +71,5 @@
 @media (max-width: 720px) {
   .header {
     padding: $space-4 $space-4 0;
-  }
-
-  .switcher {
-    width: 100%;
-  }
-
-  .switcherSelect,
-  .switcherButton {
-    width: 100%;
   }
 }

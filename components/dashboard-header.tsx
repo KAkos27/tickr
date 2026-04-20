@@ -1,13 +1,23 @@
 import { auth } from "@/auth";
-import { getActiveClinic, getUserClinics } from "@/lib/querys";
-import { setActiveClinic } from "@/lib/actions";
+import { getActiveClinic, getCurrentMemberColor, getUserClinics } from "@/lib/querys";
+import { setActiveClinic, updateMemberColor } from "@/lib/actions";
+import ColorPicker from "@/components/color-picker";
+import ClinicSwitcher from "@/components/clinic-switcher";
 import style from "@/styles/components/dashboard-header.module.scss";
 import Link from "next/link";
 
 export default async function DashboardHeader() {
-  const session = await auth();
-  const clinics = await getUserClinics();
-  const activeClinic = await getActiveClinic();
+  const [session, clinics, activeClinic, currentColor] = await Promise.all([
+    auth(),
+    getUserClinics(),
+    getActiveClinic(),
+    getCurrentMemberColor(),
+  ]);
+
+  const clinicOptions = clinics.map((m) => ({
+    clinicId: m.clinicId,
+    clinicName: m.clinic.name,
+  }));
 
   return (
     <header className={style.header}>
@@ -31,23 +41,17 @@ export default async function DashboardHeader() {
         </nav>
 
         <div className={style.utilities}>
-          {clinics.length > 0 && (
-            <form action={setActiveClinic} className={style.switcher}>
-              <select
-                className={style.switcherSelect}
-                name="clinicId"
-                defaultValue={activeClinic?.id ?? ""}
-              >
-                {clinics.map((membership) => (
-                  <option key={membership.clinicId} value={membership.clinicId}>
-                    {membership.clinic.name}
-                  </option>
-                ))}
-              </select>
-              <button type="submit" className={style.switcherButton}>
-                Váltás
-              </button>
-            </form>
+          <ClinicSwitcher
+            clinics={clinicOptions}
+            activeClinicId={activeClinic?.id ?? null}
+            action={setActiveClinic}
+          />
+
+          {activeClinic && (
+            <ColorPicker
+              currentColor={currentColor}
+              action={updateMemberColor}
+            />
           )}
 
           {session?.user && (

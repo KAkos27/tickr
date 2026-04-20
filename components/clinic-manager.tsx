@@ -75,7 +75,7 @@ export default function ClinicManager({
               <p className={style.statusText}>{createState.message}</p>
             )}
 
-            <FormSubmit buttonText="Letrehozas" pedingText="Betoltes..." />
+            <FormSubmit buttonText="Létrehozás" pendingText="Betöltés..." />
           </form>
         </section>
 
@@ -135,7 +135,7 @@ export default function ClinicManager({
                 <p className={style.statusText}>{inviteState.message}</p>
               )}
 
-              <FormSubmit buttonText="Meghivas" pedingText="Betoltes..." />
+              <FormSubmit buttonText="Meghívás" pendingText="Betöltés..." />
             </form>
           </section>
         )}

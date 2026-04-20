@@ -2,7 +2,8 @@
 
 import { useActionState, useState } from "react";
 import FormSubmit from "./form-submit";
-import { Patient } from "@/generated/prisma/client";
+import type { Patient } from "@/generated/prisma/client";
+import type { ToothStatus } from "@/generated/prisma/enums";
 import type { CreateAppointmentState, FormAction } from "@/types/common";
 
 import style from "@/styles/components/post-appointment.module.scss";
@@ -19,7 +20,7 @@ export default function PostAppointment({
   action: FormAction<CreateAppointmentState>;
   patients: Array<
     Patient & {
-      teeth: { toothCode: string; operations: { appointmentId: string }[] }[];
+      teeth: { toothCode: string; status: ToothStatus; operations: { appointmentId: string }[] }[];
     }
   >;
   operations: Array<{ id: string; name: string; price: number }>;
@@ -101,7 +102,7 @@ export default function PostAppointment({
         >
           Mégsem
         </button>
-        <FormSubmit buttonText="OK" pedingText="Betöltés..." />
+        <FormSubmit buttonText="Mentés" pendingText="Betöltés..." />
       </div>
     </form>
   );

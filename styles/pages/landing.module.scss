@@ -1,0 +1,50 @@
+@use "../partials" as *;
+
+.page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: $space-6;
+}
+
+.hero {
+  @include stack($space-4, center);
+  text-align: center;
+  max-width: 560px;
+}
+
+.eyebrow {
+  @include eyebrow;
+}
+
+.title {
+  margin: 0;
+  font-size: 56px;
+  font-weight: 800;
+  color: $color-text;
+  letter-spacing: -0.03em;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.7;
+  color: $color-text-muted;
+}
+
+.cta {
+  @include primary-button(14px 28px, $radius-pill);
+  font-size: 16px;
+  margin-top: $space-3;
+}
+
+@media (max-width: 640px) {
+  .title {
+    font-size: 40px;
+  }
+
+  .subtitle {
+    font-size: 15px;
+  }
+}

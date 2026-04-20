@@ -1,13 +1,16 @@
 import {
   DEFAULT_APPOINTMENTS_VIEW,
+  DEFAULT_APPOINTMENTS_FILTER,
   DEFAULT_SELECTED_APPOINTMENT_ORIENTATION,
   parseCalendarOrientation,
   parseCalendarView,
+  parseCalendarFilter,
 } from "@/lib/appointments";
 import AppointmentsContent from "@/components/appointments-content";
 import {
   getAppointmentDetails,
   getAppointments,
+  getCurrentUserId,
 } from "@/lib/querys";
 import type { Params } from "@/types/route";
 import { notFound } from "next/navigation";
@@ -15,6 +18,7 @@ import { notFound } from "next/navigation";
 type AppointmentSearchParams = {
   view?: string;
   orientation?: string;
+  filter?: string;
 };
 
 export default async function AppointmentPage({
@@ -24,11 +28,13 @@ export default async function AppointmentPage({
   searchParams: Promise<AppointmentSearchParams>;
 }) {
   const { id } = await params;
-  const [appointments, appointment, resolvedSearchParams] = await Promise.all([
-    getAppointments(),
-    getAppointmentDetails(id),
-    searchParams,
-  ]);
+  const [appointments, appointment, currentUserId, resolvedSearchParams] =
+    await Promise.all([
+      getAppointments(),
+      getAppointmentDetails(id),
+      getCurrentUserId(),
+      searchParams,
+    ]);
 
   if (!appointment) {
     notFound();
@@ -42,6 +48,10 @@ export default async function AppointmentPage({
     resolvedSearchParams.orientation,
     DEFAULT_SELECTED_APPOINTMENT_ORIENTATION,
   );
+  const filter = parseCalendarFilter(
+    resolvedSearchParams.filter,
+    DEFAULT_APPOINTMENTS_FILTER,
+  );
 
   return (
     <AppointmentsContent
@@ -49,6 +59,8 @@ export default async function AppointmentPage({
       selectedAppointment={appointment}
       view={view}
       orientation={orientation}
+      filter={filter}
+      currentUserId={currentUserId}
       initialDate={appointment.start.toISOString()}
     />
   );

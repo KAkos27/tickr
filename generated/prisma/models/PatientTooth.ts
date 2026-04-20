@@ -27,16 +27,19 @@ export type AggregatePatientTooth = {
 export type PatientToothMinAggregateOutputType = {
   patientId: string | null
   toothCode: string | null
+  status: $Enums.ToothStatus | null
 }
 
 export type PatientToothMaxAggregateOutputType = {
   patientId: string | null
   toothCode: string | null
+  status: $Enums.ToothStatus | null
 }
 
 export type PatientToothCountAggregateOutputType = {
   patientId: number
   toothCode: number
+  status: number
   _all: number
 }
 
@@ -44,16 +47,19 @@ export type PatientToothCountAggregateOutputType = {
 export type PatientToothMinAggregateInputType = {
   patientId?: true
   toothCode?: true
+  status?: true
 }
 
 export type PatientToothMaxAggregateInputType = {
   patientId?: true
   toothCode?: true
+  status?: true
 }
 
 export type PatientToothCountAggregateInputType = {
   patientId?: true
   toothCode?: true
+  status?: true
   _all?: true
 }
 
@@ -132,6 +138,7 @@ export type PatientToothGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 export type PatientToothGroupByOutputType = {
   patientId: string
   toothCode: string
+  status: $Enums.ToothStatus
   _count: PatientToothCountAggregateOutputType | null
   _min: PatientToothMinAggregateOutputType | null
   _max: PatientToothMaxAggregateOutputType | null
@@ -158,6 +165,7 @@ export type PatientToothWhereInput = {
   NOT?: Prisma.PatientToothWhereInput | Prisma.PatientToothWhereInput[]
   patientId?: Prisma.StringFilter<"PatientTooth"> | string
   toothCode?: Prisma.StringFilter<"PatientTooth"> | string
+  status?: Prisma.EnumToothStatusFilter<"PatientTooth"> | $Enums.ToothStatus
   patient?: Prisma.XOR<Prisma.PatientScalarRelationFilter, Prisma.PatientWhereInput>
   tooth?: Prisma.XOR<Prisma.ToothScalarRelationFilter, Prisma.ToothWhereInput>
   operations?: Prisma.AppointmentToothOperationListRelationFilter
@@ -166,6 +174,7 @@ export type PatientToothWhereInput = {
 export type PatientToothOrderByWithRelationInput = {
   patientId?: Prisma.SortOrder
   toothCode?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   patient?: Prisma.PatientOrderByWithRelationInput
   tooth?: Prisma.ToothOrderByWithRelationInput
   operations?: Prisma.AppointmentToothOperationOrderByRelationAggregateInput
@@ -178,6 +187,7 @@ export type PatientToothWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.PatientToothWhereInput | Prisma.PatientToothWhereInput[]
   patientId?: Prisma.StringFilter<"PatientTooth"> | string
   toothCode?: Prisma.StringFilter<"PatientTooth"> | string
+  status?: Prisma.EnumToothStatusFilter<"PatientTooth"> | $Enums.ToothStatus
   patient?: Prisma.XOR<Prisma.PatientScalarRelationFilter, Prisma.PatientWhereInput>
   tooth?: Prisma.XOR<Prisma.ToothScalarRelationFilter, Prisma.ToothWhereInput>
   operations?: Prisma.AppointmentToothOperationListRelationFilter
@@ -186,6 +196,7 @@ export type PatientToothWhereUniqueInput = Prisma.AtLeast<{
 export type PatientToothOrderByWithAggregationInput = {
   patientId?: Prisma.SortOrder
   toothCode?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   _count?: Prisma.PatientToothCountOrderByAggregateInput
   _max?: Prisma.PatientToothMaxOrderByAggregateInput
   _min?: Prisma.PatientToothMinOrderByAggregateInput
@@ -197,9 +208,11 @@ export type PatientToothScalarWhereWithAggregatesInput = {
   NOT?: Prisma.PatientToothScalarWhereWithAggregatesInput | Prisma.PatientToothScalarWhereWithAggregatesInput[]
   patientId?: Prisma.StringWithAggregatesFilter<"PatientTooth"> | string
   toothCode?: Prisma.StringWithAggregatesFilter<"PatientTooth"> | string
+  status?: Prisma.EnumToothStatusWithAggregatesFilter<"PatientTooth"> | $Enums.ToothStatus
 }
 
 export type PatientToothCreateInput = {
+  status?: $Enums.ToothStatus
   patient: Prisma.PatientCreateNestedOneWithoutTeethInput
   tooth: Prisma.ToothCreateNestedOneWithoutPatientTeethInput
   operations?: Prisma.AppointmentToothOperationCreateNestedManyWithoutPatientToothInput
@@ -208,10 +221,12 @@ export type PatientToothCreateInput = {
 export type PatientToothUncheckedCreateInput = {
   patientId: string
   toothCode: string
+  status?: $Enums.ToothStatus
   operations?: Prisma.AppointmentToothOperationUncheckedCreateNestedManyWithoutPatientToothInput
 }
 
 export type PatientToothUpdateInput = {
+  status?: Prisma.EnumToothStatusFieldUpdateOperationsInput | $Enums.ToothStatus
   patient?: Prisma.PatientUpdateOneRequiredWithoutTeethNestedInput
   tooth?: Prisma.ToothUpdateOneRequiredWithoutPatientTeethNestedInput
   operations?: Prisma.AppointmentToothOperationUpdateManyWithoutPatientToothNestedInput
@@ -220,21 +235,24 @@ export type PatientToothUpdateInput = {
 export type PatientToothUncheckedUpdateInput = {
   patientId?: Prisma.StringFieldUpdateOperationsInput | string
   toothCode?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumToothStatusFieldUpdateOperationsInput | $Enums.ToothStatus
   operations?: Prisma.AppointmentToothOperationUncheckedUpdateManyWithoutPatientToothNestedInput
 }
 
 export type PatientToothCreateManyInput = {
   patientId: string
   toothCode: string
+  status?: $Enums.ToothStatus
 }
 
 export type PatientToothUpdateManyMutationInput = {
-
+  status?: Prisma.EnumToothStatusFieldUpdateOperationsInput | $Enums.ToothStatus
 }
 
 export type PatientToothUncheckedUpdateManyInput = {
   patientId?: Prisma.StringFieldUpdateOperationsInput | string
   toothCode?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumToothStatusFieldUpdateOperationsInput | $Enums.ToothStatus
 }
 
 export type PatientToothListRelationFilter = {
@@ -255,16 +273,19 @@ export type PatientToothPatientIdToothCodeCompoundUniqueInput = {
 export type PatientToothCountOrderByAggregateInput = {
   patientId?: Prisma.SortOrder
   toothCode?: Prisma.SortOrder
+  status?: Prisma.SortOrder
 }
 
 export type PatientToothMaxOrderByAggregateInput = {
   patientId?: Prisma.SortOrder
   toothCode?: Prisma.SortOrder
+  status?: Prisma.SortOrder
 }
 
 export type PatientToothMinOrderByAggregateInput = {
   patientId?: Prisma.SortOrder
   toothCode?: Prisma.SortOrder
+  status?: Prisma.SortOrder
 }
 
 export type PatientToothScalarRelationFilter = {
@@ -356,6 +377,10 @@ export type PatientToothUncheckedUpdateManyWithoutToothNestedInput = {
   deleteMany?: Prisma.PatientToothScalarWhereInput | Prisma.PatientToothScalarWhereInput[]
 }
 
+export type EnumToothStatusFieldUpdateOperationsInput = {
+  set?: $Enums.ToothStatus
+}
+
 export type PatientToothCreateNestedOneWithoutOperationsInput = {
   create?: Prisma.XOR<Prisma.PatientToothCreateWithoutOperationsInput, Prisma.PatientToothUncheckedCreateWithoutOperationsInput>
   connectOrCreate?: Prisma.PatientToothCreateOrConnectWithoutOperationsInput
@@ -371,12 +396,14 @@ export type PatientToothUpdateOneRequiredWithoutOperationsNestedInput = {
 }
 
 export type PatientToothCreateWithoutPatientInput = {
+  status?: $Enums.ToothStatus
   tooth: Prisma.ToothCreateNestedOneWithoutPatientTeethInput
   operations?: Prisma.AppointmentToothOperationCreateNestedManyWithoutPatientToothInput
 }
 
 export type PatientToothUncheckedCreateWithoutPatientInput = {
   toothCode: string
+  status?: $Enums.ToothStatus
   operations?: Prisma.AppointmentToothOperationUncheckedCreateNestedManyWithoutPatientToothInput
 }
 
@@ -412,15 +439,18 @@ export type PatientToothScalarWhereInput = {
   NOT?: Prisma.PatientToothScalarWhereInput | Prisma.PatientToothScalarWhereInput[]
   patientId?: Prisma.StringFilter<"PatientTooth"> | string
   toothCode?: Prisma.StringFilter<"PatientTooth"> | string
+  status?: Prisma.EnumToothStatusFilter<"PatientTooth"> | $Enums.ToothStatus
 }
 
 export type PatientToothCreateWithoutToothInput = {
+  status?: $Enums.ToothStatus
   patient: Prisma.PatientCreateNestedOneWithoutTeethInput
   operations?: Prisma.AppointmentToothOperationCreateNestedManyWithoutPatientToothInput
 }
 
 export type PatientToothUncheckedCreateWithoutToothInput = {
   patientId: string
+  status?: $Enums.ToothStatus
   operations?: Prisma.AppointmentToothOperationUncheckedCreateNestedManyWithoutPatientToothInput
 }
 
@@ -451,6 +481,7 @@ export type PatientToothUpdateManyWithWhereWithoutToothInput = {
 }
 
 export type PatientToothCreateWithoutOperationsInput = {
+  status?: $Enums.ToothStatus
   patient: Prisma.PatientCreateNestedOneWithoutTeethInput
   tooth: Prisma.ToothCreateNestedOneWithoutPatientTeethInput
 }
@@ -458,6 +489,7 @@ export type PatientToothCreateWithoutOperationsInput = {
 export type PatientToothUncheckedCreateWithoutOperationsInput = {
   patientId: string
   toothCode: string
+  status?: $Enums.ToothStatus
 }
 
 export type PatientToothCreateOrConnectWithoutOperationsInput = {
@@ -477,6 +509,7 @@ export type PatientToothUpdateToOneWithWhereWithoutOperationsInput = {
 }
 
 export type PatientToothUpdateWithoutOperationsInput = {
+  status?: Prisma.EnumToothStatusFieldUpdateOperationsInput | $Enums.ToothStatus
   patient?: Prisma.PatientUpdateOneRequiredWithoutTeethNestedInput
   tooth?: Prisma.ToothUpdateOneRequiredWithoutPatientTeethNestedInput
 }
@@ -484,42 +517,51 @@ export type PatientToothUpdateWithoutOperationsInput = {
 export type PatientToothUncheckedUpdateWithoutOperationsInput = {
   patientId?: Prisma.StringFieldUpdateOperationsInput | string
   toothCode?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumToothStatusFieldUpdateOperationsInput | $Enums.ToothStatus
 }
 
 export type PatientToothCreateManyPatientInput = {
   toothCode: string
+  status?: $Enums.ToothStatus
 }
 
 export type PatientToothUpdateWithoutPatientInput = {
+  status?: Prisma.EnumToothStatusFieldUpdateOperationsInput | $Enums.ToothStatus
   tooth?: Prisma.ToothUpdateOneRequiredWithoutPatientTeethNestedInput
   operations?: Prisma.AppointmentToothOperationUpdateManyWithoutPatientToothNestedInput
 }
 
 export type PatientToothUncheckedUpdateWithoutPatientInput = {
   toothCode?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumToothStatusFieldUpdateOperationsInput | $Enums.ToothStatus
   operations?: Prisma.AppointmentToothOperationUncheckedUpdateManyWithoutPatientToothNestedInput
 }
 
 export type PatientToothUncheckedUpdateManyWithoutPatientInput = {
   toothCode?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumToothStatusFieldUpdateOperationsInput | $Enums.ToothStatus
 }
 
 export type PatientToothCreateManyToothInput = {
   patientId: string
+  status?: $Enums.ToothStatus
 }
 
 export type PatientToothUpdateWithoutToothInput = {
+  status?: Prisma.EnumToothStatusFieldUpdateOperationsInput | $Enums.ToothStatus
   patient?: Prisma.PatientUpdateOneRequiredWithoutTeethNestedInput
   operations?: Prisma.AppointmentToothOperationUpdateManyWithoutPatientToothNestedInput
 }
 
 export type PatientToothUncheckedUpdateWithoutToothInput = {
   patientId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumToothStatusFieldUpdateOperationsInput | $Enums.ToothStatus
   operations?: Prisma.AppointmentToothOperationUncheckedUpdateManyWithoutPatientToothNestedInput
 }
 
 export type PatientToothUncheckedUpdateManyWithoutToothInput = {
   patientId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumToothStatusFieldUpdateOperationsInput | $Enums.ToothStatus
 }
 
 
@@ -556,6 +598,7 @@ export type PatientToothCountOutputTypeCountOperationsArgs<ExtArgs extends runti
 export type PatientToothSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   patientId?: boolean
   toothCode?: boolean
+  status?: boolean
   patient?: boolean | Prisma.PatientDefaultArgs<ExtArgs>
   tooth?: boolean | Prisma.ToothDefaultArgs<ExtArgs>
   operations?: boolean | Prisma.PatientTooth$operationsArgs<ExtArgs>
@@ -565,6 +608,7 @@ export type PatientToothSelect<ExtArgs extends runtime.Types.Extensions.Internal
 export type PatientToothSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   patientId?: boolean
   toothCode?: boolean
+  status?: boolean
   patient?: boolean | Prisma.PatientDefaultArgs<ExtArgs>
   tooth?: boolean | Prisma.ToothDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["patientTooth"]>
@@ -572,6 +616,7 @@ export type PatientToothSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
 export type PatientToothSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   patientId?: boolean
   toothCode?: boolean
+  status?: boolean
   patient?: boolean | Prisma.PatientDefaultArgs<ExtArgs>
   tooth?: boolean | Prisma.ToothDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["patientTooth"]>
@@ -579,9 +624,10 @@ export type PatientToothSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
 export type PatientToothSelectScalar = {
   patientId?: boolean
   toothCode?: boolean
+  status?: boolean
 }
 
-export type PatientToothOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"patientId" | "toothCode", ExtArgs["result"]["patientTooth"]>
+export type PatientToothOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"patientId" | "toothCode" | "status", ExtArgs["result"]["patientTooth"]>
 export type PatientToothInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   patient?: boolean | Prisma.PatientDefaultArgs<ExtArgs>
   tooth?: boolean | Prisma.ToothDefaultArgs<ExtArgs>
@@ -607,6 +653,7 @@ export type $PatientToothPayload<ExtArgs extends runtime.Types.Extensions.Intern
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     patientId: string
     toothCode: string
+    status: $Enums.ToothStatus
   }, ExtArgs["result"]["patientTooth"]>
   composites: {}
 }
@@ -1035,6 +1082,7 @@ export interface Prisma__PatientToothClient<T, Null = never, ExtArgs extends run
 export interface PatientToothFieldRefs {
   readonly patientId: Prisma.FieldRef<"PatientTooth", 'String'>
   readonly toothCode: Prisma.FieldRef<"PatientTooth", 'String'>
+  readonly status: Prisma.FieldRef<"PatientTooth", 'ToothStatus'>
 }
     
 

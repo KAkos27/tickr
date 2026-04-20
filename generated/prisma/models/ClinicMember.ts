@@ -30,6 +30,7 @@ export type ClinicMemberMinAggregateOutputType = {
   userId: string | null
   email: string | null
   role: $Enums.ClinicRole | null
+  color: string | null
   createdAt: Date | null
 }
 
@@ -39,6 +40,7 @@ export type ClinicMemberMaxAggregateOutputType = {
   userId: string | null
   email: string | null
   role: $Enums.ClinicRole | null
+  color: string | null
   createdAt: Date | null
 }
 
@@ -48,6 +50,7 @@ export type ClinicMemberCountAggregateOutputType = {
   userId: number
   email: number
   role: number
+  color: number
   createdAt: number
   _all: number
 }
@@ -59,6 +62,7 @@ export type ClinicMemberMinAggregateInputType = {
   userId?: true
   email?: true
   role?: true
+  color?: true
   createdAt?: true
 }
 
@@ -68,6 +72,7 @@ export type ClinicMemberMaxAggregateInputType = {
   userId?: true
   email?: true
   role?: true
+  color?: true
   createdAt?: true
 }
 
@@ -77,6 +82,7 @@ export type ClinicMemberCountAggregateInputType = {
   userId?: true
   email?: true
   role?: true
+  color?: true
   createdAt?: true
   _all?: true
 }
@@ -159,6 +165,7 @@ export type ClinicMemberGroupByOutputType = {
   userId: string | null
   email: string | null
   role: $Enums.ClinicRole
+  color: string
   createdAt: Date
   _count: ClinicMemberCountAggregateOutputType | null
   _min: ClinicMemberMinAggregateOutputType | null
@@ -189,6 +196,7 @@ export type ClinicMemberWhereInput = {
   userId?: Prisma.StringNullableFilter<"ClinicMember"> | string | null
   email?: Prisma.StringNullableFilter<"ClinicMember"> | string | null
   role?: Prisma.EnumClinicRoleFilter<"ClinicMember"> | $Enums.ClinicRole
+  color?: Prisma.StringFilter<"ClinicMember"> | string
   createdAt?: Prisma.DateTimeFilter<"ClinicMember"> | Date | string
   clinic?: Prisma.XOR<Prisma.ClinicScalarRelationFilter, Prisma.ClinicWhereInput>
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
@@ -200,6 +208,7 @@ export type ClinicMemberOrderByWithRelationInput = {
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
+  color?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   clinic?: Prisma.ClinicOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
@@ -216,6 +225,7 @@ export type ClinicMemberWhereUniqueInput = Prisma.AtLeast<{
   userId?: Prisma.StringNullableFilter<"ClinicMember"> | string | null
   email?: Prisma.StringNullableFilter<"ClinicMember"> | string | null
   role?: Prisma.EnumClinicRoleFilter<"ClinicMember"> | $Enums.ClinicRole
+  color?: Prisma.StringFilter<"ClinicMember"> | string
   createdAt?: Prisma.DateTimeFilter<"ClinicMember"> | Date | string
   clinic?: Prisma.XOR<Prisma.ClinicScalarRelationFilter, Prisma.ClinicWhereInput>
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
@@ -227,6 +237,7 @@ export type ClinicMemberOrderByWithAggregationInput = {
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
+  color?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.ClinicMemberCountOrderByAggregateInput
   _max?: Prisma.ClinicMemberMaxOrderByAggregateInput
@@ -242,6 +253,7 @@ export type ClinicMemberScalarWhereWithAggregatesInput = {
   userId?: Prisma.StringNullableWithAggregatesFilter<"ClinicMember"> | string | null
   email?: Prisma.StringNullableWithAggregatesFilter<"ClinicMember"> | string | null
   role?: Prisma.EnumClinicRoleWithAggregatesFilter<"ClinicMember"> | $Enums.ClinicRole
+  color?: Prisma.StringWithAggregatesFilter<"ClinicMember"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ClinicMember"> | Date | string
 }
 
@@ -249,6 +261,7 @@ export type ClinicMemberCreateInput = {
   id?: string
   email?: string | null
   role?: $Enums.ClinicRole
+  color?: string
   createdAt?: Date | string
   clinic: Prisma.ClinicCreateNestedOneWithoutMembersInput
   user?: Prisma.UserCreateNestedOneWithoutClinicMembershipsInput
@@ -260,6 +273,7 @@ export type ClinicMemberUncheckedCreateInput = {
   userId?: string | null
   email?: string | null
   role?: $Enums.ClinicRole
+  color?: string
   createdAt?: Date | string
 }
 
@@ -267,6 +281,7 @@ export type ClinicMemberUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumClinicRoleFieldUpdateOperationsInput | $Enums.ClinicRole
+  color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   clinic?: Prisma.ClinicUpdateOneRequiredWithoutMembersNestedInput
   user?: Prisma.UserUpdateOneWithoutClinicMembershipsNestedInput
@@ -278,6 +293,7 @@ export type ClinicMemberUncheckedUpdateInput = {
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumClinicRoleFieldUpdateOperationsInput | $Enums.ClinicRole
+  color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -287,6 +303,7 @@ export type ClinicMemberCreateManyInput = {
   userId?: string | null
   email?: string | null
   role?: $Enums.ClinicRole
+  color?: string
   createdAt?: Date | string
 }
 
@@ -294,6 +311,7 @@ export type ClinicMemberUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumClinicRoleFieldUpdateOperationsInput | $Enums.ClinicRole
+  color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -303,6 +321,7 @@ export type ClinicMemberUncheckedUpdateManyInput = {
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumClinicRoleFieldUpdateOperationsInput | $Enums.ClinicRole
+  color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -332,6 +351,7 @@ export type ClinicMemberCountOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   email?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  color?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -341,6 +361,7 @@ export type ClinicMemberMaxOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   email?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  color?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -350,6 +371,7 @@ export type ClinicMemberMinOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   email?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  color?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -445,6 +467,7 @@ export type ClinicMemberCreateWithoutUserInput = {
   id?: string
   email?: string | null
   role?: $Enums.ClinicRole
+  color?: string
   createdAt?: Date | string
   clinic: Prisma.ClinicCreateNestedOneWithoutMembersInput
 }
@@ -454,6 +477,7 @@ export type ClinicMemberUncheckedCreateWithoutUserInput = {
   clinicId: string
   email?: string | null
   role?: $Enums.ClinicRole
+  color?: string
   createdAt?: Date | string
 }
 
@@ -492,6 +516,7 @@ export type ClinicMemberScalarWhereInput = {
   userId?: Prisma.StringNullableFilter<"ClinicMember"> | string | null
   email?: Prisma.StringNullableFilter<"ClinicMember"> | string | null
   role?: Prisma.EnumClinicRoleFilter<"ClinicMember"> | $Enums.ClinicRole
+  color?: Prisma.StringFilter<"ClinicMember"> | string
   createdAt?: Prisma.DateTimeFilter<"ClinicMember"> | Date | string
 }
 
@@ -499,6 +524,7 @@ export type ClinicMemberCreateWithoutClinicInput = {
   id?: string
   email?: string | null
   role?: $Enums.ClinicRole
+  color?: string
   createdAt?: Date | string
   user?: Prisma.UserCreateNestedOneWithoutClinicMembershipsInput
 }
@@ -508,6 +534,7 @@ export type ClinicMemberUncheckedCreateWithoutClinicInput = {
   userId?: string | null
   email?: string | null
   role?: $Enums.ClinicRole
+  color?: string
   createdAt?: Date | string
 }
 
@@ -542,6 +569,7 @@ export type ClinicMemberCreateManyUserInput = {
   clinicId: string
   email?: string | null
   role?: $Enums.ClinicRole
+  color?: string
   createdAt?: Date | string
 }
 
@@ -549,6 +577,7 @@ export type ClinicMemberUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumClinicRoleFieldUpdateOperationsInput | $Enums.ClinicRole
+  color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   clinic?: Prisma.ClinicUpdateOneRequiredWithoutMembersNestedInput
 }
@@ -558,6 +587,7 @@ export type ClinicMemberUncheckedUpdateWithoutUserInput = {
   clinicId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumClinicRoleFieldUpdateOperationsInput | $Enums.ClinicRole
+  color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -566,6 +596,7 @@ export type ClinicMemberUncheckedUpdateManyWithoutUserInput = {
   clinicId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumClinicRoleFieldUpdateOperationsInput | $Enums.ClinicRole
+  color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -574,6 +605,7 @@ export type ClinicMemberCreateManyClinicInput = {
   userId?: string | null
   email?: string | null
   role?: $Enums.ClinicRole
+  color?: string
   createdAt?: Date | string
 }
 
@@ -581,6 +613,7 @@ export type ClinicMemberUpdateWithoutClinicInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumClinicRoleFieldUpdateOperationsInput | $Enums.ClinicRole
+  color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneWithoutClinicMembershipsNestedInput
 }
@@ -590,6 +623,7 @@ export type ClinicMemberUncheckedUpdateWithoutClinicInput = {
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumClinicRoleFieldUpdateOperationsInput | $Enums.ClinicRole
+  color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -598,6 +632,7 @@ export type ClinicMemberUncheckedUpdateManyWithoutClinicInput = {
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumClinicRoleFieldUpdateOperationsInput | $Enums.ClinicRole
+  color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -609,6 +644,7 @@ export type ClinicMemberSelect<ExtArgs extends runtime.Types.Extensions.Internal
   userId?: boolean
   email?: boolean
   role?: boolean
+  color?: boolean
   createdAt?: boolean
   clinic?: boolean | Prisma.ClinicDefaultArgs<ExtArgs>
   user?: boolean | Prisma.ClinicMember$userArgs<ExtArgs>
@@ -620,6 +656,7 @@ export type ClinicMemberSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   userId?: boolean
   email?: boolean
   role?: boolean
+  color?: boolean
   createdAt?: boolean
   clinic?: boolean | Prisma.ClinicDefaultArgs<ExtArgs>
   user?: boolean | Prisma.ClinicMember$userArgs<ExtArgs>
@@ -631,6 +668,7 @@ export type ClinicMemberSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   userId?: boolean
   email?: boolean
   role?: boolean
+  color?: boolean
   createdAt?: boolean
   clinic?: boolean | Prisma.ClinicDefaultArgs<ExtArgs>
   user?: boolean | Prisma.ClinicMember$userArgs<ExtArgs>
@@ -642,10 +680,11 @@ export type ClinicMemberSelectScalar = {
   userId?: boolean
   email?: boolean
   role?: boolean
+  color?: boolean
   createdAt?: boolean
 }
 
-export type ClinicMemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clinicId" | "userId" | "email" | "role" | "createdAt", ExtArgs["result"]["clinicMember"]>
+export type ClinicMemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clinicId" | "userId" | "email" | "role" | "color" | "createdAt", ExtArgs["result"]["clinicMember"]>
 export type ClinicMemberInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   clinic?: boolean | Prisma.ClinicDefaultArgs<ExtArgs>
   user?: boolean | Prisma.ClinicMember$userArgs<ExtArgs>
@@ -671,6 +710,7 @@ export type $ClinicMemberPayload<ExtArgs extends runtime.Types.Extensions.Intern
     userId: string | null
     email: string | null
     role: $Enums.ClinicRole
+    color: string
     createdAt: Date
   }, ExtArgs["result"]["clinicMember"]>
   composites: {}
@@ -1102,6 +1142,7 @@ export interface ClinicMemberFieldRefs {
   readonly userId: Prisma.FieldRef<"ClinicMember", 'String'>
   readonly email: Prisma.FieldRef<"ClinicMember", 'String'>
   readonly role: Prisma.FieldRef<"ClinicMember", 'ClinicRole'>
+  readonly color: Prisma.FieldRef<"ClinicMember", 'String'>
   readonly createdAt: Prisma.FieldRef<"ClinicMember", 'DateTime'>
 }
     

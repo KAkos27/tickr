@@ -4,16 +4,16 @@ import { useFormStatus } from "react-dom";
 
 export default function FormSubmit({
   buttonText,
-  pedingText,
+  pendingText,
 }: {
   buttonText: string;
-  pedingText: string;
+  pendingText: string;
 }) {
   const status = useFormStatus();
 
   return (
     <button type="submit" disabled={status.pending}>
-      {status.pending ? pedingText : buttonText}
+      {status.pending ? pendingText : buttonText}
     </button>
   );
 }

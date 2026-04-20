@@ -196,6 +196,23 @@ export type EnumClinicRoleWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumClinicRoleFilter<$PrismaModel>
 }
 
+export type EnumToothStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.ToothStatus | Prisma.EnumToothStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ToothStatus[] | Prisma.ListEnumToothStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ToothStatus[] | Prisma.ListEnumToothStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumToothStatusFilter<$PrismaModel> | $Enums.ToothStatus
+}
+
+export type EnumToothStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ToothStatus | Prisma.EnumToothStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ToothStatus[] | Prisma.ListEnumToothStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ToothStatus[] | Prisma.ListEnumToothStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumToothStatusWithAggregatesFilter<$PrismaModel> | $Enums.ToothStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumToothStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumToothStatusFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -389,6 +406,23 @@ export type NestedEnumClinicRoleWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumClinicRoleFilter<$PrismaModel>
   _max?: Prisma.NestedEnumClinicRoleFilter<$PrismaModel>
+}
+
+export type NestedEnumToothStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.ToothStatus | Prisma.EnumToothStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ToothStatus[] | Prisma.ListEnumToothStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ToothStatus[] | Prisma.ListEnumToothStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumToothStatusFilter<$PrismaModel> | $Enums.ToothStatus
+}
+
+export type NestedEnumToothStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ToothStatus | Prisma.EnumToothStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ToothStatus[] | Prisma.ListEnumToothStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ToothStatus[] | Prisma.ListEnumToothStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumToothStatusWithAggregatesFilter<$PrismaModel> | $Enums.ToothStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumToothStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumToothStatusFilter<$PrismaModel>
 }
 
 

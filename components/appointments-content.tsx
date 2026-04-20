@@ -3,12 +3,14 @@ import type { DateInput } from "@fullcalendar/core/index.js";
 import AppointmentDetails, {
   type AppointmentDetailRecord,
 } from "@/components/appointment-details";
-import Calendar from "@/components/calendar";
+import Calendar from "@/components/lazy-calendar";
 import {
   getCalendarOrientationLabel,
   getCalendarViewLabel,
+  getCalendarFilterLabel,
   type CalendarOrientation,
   type CalendarView,
+  type CalendarFilter,
 } from "@/lib/appointments";
 import { formatDate, formatTime } from "@/lib/utils";
 
@@ -19,6 +21,8 @@ type AppointmentEventRecord = {
   title: string;
   start: Date;
   end: Date;
+  userId: string;
+  user: { id: string; color: string } | null;
 };
 
 export default function AppointmentsContent({
@@ -26,12 +30,16 @@ export default function AppointmentsContent({
   selectedAppointment,
   view,
   orientation,
+  filter,
+  currentUserId,
   initialDate,
 }: {
   appointments: AppointmentEventRecord[];
   selectedAppointment?: AppointmentDetailRecord | null;
   view: CalendarView;
   orientation: CalendarOrientation;
+  filter: CalendarFilter;
+  currentUserId: string | null;
   initialDate?: DateInput;
 }) {
   const events = appointments.map((appointment) => ({
@@ -39,6 +47,9 @@ export default function AppointmentsContent({
     title: appointment.title,
     start: appointment.start.toISOString(),
     end: appointment.end.toISOString(),
+    backgroundColor: appointment.user?.color ?? "#5d8da8",
+    borderColor: appointment.user?.color ?? "#5d8da8",
+    userId: appointment.userId,
   }));
 
   const hasSelectedAppointment = Boolean(selectedAppointment);
@@ -67,6 +78,9 @@ export default function AppointmentsContent({
             {getCalendarViewLabel(view)}
           </span>
           <span className={style.summaryBadge}>
+            {getCalendarFilterLabel(filter)}
+          </span>
+          <span className={style.summaryBadge}>
             {getCalendarOrientationLabel(orientation)}
           </span>
         </div>
@@ -86,12 +100,12 @@ export default function AppointmentsContent({
           </div>
 
           <Calendar
-            key={`${view}-${selectedAppointment?.id ?? "overview"}-${
-              initialDate ?? "today"
-            }`}
+            key={`${view}-${initialDate ?? "today"}`}
             events={events}
             view={view}
             orientation={orientation}
+            filter={filter}
+            currentUserId={currentUserId}
             initialDate={initialDate}
             selectedEventId={selectedAppointment?.id}
           />
