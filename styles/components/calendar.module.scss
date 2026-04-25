@@ -104,8 +104,37 @@
   padding: 2px 4px;
 }
 
+.container :global(.fc .fc-timegrid-event) {
+  margin-bottom: 0;
+}
+
 .container :global(.fc .fc-timegrid-event .fc-event-main) {
   padding: 4px 6px;
+  overflow: hidden;
+}
+
+.container :global(.fc .fc-timegrid-event .fc-event-main-frame) {
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+}
+
+.container :global(.fc .fc-timegrid-event .fc-event-time) {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.container :global(.fc .fc-timegrid-event .fc-event-title-container) {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+.container :global(.fc .fc-timegrid-event .fc-event-title) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .container :global(.fc .fc-highlight) {

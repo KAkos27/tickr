@@ -22,13 +22,16 @@ export default function ClinicSwitcher({
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   const activeName =
-    clinics.find((c) => c.clinicId === activeClinicId)?.clinicName ?? "Nincs rendelő";
+    clinics.find((c) => c.clinicId === activeClinicId)?.clinicName ??
+    "Nincs rendelő";
 
-  // Close on outside click
   useEffect(() => {
     if (!open) return;
     const handleClick = (e: MouseEvent) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(e.target as Node)
+      ) {
         setOpen(false);
       }
     };
@@ -38,7 +41,6 @@ export default function ClinicSwitcher({
 
   if (clinics.length === 0) return null;
 
-  // Only 1 clinic — just show name, no dropdown
   if (clinics.length === 1) {
     return (
       <div className={style.wrapper}>
@@ -60,7 +62,9 @@ export default function ClinicSwitcher({
       >
         <span className={style.triggerLabel}>Rendelő</span>
         <strong className={style.triggerName}>{activeName}</strong>
-        <span className={`${style.triggerArrow} ${open ? style.triggerArrowOpen : ""}`}>
+        <span
+          className={`${style.triggerArrow} ${open ? style.triggerArrowOpen : ""}`}
+        >
           ▾
         </span>
       </button>
@@ -75,17 +79,22 @@ export default function ClinicSwitcher({
             const isActive = clinic.clinicId === activeClinicId;
             return (
               <li key={clinic.clinicId}>
-                <form
-                  action={action}
-                  onSubmit={() => setOpen(false)}
-                >
-                  <input type="hidden" name="clinicId" value={clinic.clinicId} />
+                <form action={action} onSubmit={() => setOpen(false)}>
+                  <input
+                    type="hidden"
+                    name="clinicId"
+                    value={clinic.clinicId}
+                  />
                   <button
                     type="submit"
                     className={`${style.option} ${isActive ? style.optionActive : ""}`}
                   >
-                    <span className={style.optionName}>{clinic.clinicName}</span>
-                    {isActive && <span className={style.optionBadge}>Aktív</span>}
+                    <span className={style.optionName}>
+                      {clinic.clinicName}
+                    </span>
+                    {isActive && (
+                      <span className={style.optionBadge}>Aktív</span>
+                    )}
                   </button>
                 </form>
               </li>

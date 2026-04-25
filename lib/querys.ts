@@ -4,9 +4,6 @@ import { cache } from "react";
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 
-// ── Per-request deduplication ────────────────────────────────────────────────
-// React cache() memoises within a single server render so repeated calls
-// from different query functions hit the DB only once per request.
 const getSession = cache(() => auth());
 const getClinicId = cache((userId: string) => ensureActiveClinicId(userId));
 

@@ -1,6 +1,14 @@
 "use client";
 
-import { memo, useActionState, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  memo,
+  useActionState,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type { ToothStatus } from "@/generated/prisma/enums";
 import {
   TOOTH_STATUS_LABELS,
@@ -115,10 +123,9 @@ export default function ToothChart({
   const [selectedTooth, setSelectedTooth] = useState<string | null>(null);
   const [dentition, setDentition] = useState<Dentition>("permanent");
 
-  const activeQuadrants = dentition === "permanent" ? PERMANENT_CODES : DECIDUOUS_CODES;
+  const activeQuadrants =
+    dentition === "permanent" ? PERMANENT_CODES : DECIDUOUS_CODES;
 
-  // Pre-build a complete map for every code in the active quadrants.
-  // This avoids creating new fallback objects on every render for missing teeth.
   const completeTeethMap = useMemo(() => {
     const known = new Map<string, ToothData>();
     for (const t of teeth) known.set(t.toothCode, t);
@@ -127,10 +134,7 @@ export default function ToothChart({
     const allCodes = [...PERMANENT_CODES, ...DECIDUOUS_CODES];
     for (const quadrant of allCodes) {
       for (const code of quadrant) {
-        map.set(
-          code,
-          known.get(code) ?? { toothCode: code, ...DEFAULT_TOOTH },
-        );
+        map.set(code, known.get(code) ?? { toothCode: code, ...DEFAULT_TOOTH });
       }
     }
     return map;
@@ -293,24 +297,32 @@ export default function ToothChart({
         ))}
       </div>
 
-      {mode === "status" && selectedToothData && updateStatusAction && patientId && (
-        <ToothStatusPanel
-          tooth={selectedToothData}
-          patientId={patientId}
-          action={updateStatusAction}
-        />
-      )}
+      {mode === "status" &&
+        selectedToothData &&
+        updateStatusAction &&
+        patientId && (
+          <ToothStatusPanel
+            tooth={selectedToothData}
+            patientId={patientId}
+            action={updateStatusAction}
+          />
+        )}
 
-      {mode === "treatment" && sortedSelectedTeeth.length > 0 && operations && toothOperations && onToggleOperation && onToggleTooth && (
-        <TreatmentPanel
-          sortedSelectedTeeth={sortedSelectedTeeth}
-          getToothData={getToothData}
-          operations={operations}
-          toothOperations={toothOperations}
-          onToggleOperation={onToggleOperation}
-          onRemoveTooth={onToggleTooth}
-        />
-      )}
+      {mode === "treatment" &&
+        sortedSelectedTeeth.length > 0 &&
+        operations &&
+        toothOperations &&
+        onToggleOperation &&
+        onToggleTooth && (
+          <TreatmentPanel
+            sortedSelectedTeeth={sortedSelectedTeeth}
+            getToothData={getToothData}
+            operations={operations}
+            toothOperations={toothOperations}
+            onToggleOperation={onToggleOperation}
+            onRemoveTooth={onToggleTooth}
+          />
+        )}
     </div>
   );
 }
@@ -334,7 +346,6 @@ const TreatmentPanel = memo(function TreatmentPanel({
     sortedSelectedTeeth[0] ?? null,
   );
 
-  // Auto-expand newly added tooth
   const prevCount = useRef(sortedSelectedTeeth.length);
   useEffect(() => {
     if (sortedSelectedTeeth.length > prevCount.current) {
@@ -349,7 +360,6 @@ const TreatmentPanel = memo(function TreatmentPanel({
     return map;
   }, [operations]);
 
-  // Running total
   const total = useMemo(() => {
     let sum = 0;
     for (const toothCode of sortedSelectedTeeth) {
@@ -375,7 +385,9 @@ const TreatmentPanel = memo(function TreatmentPanel({
                 key={code}
                 type="button"
                 className={`${style.chip} ${expandedTooth === code ? style.chipActive : ""}`}
-                onClick={() => setExpandedTooth((prev) => (prev === code ? null : code))}
+                onClick={() =>
+                  setExpandedTooth((prev) => (prev === code ? null : code))
+                }
               >
                 <span>{code}</span>
                 {count > 0 && <span className={style.chipBadge}>{count}</span>}
@@ -402,7 +414,6 @@ const TreatmentPanel = memo(function TreatmentPanel({
         </div>
       </div>
 
-      {/* Expanded operation picker for one tooth at a time */}
       {expandedTooth && toothOperations[expandedTooth] !== undefined && (
         <TreatmentGroup
           key={expandedTooth}
@@ -414,7 +425,6 @@ const TreatmentPanel = memo(function TreatmentPanel({
         />
       )}
 
-      {/* Summary */}
       {total > 0 && (
         <div className={style.treatmentTotal}>
           <span>Összesen</span>
@@ -446,9 +456,7 @@ const TreatmentGroup = memo(function TreatmentGroup({
   return (
     <div className={style.treatmentGroup}>
       <div className={style.treatmentGroupHeader}>
-        <span className={style.treatmentGroupTitle}>
-          Fog {toothCode}
-        </span>
+        <span className={style.treatmentGroupTitle}>Fog {toothCode}</span>
         <span
           className={style.treatmentGroupStatus}
           style={{ color: TOOTH_STATUS_COLORS[toothData.status] }}
@@ -469,9 +477,7 @@ const TreatmentGroup = memo(function TreatmentGroup({
                 checked={checked}
                 onChange={() => onToggleOperation(toothCode, operation.id)}
               />
-              <span className={style.treatmentName}>
-                {operation.name}
-              </span>
+              <span className={style.treatmentName}>{operation.name}</span>
               <span className={style.treatmentPrice}>
                 {operation.price.toLocaleString("hu-HU")} Ft
               </span>

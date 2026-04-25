@@ -295,7 +295,6 @@ export const createAppointment = async (
   }
 
   try {
-    // Collect all referenced operation IDs and pre-fetch their names in one query
     const allOperationIds = [
       ...new Set(toothOperations.flatMap((t) => t.operationIds)),
     ];
@@ -303,12 +302,9 @@ export const createAppointment = async (
       where: { id: { in: allOperationIds } },
       select: { id: true, name: true },
     });
-    const operationNameById = new Map(
-      operationRows.map((o) => [o.id, o.name]),
-    );
+    const operationNameById = new Map(operationRows.map((o) => [o.id, o.name]));
 
     await prisma.$transaction(async (tx) => {
-      // 1. Create the appointment
       const currentAppointment = await tx.appointment.create({
         data: {
           title: patient!.name,
@@ -320,7 +316,6 @@ export const createAppointment = async (
         },
       });
 
-      // 2. Upsert teeth in parallel (one per tooth code)
       await Promise.all(
         toothOperations.map((t) =>
           tx.patientTooth.upsert({
@@ -339,7 +334,6 @@ export const createAppointment = async (
         ),
       );
 
-      // 3. Bulk-create all tooth-operation links
       const toothOpData = toothOperations.flatMap((t) =>
         t.operationIds.map((operationId) => ({
           appointmentId: currentAppointment.id,
@@ -350,7 +344,6 @@ export const createAppointment = async (
       );
       await tx.appointmentToothOperation.createMany({ data: toothOpData });
 
-      // 4. Compute & apply status changes in parallel
       const statusUpdates: { toothCode: string; status: ToothStatus }[] = [];
       for (const t of toothOperations) {
         let resultingStatus: ToothStatus | null = null;
@@ -361,7 +354,10 @@ export const createAppointment = async (
           }
         }
         if (resultingStatus) {
-          statusUpdates.push({ toothCode: t.toothCode, status: resultingStatus });
+          statusUpdates.push({
+            toothCode: t.toothCode,
+            status: resultingStatus,
+          });
         }
       }
       await Promise.all(
@@ -427,9 +423,7 @@ export const updateToothStatus = async (
     return { message: "Hiányzó adatok" };
   }
 
-  if (
-    !(TOOTH_STATUS_OPTIONS as readonly string[]).includes(status)
-  ) {
+  if (!(TOOTH_STATUS_OPTIONS as readonly string[]).includes(status)) {
     return { message: "Érvénytelen státusz" };
   }
 

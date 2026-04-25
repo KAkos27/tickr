@@ -22,11 +22,13 @@ export default function ColorPicker({
     {},
   );
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     if (!open) return;
     const handleClick = (e: MouseEvent) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(e.target as Node)
+      ) {
         setOpen(false);
       }
     };
@@ -42,10 +44,7 @@ export default function ColorPicker({
         onClick={() => setOpen((prev) => !prev)}
         aria-label="Szín választás"
       >
-        <span
-          className={style.dot}
-          style={{ backgroundColor: currentColor }}
-        />
+        <span className={style.dot} style={{ backgroundColor: currentColor }} />
         <span className={style.label}>Szín</span>
       </button>
 
